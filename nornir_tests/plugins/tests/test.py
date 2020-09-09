@@ -115,3 +115,19 @@ class TestList(object):
         string.rstrip("\n")
 
         return string
+
+    def __repr__(self) -> str:
+        """Represent overload
+
+        Returns:
+            str: string representation of Test object
+        """
+        return self.__str__()
+
+    def __len__(self) -> int:
+        """Length overload
+
+        Returns:
+            int: length of test attribute
+        """
+        return len(self.tests)

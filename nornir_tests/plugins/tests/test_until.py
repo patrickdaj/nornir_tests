@@ -58,8 +58,7 @@ class test_until(Test):
         self.t1 = time.time()
 
         self.msg = "until: {} after {} seconds".format(
-            'succeeded' if self.result else 'failed',
-            self.t1 - self.t0
+            "succeeded" if self.result else "failed", self.t1 - self.t0
         )
 
         self._add_test(result)

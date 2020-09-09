@@ -8,7 +8,7 @@ from nornir_tests.plugins.tests import apply_tests
 
 class TestsProcessor:
     """This processor adds additional functionality to wrap tasks with test decorators.
-    
+
     This was required due to the fact that decorators can't be easily applied to the tasks
     in Nornir.  Multiple decorations can be applied to a task but it is only usable on
     tasks that return a result such as nr.run tasks or task.run tasks.  Tests cannot be

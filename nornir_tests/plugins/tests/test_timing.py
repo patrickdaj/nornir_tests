@@ -38,14 +38,19 @@ class test_timing(Test):
         Returns:
             `nornir.core.task.Result`: Result of task after executed and decorated by test_timing
         """
-        t0 = time.time()
+        self.t0 = time.time()
         result = func(*args, **kwargs)
+        self.t1 = time.time()
 
-        result.run_time = time.time() - t0
+        result.run_time = self.t1 - self.t0
 
-        self.result = result.run_time > self.min_run_time and result.run_time < self.max_run_time
+        self.result = (
+            result.run_time > self.min_run_time and result.run_time < self.max_run_time
+        )
 
-        self.msg = (f"timing: {self.min_run_time} < {result.run_time} < {self.max_run_time}",)
+        self.msg = (
+            f"timing: {self.min_run_time} < {result.run_time} < {self.max_run_time}",
+        )
 
         if self.fail_task and not self.result:
             result.failed = True
