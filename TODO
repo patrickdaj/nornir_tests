@@ -1,0 +1,13 @@
+Docs!  Need docs.
+
+Tests!  Need tests.
+
+Implement tests:
+- jsonpath
+- xpath - convert xml to etree perhaps?
+- dict
+- custom or plugin type tests
+
+Keep trying to figure out how to wrap grouped task 0
+
+Not sure if it will make sense to wrap aggregates but for consistency it would be nice
