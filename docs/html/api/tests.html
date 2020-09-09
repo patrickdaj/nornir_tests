@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests &mdash; nornir_tests 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorials" href="../tutorials/index.html" />
+    <link rel="prev" title="processors" href="processors.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nornir_tests
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="processors.html">processors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nornir_tests</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API</a> &raquo;</li>
+        
+      <li>tests</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/tests.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-nornir_tests.plugins.tests">
+<span id="tests"></span><h1>tests<a class="headerlink" href="#module-nornir_tests.plugins.tests" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="nornir_tests.plugins.tests.apply_tests">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">apply_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">tests</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span><a class="headerlink" href="#nornir_tests.plugins.tests.apply_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply tests (decorators) to task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – nornir task</p></li>
+<li><p><strong>tests</strong> (<em>List</em><em>[</em><em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – test decorators to apply</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Decorated function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Callable[.., Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="nornir_tests.plugins.tests.test_jsonpath">
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_jsonpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator using jsonpath</p>
+<p>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">jsonpath_ng</a> implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath path. Defaults to “”.</p></li>
+<li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).
+Defaults to “result”.</p></li>
+<li><p><strong>value</strong> (<em>Any</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nornir_tests.plugins.tests.test_jsonpath.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method decorator to perform jsonpath parse and find on result of task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – Decorated function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of task after executed and decorated by test_jsonpath</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nornir.core.task.Result</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nornir_tests.plugins.tests.test_lxml">
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_lxml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xpath</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">attrib</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_lxml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator using lxml</p>
+<p>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">lxml</a> implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xpath</strong> (<em>str</em><em>, </em><em>optional</em>) – xpath locator. Defaults to “”.</p></li>
+<li><p><strong>value</strong> (<em>str</em><em>, </em><em>optional</em>) – value for comparison.  Defaults to “”.</p></li>
+<li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).
+Defaults to “result”.</p></li>
+<li><p><strong>text</strong> (<em>bool</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>attrib</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”.</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nornir_tests.plugins.tests.test_lxml.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_lxml.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method decorator to perform lxml find and compare on result of task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – Decorated function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of task after executed and decorated by test_jsonpath</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nornir.core.task.Result</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nornir_tests.plugins.tests.test_regexp">
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_regexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regexp</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_regexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator using regexp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regexp</strong> (<em>str</em><em>, </em><em>optional</em>) – Regular expression to use for matching. Defaults to “”.</p></li>
+<li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).
+Defaults to “result”.</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nornir_tests.plugins.tests.test_regexp.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_regexp.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method decorator to perform regexp on result of task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – Decorated function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of task after executed and decorated by test_regexp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nornir.core.task.Result</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nornir_tests.plugins.tests.test_timing">
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_timing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">min_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">9223372036854775807</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_timing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator for timing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure. Defaults to False.</p></li>
+<li><p><strong>min_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required minimum runtime. Defaults to 0.</p></li>
+<li><p><strong>max_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required maximum runtime. Defaults to sys.maxsize.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nornir_tests.plugins.tests.test_timing.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_timing.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method decorator to perform timing on result of task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – Decorated function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of task after executed and decorated by test_timing</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nornir.core.task.Result</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nornir_tests.plugins.tests.test_until">
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_until</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_delay</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">retries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">delay</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_until" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator to continue until task result is not failed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_delay</strong> (<em>int</em><em>, </em><em>optional</em>) – Initial delay before trying first try.
+Defaults to 0.</p></li>
+<li><p><strong>retries</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of retries. Defaults to 0.</p></li>
+<li><p><strong>delay</strong> (<em>int</em><em>, </em><em>optional</em>) – Time between retries. Defaults to 0.</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – . Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nornir_tests.plugins.tests.test_until.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_until.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method decorator to continue until result of task is not failed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – Decorated function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of task after executed and decorated by test_until</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nornir.core.task.Result</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="processors.html" class="btn btn-neutral float-left" title="processors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Avery
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.2-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python38264bitvenvvenv1c35bb63d8ff4e6aa6d1792b190afa1b",
+   "display_name": "Python 3.8.2 64-bit ('.venv': venv)"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Introduction\n",
+    "\n",
+    "The idea behind nornir_tests is to allow for adding tests against the task run and its results.  Many times, a task can run and get some output but that doesn't mean it is successful.  One option is to add additional checks or some conditional logic to deal with this.  Another is to add tests against the data returned from a task.  That is what nornir_tests is for."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Typical nornir initialization is done first."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from nornir_utils.plugins.tasks.data import echo_data\n",
+    "from nornir_utils.plugins.functions import print_result\n",
+    "from nornir import InitNornir\n",
+    "\n",
+    "nr = InitNornir(\n",
+    "    inventory={\n",
+    "        \"plugin\": \"SimpleInventory\",\n",
+    "        \"options\": {\n",
+    "            \"host_file\": \"data/hosts.yaml\",\n",
+    "            \"group_file\": \"data/groups.yaml\",\n",
+    "            \"defaults_file\": \"data/defaults.yaml\",\n",
+    "        },\n",
+    "    },\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next the TestsProcessor is appended to the processors list and the inventory is shown."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "{'test': Host: test}\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "from nornir_tests.plugins.processors import TestsProcessor\n",
+    "\n",
+    "nr.processors.append(TestsProcessor())\n",
+    "\n",
+    "print(nr.inventory.hosts)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Using more typical nornir methodology the process of running a task and verifying certain aspects about it can be accomplished a many different ways.  The example case is to simply run an echo_data task and validate that the result is changed and it completed within 10 seconds."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[36mgrouped_task********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* test ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0mTraceback (most recent call last):\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py\", line 98, in start\n    r = self.task(self, **self.params)\n  File \"<ipython-input-3-2b81df11fe9b>\", line 13, in grouped_task\n    result.failed = True\nAttributeError: can't set attribute\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m---- echo_data ** changed : False ---------------------------------------------- INFO\u001b[0m\n\u001b[0m{'x': 1, 'y': 1}\u001b[0m\n\u001b[0m\u001b[1m\u001b[31m^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "import time\n",
+    "\n",
+    "def grouped_task(task, *args, **kwargs):\n",
+    "    t0 = time.time()\n",
+    "    result = task.run(task=echo_data, *args, **kwargs)\n",
+    "    t1 = time.time()\n",
+    "\n",
+    "    # one way to validate, kinda clunky\n",
+    "    if t1 - t0 > 10:\n",
+    "        result.failed = True\n",
+    "    \n",
+    "    if result.changed != True:\n",
+    "        result.failed = True\n",
+    "\n",
+    "    # and to get the above into results either return another Result or append tests\n",
+    "    result.tests = [\n",
+    "        f'changed: changed=True - {result.changed == True}',\n",
+    "        f'timing: 0 < {t1 - t0} < {sys.maxsize} - {t1 - t0 <= 10}'\n",
+    "    ]\n",
+    "    \n",
+    "result = nr.run(task=grouped_task, x=1, y=1)\n",
+    "print_result(result)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Unfortunately we cannot change the failed state at this point.  So perhaps we just conditionally "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[36mecho_data***********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* test ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv echo_data ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m{'x': 1, 'y': 1}\u001b[0m\n\u001b[0m'regexp: 123 did not match result - FAILED'\n\"regexp: 'x': 1 matched 'x': 1 in result - PASSED\"\n'until: succeeded after 0.0017473697662353516 seconds - PASSED'\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END echo_data ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "nr.data.reset_failed_hosts()\n",
+    "\n",
+    "from nornir_tests.plugins.tests import test_regexp, test_until\n",
+    "\n",
+    "result = nr.run(\n",
+    "    task=echo_data, \n",
+    "    x=1, y=1,\n",
+    "    tests=[\n",
+    "        test_regexp(regexp='123'),\n",
+    "        test_regexp(regexp=\"\\'x\\': 1\"),\n",
+    "        test_until(delay=1, retries=1)\n",
+    "    ]\n",
+    ")\n",
+    "\n",
+    "print_result(result, vars=['result', 'tests'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ]
+}
