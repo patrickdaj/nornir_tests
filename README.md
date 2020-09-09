@@ -6,6 +6,8 @@
 - Fail task on failed tests or just have them for informational purposes
 - Get detailed test records for each of the verifications/assertions, printable by print_result
 
+[nornir_tests documentation](https://patrickdaj.github.io/nornir_tests/)
+
 ## How it works
 Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
 no way to use normal @ decorator syntax as these need to be applied before function definitions.

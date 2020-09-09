@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Indices and tables &mdash; nornir_tests 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> nornir_tests
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">nornir_tests</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Indices and tables</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<p># nornir_tests</p>
+<p><cite>nornir_tests</cite> provides the ability to add one or more tests to a Nornir task.</p>
+<ul class="simple">
+<li><p>Attach verifications or assertions to a task</p></li>
+<li><p>Fail task on failed tests or just have them for informational purposes</p></li>
+<li><p>Get detailed test records for each of the verifications/assertions, printable by print_result</p></li>
+</ul>
+<p>## How it works
+Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
+no way to use normal &#64; decorator syntax as these need to be applied before function definitions.
+That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
+paired with a special processor that looks for them in task.params.</p>
+<p>Once the task is wrapped, when Nornir calls it the decorator can run code before and after
+execution of the task.  It can then affect the actual result being returned.  For this reason
+it does not really work for anything that doesn’t return a result.  So wrapping calls to tasks
+defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
+currently possible but the tasks within the grouped task are.  Nornir run commands that return
+results work fine.</p>
+<p>## Potential uses</p>
+<ul class="simple">
+<li><p>Timing a task and making sure it completes within x seconds</p></li>
+<li><p>Faling a task if it isn’t changed</p></li>
+<li><p>Faling a task if text is not in results attribute</p></li>
+<li><p>Using jsonpath or xpath to assert a value at a particular path</p></li>
+<li><p>Passing a task for an expected exception</p></li>
+<li><p>Testing til a condition repeatedly until all tests are passing</p></li>
+</ul>
+<p>## Installation</p>
+<p><code class="docutils literal notranslate"><span class="pre">`shell</span>
+<span class="pre">pip</span> <span class="pre">install</span> <span class="pre">nornir-tests</span>
+<span class="pre">`</span></code></p>
+<p>## Basic Usage</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+&gt;&gt; from nornir_tests.plugins.processors import TestsProcessor
+&gt;&gt; from nornir_tests.plugins.tests import test_timing, test_until, test_jsonpath
+&gt;&gt; from nornir_napalm.plugins.tasks import napalm_get
+&gt;&gt;
+&gt;&gt; nr = InitNornir()
+&gt;&gt; nr.processors.append(TestsProcessor())
+&gt;&gt;
+&gt;&gt; result = nr.run(</p>
+<blockquote>
+<div><blockquote>
+<div><p>napalm_get, getters=[‘facts’],
+tests=[</p>
+<blockquote>
+<div><p>test_jsonpath(path=’interfaces.eth1.is_enabled’, value=True),
+test_until(retries=10, delay=30)</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>)</p>
+</div></blockquote>
+<p>&gt;&gt;
+&gt;&gt; print_result(result, vars=[‘result’, ‘tests’])
+napalm_get**********************************************************************
+* vyos ** changed : False <strong>**************************************************</strong>
+vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO
+{ ‘interfaces’: { ‘eth0’: { ‘description’: ‘’,</p>
+<blockquote>
+<div><blockquote>
+<div><p>‘is_enabled’: True,
+‘is_up’: True,
+‘last_flapped’: -1.0,
+‘mac_address’: ‘08:00:27:e0:28:63’,
+‘mtu’: -1,
+‘speed’: 0},</p>
+</div></blockquote>
+<dl class="simple">
+<dt>‘lo’: { ‘description’: ‘’,</dt><dd><p>‘is_enabled’: True,
+‘is_up’: True,
+‘last_flapped’: -1.0,
+‘mac_address’: ‘00:00:00:00:00:00’,
+‘mtu’: -1,
+‘speed’: 0}}}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>‘jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value True found - PASSED’
+‘until: succeeded after 2.0347249507904053 seconds - PASSED’
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>Things to note a</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/processors.html">processors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tests.html">tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api/index.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Avery
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
