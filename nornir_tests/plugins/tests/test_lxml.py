@@ -67,7 +67,7 @@ class test_lxml(Test):
 
             self.match = xml_data.find(self.xpath)
 
-            if self.match == None:
+            if not self.match:
                 raise Exception(f"no match found from xpath {self.xpath}")
 
             else:
@@ -79,12 +79,12 @@ class test_lxml(Test):
 
                 else:
                     self.result = False
-                
+
                 if self.result:
                     self.msg = "{} found as {} at xpath {}".format(
                         self.value, "text" if self.text else "attrib", self.xpath
                     )
-                
+
                 else:
                     raise Exception(
                         "{} not found as {} at xpath {}".format(

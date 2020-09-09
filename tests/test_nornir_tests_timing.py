@@ -29,5 +29,5 @@ def test_no_arguments_not_failed(nornir):
         assert hasattr(result[0], "run_time")
         assert hasattr(result[0], "tests")
         assert len(result[0].tests) > 0
-        assert result[0].failed == False
+        assert not result[0].failed
         assert result[0].tests[0].t1 > result[0].tests[0].t0

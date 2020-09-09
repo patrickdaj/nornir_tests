@@ -89,7 +89,7 @@ class TestList(object):
         """Constructor for TestList"""
         self.tests: List[Test] = []
 
-    def __getitem__(self, key: int):
+    def __getitem__(self, key: int) -> Test:
         """Index access overload"""
         return self.tests[key]
 
