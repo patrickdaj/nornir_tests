@@ -17,7 +17,8 @@ class test_jsonpath(Test):
         path (str, optional): jsonpath path. Defaults to "".
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
             Defaults to "result".
-        value (Any, optional) Value to check for in path. Defaults to ""
+        value (Any, optional): Value to check for in path. Defaults to ""
+        host_data (str, optional): jsonpath to get value from task.host.data.  Defaults to ""
         fail_task (bool, optional): Determines whether test failure results causes
             setting result failure. Defaults to False.
     """
@@ -25,12 +26,14 @@ class test_jsonpath(Test):
     def __init__(
         self,
         value: Any = "",
+        host_data: str = "",
         path: str = "",
         result_attr: str = "result",
         fail_task: bool = False,
     ):
         """Constructor for regexp decorator"""
         self.path = path
+        self.host_data = host_data
         self.value = value
         self.result_attr = result_attr
         super(test_jsonpath, self).__init__(fail_task)
@@ -49,6 +52,11 @@ class test_jsonpath(Test):
 
         try:
             json_data = getattr(result, self.result_attr)
+
+            # self.host_data always preferred
+            if self.host_data:
+                new_value = parse(self.host_data).find(task.host.data)
+                self.value = new_value if new_value else self.value
 
             if isinstance(json_data, str):
                 json_data = loads(json_data)

@@ -203,7 +203,7 @@
 
 <dl class="py class">
 <dt id="nornir_tests.plugins.tests.test_jsonpath">
-<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_jsonpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_jsonpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using jsonpath</p>
 <dl class="simple">
 <dt>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">jsonpath_ng</a></dt><dd><p>implementation.</p>
@@ -215,7 +215,8 @@
 <li><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath path. Defaults to “”.</p></li>
 <li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).
 Defaults to “result”.</p></li>
-<li><p><strong>value</strong> (<em>Any</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value to check for in path. Defaults to “”</p></li>
+<li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath to get value from task.host.data.  Defaults to “”</p></li>
 <li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
 setting result failure. Defaults to False.</p></li>
 </ul>
@@ -242,7 +243,7 @@ setting result failure. Defaults to False.</p></li>
 
 <dl class="py class">
 <dt id="nornir_tests.plugins.tests.test_lxml">
-<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_lxml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xpath</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">attrib</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_lxml" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_lxml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">xpath</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">attrib</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nornir_tests.plugins.tests.test_lxml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using lxml</p>
 <p>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">lxml</a> implementation.</p>
 <dl class="field-list simple">
@@ -250,10 +251,12 @@ setting result failure. Defaults to False.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>xpath</strong> (<em>str</em><em>, </em><em>optional</em>) – xpath locator. Defaults to “”.</p></li>
 <li><p><strong>value</strong> (<em>str</em><em>, </em><em>optional</em>) – value for comparison.  Defaults to “”.</p></li>
+<li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath to get value from task.host.data.  Defaults to “”</p></li>
 <li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).
 Defaults to “result”.</p></li>
-<li><p><strong>text</strong> (<em>bool</em><em>, </em><em>optional</em>) – </p></li>
-<li><p><strong>attrib</strong> (<em>str</em><em>, </em><em>optional</em>) – Defaults to “”.</p></li>
+<li><p><strong>text</strong> (<em>bool</em><em>, </em><em>optional</em>) – compare text value ie. &lt;element&gt;text&lt;/element&gt;. Defaults to False.</p></li>
+<li><p><strong>attrib</strong> (<em>str</em><em>, </em><em>optional</em>) – compare attribute value ie. &lt;element &#64;attrib=’whatever’&gt;.
+Defaults to “”.</p></li>
 <li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
 setting result failure. Defaults to False.</p></li>
 </ul>
