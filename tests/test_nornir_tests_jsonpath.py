@@ -1,4 +1,3 @@
-import pytest
 import json
 import os
 
@@ -34,7 +33,7 @@ def test_jsonpath_from_str(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == False
+        assert not result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert hasattr(result[0].tests[0], "match")
@@ -49,7 +48,7 @@ def test_jsonpath_from_dict(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == False
+        assert not result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert hasattr(result[0].tests[0], "match")
@@ -64,7 +63,7 @@ def test_jsonpath_from_dict_failure(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == True
+        assert result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
 
@@ -78,7 +77,7 @@ def test_jsonpath_invalid_input(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == True
+        assert result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert result[0].tests[0].msg.find("not parsible as dict") != -1
@@ -95,7 +94,7 @@ def test_jsonpath_no_path_match(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == True
+        assert result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert result[0].tests[0].msg.find("no match found from path") != -1
@@ -110,7 +109,7 @@ def test_jsonpath_no_value_match(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == False
+        assert not result[0].failed
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert result[0].tests[0].msg.find("could not find value") != -1

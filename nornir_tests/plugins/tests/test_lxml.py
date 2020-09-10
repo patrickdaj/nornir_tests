@@ -1,4 +1,5 @@
 import lxml.etree as etree
+import xml.etree.ElementTree as ET
 from typing import Callable, Any
 
 from nornir.core.task import Result
@@ -62,6 +63,8 @@ class test_lxml(Test):
                 xml_data = etree.fromstring(xml_data)
             elif isinstance(xml_data, etree._Element):
                 pass
+            elif isinstance(xml_data, ET.Element):
+                pass
             else:
                 raise Exception(f"{self.result_attr} is not xml or etree")
 
@@ -79,12 +82,12 @@ class test_lxml(Test):
 
                 else:
                     self.result = False
-                
+
                 if self.result:
                     self.msg = "{} found as {} at xpath {}".format(
                         self.value, "text" if self.text else "attrib", self.xpath
                     )
-                
+
                 else:
                     raise Exception(
                         "{} not found as {} at xpath {}".format(

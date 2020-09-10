@@ -2,3 +2,8 @@ test:
   hostname: test
   username: test
   password: test
+vyos:
+  hostname: 192.168.99.170
+  username: vyos
+  password: vyos
+  platform: vyos

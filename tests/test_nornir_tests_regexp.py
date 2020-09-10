@@ -14,7 +14,7 @@ def test_regexp_not_failed(nornir):
 
     for host, result in results.items():
         assert hasattr(result[0], "tests")
-        assert result[0].failed == False
+        assert not result[0].failed
         assert len(result[0].tests) > 0
         assert str(result[0]) != ""
 

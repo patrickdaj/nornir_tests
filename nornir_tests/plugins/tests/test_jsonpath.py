@@ -1,5 +1,5 @@
 from jsonpath_ng import parse
-from json import loads, JSONDecodeError
+from json import loads
 from typing import Callable, Any
 
 from nornir.core.task import Result
@@ -10,7 +10,8 @@ from .test import Test
 class test_jsonpath(Test):
     """Test decorator using jsonpath
 
-    This test is based off of the `jsonpath_ng <https://github.com/h2non/jsonpath-ng>`__ implementation.
+    This test is based off of the `jsonpath_ng <https://github.com/h2non/jsonpath-ng>`__
+        implementation.
 
     Args:
         path (str, optional): jsonpath path. Defaults to "".
