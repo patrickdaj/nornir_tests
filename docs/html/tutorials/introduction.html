@@ -397,14 +397,16 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Introduction">
 <h1>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h1>
-<p>The idea behind nornir_tests is to allow for adding tests against the task run and its results. Many times, a task can run and get some output but that doesn’t mean it is successful. One option is to add additional checks or some conditional logic to deal with this. Another is to add tests against the data returned from a task. That is what nornir_tests is for.</p>
+<p>The idea behind nornir_tests is to allow for adding tests against the task run and its results. Many times, a task can run and get some output but that doesn’t mean it is successful. One option is to add additional checks or tasks with some conditional logic to deal with this. Another is to add tests against the data returned from a task. That is what nornir_tests is for.</p>
+<p>The question is probably why use tests. Tests were inspired by the same feature in postman. In postman, a test was something that was done against the data returned from a postman request to determine if the request was actually successful. This can certainly be added in python using either pure python or additional tasks but there is some elegance and some additional functionality obtained by using tests tied to tasks. In this intro, I will try to touch on a variety of ideas using tests. In
+further tutorials I’ll go into more detail on using each of the test types.</p>
 <p>Typical nornir initialization is done first.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nornir_utils.plugins.tasks.data</span> <span class="kn">import</span> <span class="n">echo_data</span>
+<span></span><span class="kn">from</span> <span class="nn">nornir_napalm.plugins.tasks</span> <span class="kn">import</span> <span class="n">napalm_get</span><span class="p">,</span> <span class="n">napalm_ping</span>
 <span class="kn">from</span> <span class="nn">nornir_utils.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
 <span class="kn">from</span> <span class="nn">nornir</span> <span class="kn">import</span> <span class="n">InitNornir</span>
 
@@ -421,7 +423,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>Next the TestsProcessor is appended to the processors list and the inventory is shown.</p>
+<p>Next the TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -440,79 +442,25 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;test&#39;: Host: test}
+{&#39;test&#39;: Host: test, &#39;vyos&#39;: Host: vyos}
 
 </pre></div></div>
 </div>
-<p>Using more typical nornir methodology the process of running a task and verifying certain aspects about it can be accomplished a many different ways. The example case is to simply run an echo_data task and validate that the result is changed and it completed within 10 seconds.</p>
+<p>In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_regexp</span><span class="p">,</span> <span class="n">test_until</span><span class="p">,</span> <span class="n">test_timing</span><span class="p">,</span> <span class="n">test_jsonpath</span>
 
-<span class="k">def</span> <span class="nf">grouped_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">echo_data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">vyos</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;vyos&#39;</span><span class="p">)</span>
 
-    <span class="c1"># one way to validate, kinda clunky</span>
-    <span class="k">if</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">changed</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="c1"># and to get the above into results either return another Result or append tests</span>
-    <span class="n">result</span><span class="o">.</span><span class="n">tests</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">f</span><span class="s1">&#39;changed: changed=True - </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">changed</span> <span class="o">==</span> <span class="kc">True</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;timing: 0 &lt; </span><span class="si">{</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="si">}</span><span class="s1"> &lt; </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="si">}</span><span class="s1">&#39;</span>
-    <span class="p">]</span>
-
-<span class="n">result</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">grouped_task</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-cyan-intense-fg ansi-bold">grouped_task********************************************************************</span>
-<span class="ansi-blue-intense-fg ansi-bold">* test ** changed : False ******************************************************</span>
-<span class="ansi-red-intense-fg ansi-bold">vvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
-Traceback (most recent call last):
-  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py&#34;, line 98, in start
-    r = self.task(self, **self.params)
-  File &#34;&lt;ipython-input-3-2b81df11fe9b&gt;&#34;, line 13, in grouped_task
-    result.failed = True
-AttributeError: can&#39;t set attribute
-
-<span class="ansi-green-intense-fg ansi-bold">---- echo_data ** changed : False ---------------------------------------------- INFO</span>
-{&#39;x&#39;: 1, &#39;y&#39;: 1}
-<span class="ansi-red-intense-fg ansi-bold">^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
-
-</pre></div></div>
-</div>
-<p>Unfortunately we cannot change the failed state at this point. So perhaps we just conditionally</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">nr</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_failed_hosts</span><span class="p">()</span>
-
-<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_regexp</span><span class="p">,</span> <span class="n">test_until</span>
-
-<span class="n">result</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">task</span><span class="o">=</span><span class="n">echo_data</span><span class="p">,</span>
-    <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">task</span><span class="o">=</span><span class="n">napalm_get</span><span class="p">,</span>
+    <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_regexp</span><span class="p">(</span><span class="n">regexp</span><span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="p">),</span>
-        <span class="n">test_regexp</span><span class="p">(</span><span class="n">regexp</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">x</span><span class="se">\&#39;</span><span class="s2">: 1&quot;</span><span class="p">),</span>
-        <span class="n">test_until</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
@@ -525,27 +473,210 @@ AttributeError: can&#39;t set attribute
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-cyan-intense-fg ansi-bold">echo_data***********************************************************************</span>
-<span class="ansi-blue-intense-fg ansi-bold">* test ** changed : False ******************************************************</span>
-<span class="ansi-green-intense-fg ansi-bold">vvvv echo_data ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-{&#39;x&#39;: 1, &#39;y&#39;: 1}
-&#39;regexp: 123 did not match result - FAILED&#39;
-&#34;regexp: &#39;x&#39;: 1 matched &#39;x&#39;: 1 in result - PASSED&#34;
-&#39;until: succeeded after 0.0017473697662353516 seconds - PASSED&#39;
+<span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+{&#39;interfaces&#39;:{&#39;eth0&#39;:{&#39;description&#39;:&#39;&#39;,
+&#39;is_enabled&#39;:True,
+&#39;is_up&#39;:True,
+&#39;last_flapped&#39;:-1.0,
+&#39;mac_address&#39;:&#39;08:00:27:e0:28:63&#39;,
+&#39;mtu&#39;:-1,
+&#39;speed&#39;:0},
+&#39;lo&#39;:{&#39;description&#39;:&#39;&#39;,
+&#39;is_enabled&#39;:True,
+&#39;is_up&#39;:True,
+&#39;last_flapped&#39;:-1.0,
+&#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
+&#39;mtu&#39;:-1,
+&#39;speed&#39;:0}}}
+(&#39;jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value &#39;
+ &#39;True found - PASSED&#39;)
 
-<span class="ansi-green-intense-fg ansi-bold">^^^^ END echo_data ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<p>Next a ping is sent to the vyos device using the timing test. As can be seen in the output, this gives runtime of the task and can be enhanced with min_run_time and max_run_time to affect the task result if the fail_task argument is used. If a failure occurs in the test and fail_task is set to True, then the task will be marked as failed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">task</span><span class="o">=</span><span class="n">napalm_ping</span><span class="p">,</span>
+    <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">test_timing</span><span class="p">(),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">napalm_ping*********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+&#34;(&#39;timing: 0 &lt; 4.914697647094727 &lt; 9223372036854775807&#39;,) - PASSED&#34;
+
+{&#39;success&#39;:{&#39;packet_loss&#39;:0,
+&#39;probes_sent&#39;:5,
+&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 4.84}],
+&#39;rtt_avg&#39;:4.84,
+&#39;rtt_max&#39;:8.166,
+&#39;rtt_min&#39;:2.693,
+&#39;rtt_stddev&#39;:1.962}}
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+<p>The next example shows how the result failed state can be affected by a test.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">task</span><span class="o">=</span><span class="n">napalm_ping</span><span class="p">,</span>
+    <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">test_timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">napalm_ping*********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
+<span class="ansi-red-intense-fg ansi-bold">vvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
+&#34;(&#39;timing: 0 &lt; 4.8129801750183105 &lt; 1&#39;,) - FAILED&#34;
+
+{&#39;success&#39;:{&#39;packet_loss&#39;:0,
+&#39;probes_sent&#39;:5,
+&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 3.349}],
+&#39;rtt_avg&#39;:3.349,
+&#39;rtt_max&#39;:4.976,
+&#39;rtt_min&#39;:2.689,
+&#39;rtt_stddev&#39;:0.829}}
+<span class="ansi-red-intense-fg ansi-bold">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+<p>Tests can be stacked and the entire task and associated tests can be retried using test_until. The next test shows how a rebooted device can be retried until it comes back up using only tests. As napalm for vyos doesn’t currently support CLI, I rebooted it manually and ran the ping below to show it was down.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nr</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_failed_hosts</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">task</span><span class="o">=</span><span class="n">napalm_ping</span><span class="p">,</span>
+    <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">napalm_ping*********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
+<span class="ansi-red-intense-fg ansi-bold">vvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
+Traceback (most recent call last):
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py&#34;, line 98, in start
+    r = self.task(self, **self.params)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir_napalm/plugins/tasks/napalm_ping.py&#34;, line 37, in napalm_ping
+    result = device.ping(
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/napalm_vyos/vyos.py&#34;, line 857, in ping
+    output_ping = self.device.send_command(command)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/utilities.py&#34;, line 363, in wrapper_decorator
+    return func(self, *args, **kwargs)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py&#34;, line 1426, in send_command
+    prompt = self.find_prompt(delay_factor=delay_factor)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py&#34;, line 1154, in find_prompt
+    self.write_channel(self.RETURN)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py&#34;, line 453, in write_channel
+    self._write_channel(out_data)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py&#34;, line 411, in _write_channel
+    self.remote_conn.sendall(write_bytes(out_data, encoding=self.encoding))
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py&#34;, line 846, in sendall
+    sent = self.send(s)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py&#34;, line 801, in send
+    return self._send(s, m)
+  File &#34;/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py&#34;, line 1198, in _send
+    raise socket.error(&#34;Socket is closed&#34;)
+OSError: Socket is closed
+
+<span class="ansi-red-intense-fg ansi-bold">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+<p>After rebooting and failing the ping above, the get command is started with test_until and test_jsonpath. test_jsonpath was set to fail the task so that test_until would continue to loop.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nr</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_failed_hosts</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">task</span><span class="o">=</span><span class="n">napalm_get</span><span class="p">,</span>
+    <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">test_until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+(&#39;jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value &#39;
+ &#39;True found - PASSED&#39;)
+&#39;until: succeeded after 36.63877630233765 seconds - PASSED&#39;
+
+{&#39;interfaces&#39;:{&#39;eth0&#39;:{&#39;description&#39;:&#39;&#39;,
+&#39;is_enabled&#39;:True,
+&#39;is_up&#39;:True,
+&#39;last_flapped&#39;:-1.0,
+&#39;mac_address&#39;:&#39;08:00:27:e0:28:63&#39;,
+&#39;mtu&#39;:-1,
+&#39;speed&#39;:0},
+&#39;lo&#39;:{&#39;description&#39;:&#39;&#39;,
+&#39;is_enabled&#39;:True,
+&#39;is_up&#39;:True,
+&#39;last_flapped&#39;:-1.0,
+&#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
+&#39;mtu&#39;:-1,
+&#39;speed&#39;:0}}}
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+<p>Not bad. The result above shows that it must have failed on its first try but by 36 seconds it was able to pass the test_jsonpath test and the call to napalm_get and so test_until finished up.</p>
+<p>This was pretty haphazard but other tutorials will go into more details about each of the tests.</p>
 </div>
 
 

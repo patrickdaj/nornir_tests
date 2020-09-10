@@ -27,7 +27,9 @@
    "source": [
     "# Introduction\n",
     "\n",
-    "The idea behind nornir_tests is to allow for adding tests against the task run and its results.  Many times, a task can run and get some output but that doesn't mean it is successful.  One option is to add additional checks or some conditional logic to deal with this.  Another is to add tests against the data returned from a task.  That is what nornir_tests is for."
+    "The idea behind nornir_tests is to allow for adding tests against the task run and its results.  Many times, a task can run and get some output but that doesn't mean it is successful.  One option is to add additional checks or tasks with some conditional logic to deal with this.  Another is to add tests against the data returned from a task.  That is what nornir_tests is for.\n",
+    "\n",
+    "The question is probably why use tests.  Tests were inspired by the same feature in postman.  In postman, a test was something that was done against the data returned from a postman request to determine if the request was actually successful.  This can certainly be added in python using either pure python or additional tasks but there is some elegance and some additional functionality obtained by using tests tied to tasks.  In this intro, I will try to touch on a variety of ideas using tests.  In further tutorials I'll go into more detail on using each of the test types."
    ]
   },
   {
@@ -43,7 +45,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from nornir_utils.plugins.tasks.data import echo_data\n",
+    "from nornir_napalm.plugins.tasks import napalm_get, napalm_ping\n",
     "from nornir_utils.plugins.functions import print_result\n",
     "from nornir import InitNornir\n",
     "\n",
@@ -63,7 +65,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Next the TestsProcessor is appended to the processors list and the inventory is shown."
+    "Next the TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation."
    ]
   },
   {
@@ -76,7 +78,7 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "{'test': Host: test}\u001b[0m\n\u001b[0m"
+     "text": "{'test': Host: test, 'vyos': Host: vyos}\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
@@ -91,7 +93,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Using more typical nornir methodology the process of running a task and verifying certain aspects about it can be accomplished a many different ways.  The example case is to simply run an echo_data task and validate that the result is changed and it completed within 10 seconds."
+    "In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result."
    ]
   },
   {
@@ -104,39 +106,30 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mgrouped_task********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* test ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0mTraceback (most recent call last):\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py\", line 98, in start\n    r = self.task(self, **self.params)\n  File \"<ipython-input-3-2b81df11fe9b>\", line 13, in grouped_task\n    result.failed = True\nAttributeError: can't set attribute\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m---- echo_data ** changed : False ---------------------------------------------- INFO\u001b[0m\n\u001b[0m{'x': 1, 'y': 1}\u001b[0m\n\u001b[0m\u001b[1m\u001b[31m^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'interfaces'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'eth0'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m,\n\u001b[0m'lo'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'00:00:00:00:00:00'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m('jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value '\n 'True found - PASSED')\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
-    "import time\n",
+    "from nornir_tests.plugins.tests import test_regexp, test_until, test_timing, test_jsonpath\n",
     "\n",
-    "def grouped_task(task, *args, **kwargs):\n",
-    "    t0 = time.time()\n",
-    "    result = task.run(task=echo_data, *args, **kwargs)\n",
-    "    t1 = time.time()\n",
+    "vyos = nr.filter(name='vyos')\n",
     "\n",
-    "    # one way to validate, kinda clunky\n",
-    "    if t1 - t0 > 10:\n",
-    "        result.failed = True\n",
-    "    \n",
-    "    if result.changed != True:\n",
-    "        result.failed = True\n",
-    "\n",
-    "    # and to get the above into results either return another Result or append tests\n",
-    "    result.tests = [\n",
-    "        f'changed: changed=True - {result.changed == True}',\n",
-    "        f'timing: 0 < {t1 - t0} < {sys.maxsize} - {t1 - t0 <= 10}'\n",
+    "result = vyos.run(\n",
+    "    task=napalm_get,\n",
+    "    getters=['interfaces'],\n",
+    "    tests=[\n",
+    "        test_jsonpath(path='interfaces.eth0.is_up', value=True),\n",
     "    ]\n",
-    "    \n",
-    "result = nr.run(task=grouped_task, x=1, y=1)\n",
-    "print_result(result)"
+    ")\n",
+    "\n",
+    "print_result(result, vars=['result', 'tests'])"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Unfortunately we cannot change the failed state at this point.  So perhaps we just conditionally "
+    "Next a ping is sent to the vyos device using the timing test.  As can be seen in the output, this gives runtime of the task and can be enhanced with min_run_time and max_run_time to affect the task result if the fail_task argument is used.  If a failure occurs in the test and fail_task is set to True, then the task will be marked as failed."
    ]
   },
   {
@@ -149,33 +142,127 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mecho_data***********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* test ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv echo_data ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m{'x': 1, 'y': 1}\u001b[0m\n\u001b[0m'regexp: 123 did not match result - FAILED'\n\"regexp: 'x': 1 matched 'x': 1 in result - PASSED\"\n'until: succeeded after 0.0017473697662353516 seconds - PASSED'\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END echo_data ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mnapalm_ping*********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\"('timing: 0 < 4.914697647094727 < 9223372036854775807',) - PASSED\"\n\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'success'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'packet_loss'\u001b[0m:\u001b[0m0\u001b[0m,\n\u001b[0m'probes_sent'\u001b[0m:\u001b[0m5\u001b[0m,\n\u001b[0m'results'\u001b[0m:\u001b[0m[{'ip_address': '192.168.99.1', 'rtt': 4.84}]\u001b[0m,\n\u001b[0m'rtt_avg'\u001b[0m:\u001b[0m4.84\u001b[0m,\n\u001b[0m'rtt_max'\u001b[0m:\u001b[0m8.166\u001b[0m,\n\u001b[0m'rtt_min'\u001b[0m:\u001b[0m2.693\u001b[0m,\n\u001b[0m'rtt_stddev'\u001b[0m:\u001b[0m1.962\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "result = vyos.run(\n",
+    "    task=napalm_ping,\n",
+    "    dest='192.168.99.1',\n",
+    "    tests=[\n",
+    "        test_timing(),\n",
+    "    ]\n",
+    ")\n",
+    "print_result(result, vars=['tests', 'result'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The next example shows how the result failed state can be affected by a test."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[36mnapalm_ping*********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0m\"('timing: 0 < 4.8129801750183105 < 1',) - FAILED\"\n\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'success'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'packet_loss'\u001b[0m:\u001b[0m0\u001b[0m,\n\u001b[0m'probes_sent'\u001b[0m:\u001b[0m5\u001b[0m,\n\u001b[0m'results'\u001b[0m:\u001b[0m[{'ip_address': '192.168.99.1', 'rtt': 3.349}]\u001b[0m,\n\u001b[0m'rtt_avg'\u001b[0m:\u001b[0m3.349\u001b[0m,\n\u001b[0m'rtt_max'\u001b[0m:\u001b[0m4.976\u001b[0m,\n\u001b[0m'rtt_min'\u001b[0m:\u001b[0m2.689\u001b[0m,\n\u001b[0m'rtt_stddev'\u001b[0m:\u001b[0m0.829\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m\u001b[1m\u001b[31m^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "result = vyos.run(\n",
+    "    task=napalm_ping,\n",
+    "    dest='192.168.99.1',\n",
+    "    tests=[\n",
+    "        test_timing(max_run_time=1, fail_task=True),\n",
+    "    ]\n",
+    ")\n",
+    "print_result(result, vars=['tests', 'result'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Tests can be stacked and the entire task and associated tests can be retried using test_until.  The next test shows how a rebooted device can be retried until it comes back up using only tests.  As napalm for vyos doesn't currently support CLI, I rebooted it manually and ran the ping below to show it was down."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[36mnapalm_ping*********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0mTraceback (most recent call last):\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py\", line 98, in start\n    r = self.task(self, **self.params)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir_napalm/plugins/tasks/napalm_ping.py\", line 37, in napalm_ping\n    result = device.ping(\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/napalm_vyos/vyos.py\", line 857, in ping\n    output_ping = self.device.send_command(command)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/utilities.py\", line 363, in wrapper_decorator\n    return func(self, *args, **kwargs)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py\", line 1426, in send_command\n    prompt = self.find_prompt(delay_factor=delay_factor)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py\", line 1154, in find_prompt\n    self.write_channel(self.RETURN)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py\", line 453, in write_channel\n    self._write_channel(out_data)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connection.py\", line 411, in _write_channel\n    self.remote_conn.sendall(write_bytes(out_data, encoding=self.encoding))\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py\", line 846, in sendall\n    sent = self.send(s)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py\", line 801, in send\n    return self._send(s, m)\n  File \"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py\", line 1198, in _send\n    raise socket.error(\"Socket is closed\")\nOSError: Socket is closed\n\u001b[0m\n\u001b[0m\u001b[1m\u001b[31m^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
     "nr.data.reset_failed_hosts()\n",
     "\n",
-    "from nornir_tests.plugins.tests import test_regexp, test_until\n",
-    "\n",
-    "result = nr.run(\n",
-    "    task=echo_data, \n",
-    "    x=1, y=1,\n",
-    "    tests=[\n",
-    "        test_regexp(regexp='123'),\n",
-    "        test_regexp(regexp=\"\\'x\\': 1\"),\n",
-    "        test_until(delay=1, retries=1)\n",
-    "    ]\n",
+    "result = vyos.run(\n",
+    "    task=napalm_ping,\n",
+    "    dest='192.168.99.1',\n",
     ")\n",
-    "\n",
-    "print_result(result, vars=['result', 'tests'])"
+    "print_result(result, vars=['tests', 'result'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After rebooting and failing the ping above, the get command is started with test_until and test_jsonpath.  test_jsonpath was set to fail the task so that test_until would continue to loop."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 9,
+   "metadata": {
+    "tags": []
+   },
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m('jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value '\n 'True found - PASSED')\n'until: succeeded after 36.63877630233765 seconds - PASSED'\n\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'interfaces'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'eth0'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m,\n\u001b[0m'lo'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'00:00:00:00:00:00'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+    }
+   ],
+   "source": [
+    "nr.data.reset_failed_hosts()\n",
+    "result = vyos.run(\n",
+    "    task=napalm_get,\n",
+    "    getters=['interfaces'],\n",
+    "    tests=[\n",
+    "        test_jsonpath(path='interfaces.eth0.is_up', value=True, fail_task=True),\n",
+    "        test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),\n",
+    "    ]\n",
+    ")\n",
+    "print_result(result, vars=['tests', 'result'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "metadata": {},
-   "outputs": [],
-   "source": []
+   "source": [
+    "Not bad.  The result above shows that it must have failed on its first try but by 36 seconds it was able to pass the test_jsonpath test and the call to napalm_get and so test_until finished up.\n",
+    "\n",
+    "This was pretty haphazard but other tutorials will go into more details about each of the tests."
+   ]
   }
  ]
 }
