@@ -113,3 +113,8 @@ def test_jsonpath_no_value_match(nornir):
         assert str(result[0]) != ""
         assert len(result[0].tests) > 0
         assert result[0].tests[0].msg.find("could not find value") != -1
+
+# TODO -
+# add test to validate host_data
+# add test to validate one_of
+# add test to validate multiple match without one_of
