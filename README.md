@@ -15,7 +15,8 @@
 - Faling a task if text is not in results attribute
 - Using jsonpath or xpath to assert a value at a particular path
 - Passing a task for an expected exception
-- Testing til a condition repeatedly until all tests are passing
+- Testing a condition repeatedly until all tests are passing
+- Nest multiple tests
 
 ## Installation
 
