@@ -2,3 +2,5 @@ test:
   hostname: test
   username: test
   password: test
+  data:
+    data1: Computer
