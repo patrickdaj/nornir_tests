@@ -14,3 +14,21 @@ def test_task_run(nornir):
         assert hasattr(result[1], "run_time")
         assert hasattr(result[1], "tests")
         assert not result[1].failed
+        assert result[1].tests[0].msg != ''
+        assert result[1].tests[0].result
+
+
+def test_nornir_run(nornir):
+    results = nornir.run(
+        subtask,
+        tests=[
+            test_timing()
+        ]
+    )
+
+    for host, result in results.items():
+        assert hasattr(result[1], "run_time")
+        assert hasattr(result[1], "tests")
+        assert not result[1].failed
+        assert result[1].tests[0].msg != ''
+        assert result[1].tests[0].result

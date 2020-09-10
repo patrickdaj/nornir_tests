@@ -1,3 +1,5 @@
+import pytest
+import xml.etree.ElementTree as ET
 import lxml
 import os
 
@@ -15,6 +17,11 @@ def get_xml_str(task):
 
 
 def get_xml_etree(task):
+    with open(os.path.join(dir_path, "data/test.xml"), "r") as f:
+        result = Result(host=task.host, result=ET.fromstring(f.read()))
+    return result
+
+def get_xml_lxml(task):
     with open(os.path.join(dir_path, "data/test.xml"), "r") as f:
         result = Result(host=task.host, result=lxml.etree.fromstring(f.read()))
     return result
@@ -55,11 +62,11 @@ def test_lxml_from_str_using_text(nornir):
         assert hasattr(result[0].tests[0], "match")
         assert result[0].tests[0].result
 
-
-def test_lxml_from_etree(nornir):
+@pytest.mark.parametrize('xml_func', [get_xml_etree, get_xml_lxml])
+def test_lxml_from_etree(nornir, xml_func):
 
     results = nornir.run(
-        task=get_xml_etree,
+        task=xml_func,
         tests=[test_lxml(xpath=".//book/genre", text=True, value="ComputerX")],
     )
 
@@ -133,11 +140,11 @@ def test_lxml_no_path_match(nornir):
         assert not result[0].tests[0].result
         assert result[0].tests[0].msg.find("no match found from xpath") != -1
 
-
-def test_lxml_no_value_match(nornir):
+@pytest.mark.parametrize('xml_func', [get_xml_etree, get_xml_lxml])
+def test_lxml_no_value_match(nornir, xml_func):
 
     results = nornir.run(
-        task=get_xml_etree,
+        task=xml_func,
         tests=[
             test_lxml(xpath=".//book/genre", text=True, value="ABC", fail_task=True)
         ],

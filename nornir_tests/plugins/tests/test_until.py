@@ -47,11 +47,20 @@ class test_until(Test):
         self.result = False
 
         for i in range(self.retries):
-            result = func(*args, **kwargs)
+            try:
+                result = func(*args, **kwargs)
+                if not result.failed:
+                    self.result = True
+                    break
+            except Exception as e:
+                # pass last exception back to nornir
+                if i == self.retries - 1:
+                    raise e
 
-            if not result.failed:
-                self.result = True
+            # no need to sleep if this is last iteration
+            if i == self.retries - 1:
                 break
+            
             else:
                 time.sleep(self.delay)
 

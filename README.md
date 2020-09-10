@@ -8,19 +8,6 @@
 
 [nornir_tests documentation](https://patrickdaj.github.io/nornir_tests/)
 
-## How it works
-Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
-no way to use normal @ decorator syntax as these need to be applied before function definitions.
-That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
-paired with a special processor that looks for them in task.params.
-
-Once the task is wrapped, when Nornir calls it the decorator can run code before and after
-execution of the task.  It can then affect the actual result being returned.  For this reason
-it does not really work for anything that doesn't return a result.  So wrapping calls to tasks
-defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
-currently possible but the tasks within the grouped task are.  Nornir run commands that return
-results work fine.
-
 ## Potential uses
 
 - Timing a task and making sure it completes within x seconds
@@ -76,4 +63,15 @@ vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 'until: succeeded after 2.0347249507904053 seconds - PASSED'
 ```
 
-Things to note a
+## How it works
+Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
+no way to use normal @ decorator syntax as these need to be applied before function definitions.
+That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
+paired with a special processor that looks for them in task.params.
+
+Once the task is wrapped, when Nornir calls it the decorator can run code before and after
+execution of the task.  It can then affect the actual result being returned.  For this reason
+it does not really work for anything that doesn't return a result.  So wrapping calls to tasks
+defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
+currently possible but the tasks within the grouped task are.  Nornir run commands that return
+results work fine.

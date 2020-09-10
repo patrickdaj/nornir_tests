@@ -1,4 +1,5 @@
 import lxml.etree as etree
+import xml.etree.ElementTree as ET
 from typing import Callable, Any
 
 from nornir.core.task import Result
@@ -62,12 +63,14 @@ class test_lxml(Test):
                 xml_data = etree.fromstring(xml_data)
             elif isinstance(xml_data, etree._Element):
                 pass
+            elif isinstance(xml_data, ET.Element):
+                pass
             else:
                 raise Exception(f"{self.result_attr} is not xml or etree")
 
             self.match = xml_data.find(self.xpath)
 
-            if not self.match:
+            if self.match == None:
                 raise Exception(f"no match found from xpath {self.xpath}")
 
             else:
