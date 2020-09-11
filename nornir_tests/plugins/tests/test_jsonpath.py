@@ -95,11 +95,12 @@ class test_jsonpath(Test):
 
                 else:
                     self.result = self.match[0].value == self.value
+                    self.match = self.match[0]
 
             if self.result:
                 self.msg = (
                     "jsonpath: {} expanded to {} and value {} found".format(
-                        self.path, self.match[0].full_path, self.value
+                        self.path, self.match.full_path, self.value
                     )
                 )
             else:
