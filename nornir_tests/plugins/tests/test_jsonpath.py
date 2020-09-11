@@ -78,8 +78,6 @@ class test_jsonpath(Test):
         >>> nr.run(check_ntp_sync, name='Check NTP Sync')
         >>>
 
-        ``
-
     """
 
     assertion: str = "is_equal_to"
