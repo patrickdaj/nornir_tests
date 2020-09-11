@@ -5,11 +5,12 @@ description = ""
 authors = ["Patrick Avery <patrickdaj@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.6,<4.0"
-nornir = {version = ">=3.0.0b1,<3.1.0", allow-prereleases = true}
+python = "^3.6"
+nornir = {version = "*", allow-prereleases = true}
 jsonpath-ng = "^1.5.2"
 lxml = "^4.5.2"
-dataclasses = { version = "^0.7", python = "^3.6,<3.7" }
+dataclasses = {version = "^0.7", python = "~3.6"}
+assertpy = "^1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

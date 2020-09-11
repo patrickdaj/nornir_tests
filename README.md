@@ -2,7 +2,7 @@
 
 `nornir_tests` provides the ability to add one or more tests to a Nornir task.
 
-- Attach verifications or assertions to a task
+- Attach verifications or assertions to a task with the entire assertpy library of assertions available
 - Fail task on failed tests or just have them for informational purposes
 - Get detailed test records for each of the verifications/assertions, printable by print_result
 
@@ -37,7 +37,7 @@ pip install nornir-tests
 >> result = nr.run(
         napalm_get, getters=['facts'],
         tests=[
-            test_jsonpath(path='interfaces.eth1.is_enabled', value=True),
+            test_jsonpath(path='interfaces.eth1.is_enabled', assertion='is_true'),
             test_until(retries=10, delay=30)
         ]
    )

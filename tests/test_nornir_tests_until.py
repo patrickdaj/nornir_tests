@@ -9,6 +9,9 @@ counter = 0
 def just_fail(task):
     return Result(host=task.host, failed=True)
 
+def just_pass(task):
+    return Result(host=task.host, failed=False)
+
 def generate_exception(task):
     global counter
     if counter < 4:
@@ -26,11 +29,8 @@ def test_until_passed(nornir):
     )
 
     for host, result in results.items():
-        assert hasattr(result[0], "tests")
         assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert result[0].tests[0].t1 > result[0].tests[0].t0
+        assert result[0].tests[0].run_time > 0
 
 
 def test_until_on_failed(nornir):
@@ -42,10 +42,9 @@ def test_until_on_failed(nornir):
     )
 
     for host, result in results.items():
-        assert hasattr(result[0], "tests")
         assert result[0].failed
-        assert len(result[0].tests) > 0
-        assert result[0].tests[0].t1 > result[0].tests[0].t0
+        assert result[0].tests[0].run_time > 0
+        assert not result[0].tests[0].passed
 
 
 def test_exception_catch(nornir):
@@ -59,7 +58,19 @@ def test_exception_catch(nornir):
     )
 
     for host, result in results.items():
-        assert hasattr(result[0], "tests")
         assert not result[0].failed
-        assert len(result[0].tests) > 0
-        assert result[0].tests[0].t1 > result[0].tests[0].t0
+        assert result[0].tests[0].run_time > 0
+
+def test_initial_delay(nornir):
+
+    results = nornir.run(
+        name='exception',
+        task=just_pass,
+        tests=[
+            test_until(delay=0, retries=0, initial_delay=1)
+        ]
+    )
+
+    for host, result in results.items():
+        assert not result[0].failed
+        assert result[0].tests[0].run_time > 1

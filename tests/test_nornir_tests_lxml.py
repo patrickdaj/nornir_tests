@@ -1,5 +1,4 @@
 import pytest
-import xml.etree.ElementTree as ET
 import lxml
 import os
 
@@ -12,252 +11,263 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 def get_non_xml_str(task):
     return Result(host=task.host, result='kdfjkd^%%%##  ')
 
-def get_xml_str1(task):
-    with open(os.path.join(dir_path, "data/test1.xml"), "r") as f:
+def get_xml_str(task):
+    with open(os.path.join(dir_path, "data/panos_config.xml"), "r") as f:
         result = Result(host=task.host, result=f.read())
     return result
 
-
-def get_xml_etree1(task):
-    with open(os.path.join(dir_path, "data/test1.xml"), "r") as f:
-        result = Result(host=task.host, result=ET.fromstring(f.read()))
-    return result
-
-def get_xml_lxml1(task):
-    with open(os.path.join(dir_path, "data/test1.xml"), "r") as f:
-        result = Result(host=task.host, result=lxml.etree.fromstring(f.read()))
-    return result
-
-def get_xml_str2(task):
-    with open(os.path.join(dir_path, "data/test2.xml"), "r") as f:
-        result = Result(host=task.host, result=f.read())
-    return result
-
-def get_xml_etree2(task):
-    with open(os.path.join(dir_path, "data/test2.xml"), "r") as f:
-        result = Result(host=task.host, result=ET.fromstring(f.read()))
-    return result
-
-def get_xml_lxml2(task):
-    with open(os.path.join(dir_path, "data/test2.xml"), "r") as f:
+def get_xml_etree(task):
+    with open(os.path.join(dir_path, "data/panos_config.xml"), "r") as f:
         result = Result(host=task.host, result=lxml.etree.fromstring(f.read()))
     return result
 
 def get_list(task):
     return Result(host=task.host, result=[1, 2, 3])
 
-@pytest.mark.parametrize('func', [get_xml_str1, get_xml_str2])
-def test_lxml_from_str_using_attrib(nornir, func):
-
+def test_is_equal_passed_and_len_one(nornir):
     results = nornir.run(
-        task=func,
-        tests=[test_lxml(xpath=".//book", attrib="id", value="bk101", one_of=True)],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert result[0].tests[0].result
-
-@pytest.mark.parametrize('func', [get_xml_str1])
-def test_lxml_from_str_using_text(nornir, func):
-
-    results = nornir.run(
-        task=func,
-        tests=[test_lxml(xpath=".//book/genre", text=True, value="Computer")],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert result[0].tests[0].result
-
-@pytest.mark.parametrize('xml_func', [get_xml_etree1, get_xml_lxml1, get_xml_etree2, get_xml_lxml2])
-def test_lxml_from_etree(nornir, xml_func):
-
-    results = nornir.run(
-        task=xml_func,
-        tests=[test_lxml(xpath=".//book/genre", text=True, value="ComputerX")],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert not result[0].tests[0].result
-
-@pytest.mark.parametrize('func', [get_xml_str1, get_xml_str2])
-def test_lxml_from_str_failure(nornir, func):
-
-    results = nornir.run(
-        task=func,
+        task=get_xml_etree,
         tests=[
             test_lxml(
-                xpath=".//book/genre", text=True, value="ComputerX", fail_task=True
-            )
-        ],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-
-@pytest.mark.parametrize('func', [get_list])
-def test_lxml_invalid_input(nornir, func):
-
-    results = nornir.run(
-        task=func,
-        tests=[
-            test_lxml(
-                xpath=".//book/genre", text=True, value="Computer", fail_task=True
-            ),
-        ],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-        assert result[0].tests[0].msg.find("is not xml or etree") != -1
-
-
-@pytest.mark.parametrize('func', [get_non_xml_str])
-def test_lxml_invalid_input_bad_xml(nornir, func):
-
-    results = nornir.run(
-        task=func,
-        tests=[
-            test_lxml(
-                xpath=".//book/genre", text=True, value="Computer", fail_task=True
-            ),
-        ],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-        assert result[0].tests[0].msg.find("Start tag expected") != -1
-
-def test_lxml_no_path_match(nornir):
-
-    results = nornir.run(
-        task=get_xml_str1,
-        tests=[
-            test_lxml(
-                xpath=".//book/genre/invalid",
+                xpath='.//monitor-profile/entry[@name="default"]/interval', 
+                assertion='is_equal_to',
                 text=True,
-                value="Computer",
-                fail_task=True,
+                value='3'
             )
         ],
     )
 
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-        assert result[0].tests[0].msg.find("no match found from xpath") != -1
+    for result in results.values():
+        assert result[0].tests[0].passed
+        assert len(result[0].tests[0].matches) == 1
 
-
-@pytest.mark.parametrize('xml_func', [get_xml_etree2, get_xml_lxml2])
-def test_lxml_no_value_match_on_multiple(nornir, xml_func):
-
+def test_is_equal_passed_attribute(nornir):
     results = nornir.run(
-        task=xml_func,
+        task=get_xml_etree,
         tests=[
-            test_lxml(xpath=".//book/genre", text=True, value="ABC", fail_task=True)
+            test_lxml(
+                xpath='.//system/match-list/entry', 
+                assertion='is_equal_to',
+                value='System_Log_Forwarding',
+                attrib='name',
+                one_of=True
+            )
         ],
     )
 
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-        assert result[0].tests[0].msg.find("no value match on all returned matches") != -1
+    for result in results.values():
+        assert result[0].tests[0].passed
+        assert len(result[0].tests[0].matches) == 1
 
-@pytest.mark.parametrize('xml_func', [get_xml_etree1, get_xml_lxml1])
-def test_lxml_no_value_match(nornir, xml_func):
 
+def test_contains_failed(nornir):
     results = nornir.run(
-        task=xml_func,
+        task=get_xml_etree,
         tests=[
-            test_lxml(xpath=".//book/genre", text=True, value="ABC", fail_task=True)
+            test_lxml(
+                xpath='.//monitor-profile/entry[@name="default"]/interval', 
+                assertion='is_equal_to',
+                text=True,
+                value='4'
+            )
         ],
     )
 
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception).find('Expected') != -1
+
+def test_found_no_host_data(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath='.//monitor-profile/entry[@name="default"]/interval', 
+                assertion='is_equal_to',
+                text=True,
+                host_data='$.invalid'
+            )
+        ]
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception) == 'host_data not found'
+
+
+def test_found_duplicate_host_data(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath='.//monitor-profile/entry[@name="default"]/interval', 
+                assertion='is_equal_to',
+                text=True,
+                host_data='$..duplicate'
+            )
+        ]
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception) == 'host_data can only return one match'
+
+def test_path_not_found(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[test_lxml(
+            xpath=".//invalid/invalid", 
+            assertion='contains', 
+            host_data='$.domain'
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception) == 'no match found from path .//invalid/invalid'
+
+def test_with_one_of_single_match(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[test_lxml(
+            xpath=".//ike-crypto-profiles/entry[@name='default']/encryption/member", 
+            assertion='is_equal_to', 
+            value="aes-128-cbc", 
+            one_of=True,
+            text=True
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert result[0].tests[0].passed
+        assert len(result[0].tests[0].matches) == 1
+
+def test_without_one_of_single_match(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[test_lxml(
+            xpath=".//entry/encryption/member", 
+            assertion='is_equal_to', 
+            value="aes-128-cbc"
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception).find('Expected') != -1
+
+def test_with_one_of_multi_match(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath=".//wildfire-action", 
+                assertion='is_equal_to', 
+                value='reset-both',
+                text=True,
+                one_of=True
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert result[0].tests[0].passed
+        assert len(result[0].tests[0].matches) > 1
+
+def test_without_one_of_multi_match_failed(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath=".//wildfire-action", 
+                assertion='is_equal_to', 
+                value='reset-both'
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+
+def test_without_one_of_multi_match_passed(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath="alarm-rate", 
+                assertion='is_equal_to', 
+                value="10000"
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+
+def test_dont_fail_task(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath="alarm-rate", 
+                assertion='is_equal_to', 
+                value="-1"
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert not result[0].failed
+
+def test_fail_task(nornir):
+    results = nornir.run(
+        task=get_xml_etree,
+        tests=[
+            test_lxml(
+                xpath="alarm-rate", 
+                assertion='is_equal_to', 
+                value="-1",
+                fail_task=True
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert not result[0].tests[0].passed
         assert result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert not result[0].tests[0].result
-        assert result[0].tests[0].msg.find("not found as text") != -1
 
-@pytest.mark.parametrize('func', [get_xml_str1])
-def test_lxml_from_str_using_text_host_data(nornir, func):
-
+def test_string_input(nornir):
     results = nornir.run(
-        task=func,
-        tests=[test_lxml(xpath=".//book/genre", text=True, host_data='$.data1')],
+        task=get_xml_str,
+        tests=[
+            test_lxml(
+                xpath=".//minimum-length", 
+                assertion='is_equal_to', 
+                value='12',
+                text=True
+            )
+        ],
     )
 
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert result[0].tests[0].result
+    for result in results.values():
+        assert result[0].tests[0].passed
 
-
-@pytest.mark.parametrize('func', [get_xml_str1, get_xml_str2])
-def test_lxml_multi_match_without_one_of(nornir, func):
-
+def test_invalid_input(nornir):
     results = nornir.run(
-        task=func,
-        tests=[test_lxml(xpath=".//book/price", text=True, value="44.95")],
+        task=get_non_xml_str,
+        tests=[
+            test_lxml(
+                xpath=".//whatever", 
+                assertion='is_equal_to', 
+                value="1500"
+                )
+            ],
     )
 
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert result[0].tests[0].result
-
-@pytest.mark.parametrize('func', [get_xml_str2])
-def test_lxml_multi_match_without_one_of_fails(nornir, func):
-
-    results = nornir.run(
-        task=func,
-        tests=[test_lxml(xpath=".//book/genre", text=True, value="Computer")],
-    )
-
-    for host, result in results.items():
-        assert hasattr(result[0], "tests")
-        assert not result[0].failed
-        assert str(result[0]) != ""
-        assert len(result[0].tests) > 0
-        assert hasattr(result[0].tests[0], "match")
-        assert not result[0].tests[0].result
+    for result in results.values():
+        assert not result[0].tests[0].passed
+        assert str(result[0].tests[0].exception).find('Start tag expected') != -1
