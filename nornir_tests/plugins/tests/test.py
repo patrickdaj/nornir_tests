@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 import pprint
 
 from typing import Callable, List, Any
@@ -23,7 +24,7 @@ def apply_tests(
 
     return wrapped
 
-
+@dataclass
 class Test:
     """Test for Nornir task
 
@@ -32,15 +33,9 @@ class Test:
     those executed with nornir.run or task.run.  Grouped tasks cannot be decorated but
     the tasks in the grouped tasks function can.
     """
-
-    def __init__(self, fail_task: bool = False):
-        """Constructor of Test object
-
-        Args:
-            fail_task (bool, optional): Determines whether test failure results causes
-                setting result failure. Defaults to False.
-        """
-        self.fail_task: bool = fail_task
+    fail_task: bool = False
+    passed: bool = False
+    exception: str = ''
 
     def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
         """run should be implemented in derived classes"""
@@ -61,14 +56,6 @@ class Test:
 
         return inner
 
-    def __str__(self) -> str:
-        """To string overload
-
-        Returns:
-            str: string representation of Test object
-        """
-        return "{} - {}".format(self.msg, "PASSED" if self.result else "FAILED")
-
     def _add_test(self, result: Result) -> None:
         """Add test result to TestList in result
 
@@ -81,13 +68,10 @@ class Test:
             result.tests = TestList()
             result.tests.append(self)
 
-
+@dataclass
 class TestList(object):
     """List type container of Test objects"""
-
-    def __init__(self) -> None:
-        """Constructor for TestList"""
-        self.tests: List[Test] = []
+    tests: List[Test] = field(default_factory=list)
 
     def __getitem__(self, key: int) -> Test:
         """Index access overload"""
@@ -100,29 +84,6 @@ class TestList(object):
             test (Test): Test to append
         """
         self.tests.append(test)
-
-    def __str__(self) -> str:
-        """To string overload
-
-        Returns:
-            str: string representation of Test object
-        """
-        string = ""
-
-        for test in self.tests:
-            string += pprint.pformat(str(test)) + "\n"
-
-        string.rstrip("\n")
-
-        return string
-
-    def __repr__(self) -> str:
-        """Represent overload
-
-        Returns:
-            str: string representation of Test object
-        """
-        return self.__str__()
 
     def __len__(self) -> int:
         """Length overload
