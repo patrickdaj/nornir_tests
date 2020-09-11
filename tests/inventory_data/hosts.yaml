@@ -10,3 +10,8 @@ test:
     domain: domain.com
     domain2: domain2.com
     domains: [ domain.com, domain2.com ]
+    duplicate_data:
+      path1:
+        duplicate: 10
+      path2:
+        duplicate: 99

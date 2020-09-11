@@ -1,53 +1,40 @@
+from dataclasses import dataclass, field
 import lxml.etree as etree
-import xml.etree.ElementTree as ET
 from jsonpath_ng import parse
-from typing import Callable, Any
+from typing import Callable, Any, List
+from assertpy import assert_that
 
 from nornir.core.task import Result
 
 from .test import Test
 
-
+@dataclass
 class test_lxml(Test):
     """Test decorator using lxml
 
     This test is based off of the `lxml <https://github.com/h2non/jsonpath-ng>`__ implementation.
 
     Args:
-        xpath (str, optional): xpath locator. Defaults to "".
-        value (str, optional): value for comparison.  Defaults to "".
-        host_data (str, optional): jsonpath to get value from task.host.data.  Defaults to ""
+        xpath (str, optional): xpath locator.
+        value (str, optional): value for comparison can be empty but not usual.
+        host_data (str, optional): jsonpath to get value from task.host.data.
         one_of (bool, optional): When found values is > 1, allow one match to pass
-            otherwise all returned must match.  Defaults to False.
+            otherwise all returned must match.
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
-            Defaults to "result".
-        text (bool, optional): compare text value ie. <element>text</element>. Defaults to False.
+        text (bool, optional): compare text value ie. <element>text</element>.
         attrib (str, optional): compare attribute value ie. <element @attrib='whatever'>.
-            Defaults to "".
-        fail_task (bool, optional): Determines whether test failure results causes
-            setting result failure. Defaults to False.
+        fail_task (bool, optional): Determines whether test failure results causes setting result failure.
     """
-
-    def __init__(
-        self,
-        text: bool = False,
-        host_data: str = "",
-        xpath: str = "",
-        one_of: bool = False,
-        value: str = "",
-        attrib: str = "",
-        result_attr: str = "result",
-        fail_task: bool = False,
-    ):
-        """Constructor for regexp decorator"""
-        self.xpath = xpath
-        self.one_of = one_of
-        self.host_data = host_data
-        self.value = value
-        self.text = text if text else None
-        self.attrib = attrib if attrib else None
-        self.result_attr = result_attr
-        super(test_lxml, self).__init__(fail_task)
+    text: bool = False
+    host_data: str = ""
+    xpath: str = ""
+    one_of: bool = False
+    value: str = ""
+    attrib: str = ""
+    result_attr: str = "result"
+    assertion: str = "is_equal_to"
+    matches: List[str] = field(default_factory=list)
+    match: List[Any] = field(default_factory=list, repr=False)
 
     def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:
         """Method decorator to perform lxml find and compare on result of task
@@ -60,87 +47,62 @@ class test_lxml(Test):
         """
 
         result = func(task, *args, **kwargs)
-
         try:
-            if not (self.attrib or self.text):
-                raise Exception("neither attrib or text were set")
-
-            xml_data = getattr(result, self.result_attr)
+            attr_data = getattr(result, self.result_attr)
 
             # self.host_data always preferred
             if self.host_data:
                 new_value = parse(self.host_data).find(task.host.data)
+
                 if len(new_value) > 1:
-                    raise Exception("host_data can't return multiple results")
+                    raise Exception("host_data can only return one match")
+
+                elif not new_value:
+                    raise Exception("host_data not found")
+
+                self.value = new_value[0].value if new_value[0] else self.value
+
+
+            if isinstance(attr_data, str):
+                attr_data = etree.fromstring(attr_data)
                 
-                self.value = new_value[0].value if new_value[0].value else self.value
-
-            if isinstance(xml_data, str):
-                xml_data = etree.fromstring(xml_data)
-            elif isinstance(xml_data, etree._Element):
-                pass
-            elif isinstance(xml_data, ET.Element):
-                pass
-            else:
-                raise Exception(f"{self.result_attr} is not xml or etree")
-
-            self.match = xml_data.findall(self.xpath)
+            self.match = attr_data.findall(self.xpath)
 
             if not self.match:
-                raise Exception(f"no match found from xpath {self.xpath}")
+                raise Exception(f"no match found from path {self.xpath}")
 
-            if len(self.match) > 1:
-                matches = 0
-                for m in self.match:
-                    if self.attrib:
-                        subresult = m.attrib[self.attrib] == self.value
+            for match in self.match:
 
-                    elif self.text:
-                        subresult = m.text == self.value
+                try:
+                    if self.text:
+                        assert_obj = assert_that(match.text)
+                    elif self.attrib:
+                        assert_obj = assert_that(match.attrib[self.attrib])
+                    else:
+                        assert_obj = assert_that(match)
 
-                    if subresult and not self.one_of:
-                        matches += 1
-                        
-                    elif subresult and self.one_of:
-                        self.result = True
-                        self.match = m
-                        break
-
-                    elif not (subresult or self.one_of):
-                        raise Exception('no value match on all returned matches')
-                
-                if not self.one_of:
-                    self.result = matches == len(self.match)
+                    assert_method = getattr(assert_obj, self.assertion)
                     
-            else:
-                if self.attrib:
-                    self.result = self.match[0].attrib[self.attrib] == self.value
+                    if self.value:
+                        assert_method(self.value)
+                    else:
+                        assert_method()
 
-                elif self.text:
-                    self.result = self.match[0].text == self.value
+                    self.passed = True
+                    self.matches.append(attr_data.getroottree().getpath(match))
 
-                else:
-                    self.result = False
+                except Exception as e:
+                    if not self.one_of or (match == self.match[-1] and not self.passed):
+                        raise Exception(e)
 
-            if self.result:
-                self.msg = "{} found as {} at xpath {}".format(
-                    self.value, "text" if self.text else "attrib", self.xpath
-                )
-
-            else:
-                raise Exception(
-                    "{} not found as {} at xpath {}".format(
-                        self.value, "text" if self.text else "attrib", self.xpath
-                    )
-                )
 
         except Exception as e:
-            self.result = False
-            self.msg = f"lxml: {e}"
-
-        if self.fail_task and not self.result:
-            result.failed = True
+            self.passed = False
+            self.exception = e
 
         self._add_test(result)
+
+        if not self.passed and self.fail_task:
+            result.failed = True
 
         return result

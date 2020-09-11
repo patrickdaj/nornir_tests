@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Callable, Any
 import time
 
@@ -5,7 +6,7 @@ from nornir.core.task import Result
 
 from .test import Test
 
-
+@dataclass
 class test_until(Test):
     """Test decorator to continue until task result is not failed
 
@@ -18,21 +19,13 @@ class test_until(Test):
             Defaults to False.
         fail_task (bool, optional): . Defaults to False.
     """
-
-    def __init__(
-        self,
-        initial_delay: int = 0,
-        retries: int = 0,
-        delay: int = 0,
-        reset_conns: bool = False,
-        fail_task: bool = False,
-    ):
-        """Constructor for test_until decorator"""
-        self.initial_delay = initial_delay
-        self.delay = delay
-        self.reset_conns = reset_conns
-        self.retries = retries
-        super(test_until, self).__init__(fail_task)
+    initial_delay: int = 0
+    retries: int = 0
+    delay: int = 0
+    reset_conns: bool = False
+    t0: int = -1
+    t1: int = -1
+    run_time: int = -1
 
     def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:
         """Method decorator to continue until result of task is not failed
@@ -49,21 +42,18 @@ class test_until(Test):
         if self.initial_delay:
             time.sleep(self.initial_delay)
 
-        self.result = False
-
-        for i in range(self.retries):
+        for i in range(self.retries + 1):
             try:
                 result = func(task, *args, **kwargs)
                 if not result.failed:
-                    self.result = True
-                    break
+                    self.passed = True
             except Exception as e:
                 # pass last exception back to nornir
                 if i == self.retries - 1:
                     raise e
 
             # no need to sleep if this is last iteration
-            if i == self.retries - 1:
+            if self.passed or i == self.retries - 1:
                 break
             
             else:
@@ -73,9 +63,7 @@ class test_until(Test):
 
         self.t1 = time.time()
 
-        self.msg = "until: {} after {} seconds".format(
-            "succeeded" if self.result else "failed", self.t1 - self.t0
-        )
+        self.run_time = self.t1 - self.t0
 
         self._add_test(result)
 

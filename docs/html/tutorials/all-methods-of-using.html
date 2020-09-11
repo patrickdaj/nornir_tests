@@ -35,7 +35,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using test_timing" href="using-test-timing.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,9 +82,24 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">All methods of using tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#&#64;-style-decorator-use">&#64; style decorator use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-nr.run-with-tasks-that-return-results">Using nr.run with tasks that return results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-task.run-inside-grouped-task">Using task.run inside grouped task</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Not-supported">Not supported</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -127,6 +144,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
         
       <li>All methods of using tests</li>
     
@@ -393,7 +412,7 @@ div.rendered_html tbody tr:hover {
 <h1>All methods of using tests<a class="headerlink" href="#All-methods-of-using-tests" title="Permalink to this headline">¶</a></h1>
 <p>There are some things you can and some things you can’t do with tests. This tutorial will show all of them.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -424,13 +443,13 @@ div.rendered_html tbody tr:hover {
 <h2>&#64; style decorator use<a class="headerlink" href="#@-style-decorator-use" title="Permalink to this headline">¶</a></h2>
 <p>This will only work as designed if not using task.run inside the function. If there were a bunch of task.run statements in the function the decorators applied using &#64; syntax would not get applied.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nd">@test_until</span><span class="p">(</span><span class="n">retries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="nd">@test_timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_enabled&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_enabled&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">at_syntax_test</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">])</span>
 
@@ -446,11 +465,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">inner***************************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv inner ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-(&#39;jsonpath: interfaces.eth0.is_enabled expanded to interfaces.eth0.is_enabled &#39;
- &#39;and value True found - PASSED&#39;)
-&#34;(&#39;timing: 0 &lt; 2.02677583694458 &lt; 5&#39;,) - PASSED&#34;
-&#39;until: succeeded after 13.71741509437561 seconds - PASSED&#39;
-
+TestList(tests=[test_jsonpath(fail_task=True, passed=True, exception=&#39;&#39;, assertion=&#39;is_true&#39;, value=None, path=&#39;interfaces.eth0.is_enabled&#39;, host_data=&#39;&#39;, one_of=False, result_attr=&#39;result&#39;, matches=[&#39;interfaces.eth0.is_enabled&#39;, &#39;interfaces.eth0.is_enabled&#39;]), test_timing(fail_task=True, passed=False, exception=&#39;&#39;), test_until(fail_task=False, passed=True, exception=&#39;&#39;, initial_delay=0, retries=5, delay=5, reset_conns=False, t0=1599842914.120058, t1=1599842927.6856458, run_time=13.565587759017944)])
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END inner ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -459,7 +474,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Using-nr.run-with-tasks-that-return-results">
 <h2>Using nr.run with tasks that return results<a class="headerlink" href="#Using-nr.run-with-tasks-that-return-results" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -468,7 +483,7 @@ div.rendered_html tbody tr:hover {
     <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
         <span class="n">test_timing</span><span class="p">(),</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">),</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
 </pre></div>
@@ -482,10 +497,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-&#34;(&#39;timing: 0 &lt; 2.010446071624756 &lt; 9223372036854775807&#39;,) - PASSED&#34;
-(&#39;jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value &#39;
- &#39;True found - PASSED&#39;)
-
+TestList(tests=[test_timing(fail_task=False, passed=False, exception=&#39;&#39;), test_jsonpath(fail_task=False, passed=True, exception=&#39;&#39;, assertion=&#39;is_true&#39;, value=None, path=&#39;interfaces.eth0.is_up&#39;, host_data=&#39;&#39;, one_of=False, result_attr=&#39;result&#39;, matches=[&#39;interfaces.eth0.is_up&#39;])])
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -494,7 +506,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Using-task.run-inside-grouped-task">
 <h2>Using task.run inside grouped task<a class="headerlink" href="#Using-task.run-inside-grouped-task" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -511,7 +523,7 @@ div.rendered_html tbody tr:hover {
         <span class="n">napalm_get</span><span class="p">,</span>
         <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
         <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
         <span class="p">]</span>
     <span class="p">)</span>
 
@@ -528,12 +540,9 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-blue-intense-fg ansi-bold">* vyos ** changed : False ******************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
 <span class="ansi-green-intense-fg ansi-bold">---- napalm_ping ** changed : False -------------------------------------------- INFO</span>
-&#34;(&#39;timing: 0 &lt; 4.911297082901001 &lt; 9223372036854775807&#39;,) - PASSED&#34;
-
+TestList(tests=[test_timing(fail_task=False, passed=False, exception=&#39;&#39;)])
 <span class="ansi-green-intense-fg ansi-bold">---- napalm_get ** changed : False --------------------------------------------- INFO</span>
-(&#39;jsonpath: interfaces.eth0.is_up expanded to interfaces.eth0.is_up and value &#39;
- &#39;True found - PASSED&#39;)
-
+TestList(tests=[test_jsonpath(fail_task=False, passed=True, exception=&#39;&#39;, assertion=&#39;is_true&#39;, value=None, path=&#39;interfaces.eth0.is_up&#39;, host_data=&#39;&#39;, one_of=False, result_attr=&#39;result&#39;, matches=[&#39;interfaces.eth0.is_up&#39;])])
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -550,6 +559,15 @@ div.rendered_html tbody tr:hover {
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="using-test-timing.html" class="btn btn-neutral float-right" title="Using test_timing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

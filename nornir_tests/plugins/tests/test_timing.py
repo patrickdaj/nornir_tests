@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import Callable, Any
 import sys
 import time
@@ -16,18 +17,11 @@ class test_timing(Test):
         min_run_time (int, optional): Required minimum runtime. Defaults to 0.
         max_run_time (int, optional): Required maximum runtime. Defaults to sys.maxsize.
     """
-
-    def __init__(
-        self,
-        fail_task: bool = False,
-        min_run_time: int = 0,
-        max_run_time: int = sys.maxsize,
-    ):
-        """Constructor for timing decorator"""
-
-        self.min_run_time = min_run_time
-        self.max_run_time = max_run_time
-        super(test_timing, self).__init__(fail_task)
+    min_run_time: int = 0
+    max_run_time: int = sys.maxsize
+    t0: int = -1
+    t1: int = -1
+    run_time: int = -1
 
     def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
         """Method decorator to perform timing on result of task
@@ -44,15 +38,11 @@ class test_timing(Test):
 
         result.run_time = self.t1 - self.t0
 
-        self.result = (
+        self.passed = (
             result.run_time > self.min_run_time and result.run_time < self.max_run_time
         )
 
-        self.msg = (
-            f"timing: {self.min_run_time} < {result.run_time} < {self.max_run_time}",
-        )
-
-        if self.fail_task and not self.result:
+        if self.fail_task and not self.passed:
             result.failed = True
 
         self._add_test(result)
