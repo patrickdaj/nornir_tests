@@ -1,13 +1,7 @@
-Write doc tutorial for all tests and be realistic
-
-Add custom or plugin type tests
-
-Fix test_until and add try/except to prevent fails
-
-Add logic to reorganize tests so that any test_until is last
-
-Fix test_lxml pytest errors
-
-Keep trying to figure out how to wrap grouped task 0
-
-Not sure if it will make sense to wrap aggregates but for consistency it would be nice
+- Write doc tutorial for all tests and be realistic
+- Add custom or plugin type tests
+- Add logic to reorganize tests so that any test_until is last
+- Keep trying to figure out how to wrap grouped task 0
+- Not sure if it will make sense to wrap aggregates but for consistency it would be nice
+- Keep working on regexp
+- Other tests?

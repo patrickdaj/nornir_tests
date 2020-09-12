@@ -76,3 +76,13 @@ it does not really work for anything that doesn't return a result.  So wrapping 
 defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
 currently possible but the tasks within the grouped task are.  Nornir run commands that return
 results work fine.
+
+## References
+
+The nornir_tests plugin uses other libraries that are pretty critical to know in order to use nornir_tests efficiently.
+
+[jsonpath_ng](https://github.com/h2non/jsonpath-ng) - The github page has a fairly good intro to using jsonpath.
+
+[xpath cheatsheat](https://devhints.io/xpath) - The lxml documentation is great and all but its quite a bit and using something like this cheat sheet is a bit less daunting.
+
+[assertpy](https://github.com/assertpy/assertpy) - This documentation is pretty concise and this module is really the reason I wrote nornir_tests.  Prior to nornir_tests, I was running tasks that executed a bunch of python asserts using tasks.  It didn't permit stacking of assertions or very flexible control of whether or not it should fail a task.
