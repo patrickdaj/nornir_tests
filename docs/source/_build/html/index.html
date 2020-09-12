@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nornir_tests &mdash; nornir_tests 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="examples/introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> nornir_tests
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-regexp.html">Using test_regexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-lxml.html">Using test_lxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-timing.html">Using test_timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-until.html">Using test_until</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/all-methods-of-using.html">All methods of using tests</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">nornir_tests</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>nornir_tests</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<a class="reference external image-reference" href="https://patrickdaj.github.io/nornir_tests"><img alt="Documentation" src="https://img.shields.io/badge/docs-passing-green.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/patrickdaj/nornir_tests/actions?query=workflow%3Atest_nornir_tests"><img alt="test_nornir_tests" src="https://github.com/patrickdaj/nornir_tests/workflows/test_nornir_tests/badge.svg" /></a>
+<div class="section" id="nornir-tests">
+<h1>nornir_tests<a class="headerlink" href="#nornir-tests" title="Permalink to this headline">¶</a></h1>
+<p>Collection of test/assertion plugins for <a class="reference external" href="github.com/nornir-automation/nornir/">nornir</a></p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">nornir_tests</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tests">
+<h3>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>test_regexp</strong> - Run assertions on nornir results using assertpy’s text assertions</p></li>
+<li><p><strong>test_jsonpath</strong> - Run assertions on nornir results dictionaries using many of assertpy’s assertions like “is_in”, “is_equal_to” or “contains”</p></li>
+<li><p><strong>test_timing</strong> - Gather timing info from tasks</p></li>
+<li><p><strong>test_wait</strong> - Re-run tasks until assertions pass</p></li>
+<li><p><strong>test_xpath</strong> - Run assertions on nornir results XML using many of assertpy’s assertions like “is_in”, “is_equal_to” or “contains”</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="common-uses">
+<h2>Common Uses<a class="headerlink" href="#common-uses" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Timing a task and making sure it completes within x seconds</p></li>
+<li><p>Faling a task if it isn’t changed</p></li>
+<li><p>Faling a task if text is not in results attribute</p></li>
+<li><p>Using jsonpath or xpath to assert a value at a particular path</p></li>
+<li><p>Passing a task for an expected exception</p></li>
+<li><p>Testing a condition repeatedly until all tests are passing</p></li>
+<li><p>Nest multiple tests</p></li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-regexp.html">Using test_regexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-lxml.html">Using test_lxml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-timing.html">Using test_timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/using-test-until.html">Using test_until</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/all-methods-of-using.html">All methods of using tests</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
+no way to use normal &#64; decorator syntax as these need to be applied before function definitions.
+That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
+paired with a special processor that looks for them in task.params.</p>
+<p>Once the task is wrapped, when Nornir calls it the decorator can run code before and after
+execution of the task.  It can then affect the actual result being returned.  For this reason
+it does not really work for anything that doesn’t return a result.  So wrapping calls to tasks
+defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
+currently possible but the tasks within the grouped task are.  Nornir run commands that return
+results work fine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>The nornir_tests plugin uses other libraries that are pretty critical to know in order to use nornir_tests efficiently.</p>
+<p><a class="reference external" href="https://github.com/h2non/jsonpath-ng">jsonpath_ng</a> - The github page has a fairly good intro to using jsonpath.</p>
+<p><a class="reference external" href="https://devhints.io/xpath">xpath cheatsheat</a> - The lxml documentation is great and all but its quite a bit and using something like this cheat sheet is a bit less daunting.</p>
+<p><a class="reference external" href="https://github.com/assertpy/assertpy">assertpy</a> - This documentation is pretty concise and this module is really the reason I wrote nornir_tests.  Prior to nornir_tests, I was running tasks that executed a bunch of python asserts using tasks.  It didn’t permit stacking of assertions or very flexible control of whether or not it should fail a task.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/processors.html">processors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tests.html">tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/all-methods-of-using.html">All methods of using tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/using-test-timing.html">Using test_timing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/using-test-regexp.html">Using test_regexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/using-test-lxml.html">Using test_lxml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/using-test-until.html">Using test_until</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Avery
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

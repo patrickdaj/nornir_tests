@@ -34,6 +34,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="All methods of using tests" href="all-methods-of-using.html" />
@@ -85,7 +86,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Nornir-initialization">Nornir initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Setup-of-nornir_rich">Setup of nornir_rich</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-task-and-include-jsonpath-assertion">Run task and include jsonpath assertion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-ping-with-timing-requirements">Run ping with timing requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Get-unfailed-task-to-fail-due-to-assertion">Get unfailed task to fail due to assertion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Combining-tests">Combining tests</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
@@ -407,13 +416,16 @@ div.rendered_html tbody tr:hover {
 <p>The idea behind nornir_tests is to allow for adding tests against the task run and its results. Many times, a task can run and get some output but that doesn’t mean it is successful. One option is to add additional checks or tasks with some conditional logic to deal with this. Another is to add tests against the data returned from a task. That is what nornir_tests is for.</p>
 <p>The question is probably why use tests. Tests were inspired by the same feature in postman. In postman, a test was something that was done against the data returned from a postman request to determine if the request was actually successful. This can certainly be added in python using either pure python or additional tasks but there is some elegance and some additional functionality obtained by using tests tied to tasks. In this intro, I will try to touch on a variety of ideas using tests. In
 further tutorials I’ll go into more detail on using each of the test types.</p>
-<p>Typical nornir initialization is done first.</p>
+<div class="section" id="Nornir-initialization">
+<h2>Nornir initialization<a class="headerlink" href="#Nornir-initialization" title="Permalink to this headline">¶</a></h2>
+<p>This is standard nornir initialization and imports of tasks. A different library nornir_rich is used for output to provide more detail and highlighting. Using print_result is also possible if vars is set to include ‘tests’ attribute.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">nornir_napalm.plugins.tasks</span> <span class="kn">import</span> <span class="n">napalm_get</span><span class="p">,</span> <span class="n">napalm_ping</span>
+<span class="kn">from</span> <span class="nn">nornir_netmiko.tasks</span> <span class="kn">import</span> <span class="n">netmiko_send_command</span>
 <span class="kn">from</span> <span class="nn">nornir_rich.plugins.functions</span> <span class="kn">import</span> <span class="n">RichResults</span>
 <span class="kn">from</span> <span class="nn">nornir</span> <span class="kn">import</span> <span class="n">InitNornir</span>
 
@@ -428,63 +440,35 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     <span class="p">},</span>
 <span class="p">)</span>
 
-<span class="n">rr</span> <span class="o">=</span> <span class="n">RichResults</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">67</span><span class="p">)</span>
+<span class="n">rr</span> <span class="o">=</span> <span class="n">RichResults</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<p>Next the TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.processors</span> <span class="kn">import</span> <span class="n">TestsProcessor</span>
-<span class="n">nr</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TestsProcessor</span><span class="p">())</span>
-
-<span class="n">rr</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">nr</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">╭────────────┬────────────────────────────────────────────────────╮
-│<span style="font-weight: bold"> Host       </span>│<span style="font-weight: bold"> Data                                               </span>│
-├────────────┼────────────────────────────────────────────────────┤
-│ test       │ connection_options: {}                             │
-│            │ data: {}                                           │
-│            │ groups: []                                         │
-│            │ hostname: test                                     │
-│            │ name: test                                         │
-│            │ password: '******'                                 │
-│            │ platform: null                                     │
-│            │ port: null                                         │
-│            │ username: test                                     │
-│            │                                                    │
-├────────────┼────────────────────────────────────────────────────┤
-│ vyos       │ connection_options: {}                             │
-│            │ data: {}                                           │
-│            │ groups: []                                         │
-│            │ hostname: 192.168.99.170                           │
-│            │ name: vyos                                         │
-│            │ password: '******'                                 │
-│            │ platform: vyos                                     │
-│            │ port: null                                         │
-│            │ username: vyos                                     │
-│            │                                                    │
-╰────────────┴────────────────────────────────────────────────────╯
-</pre></div>
-</div>
-<p>In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="section" id="Setup-of-nornir_rich">
+<h2>Setup of nornir_rich<a class="headerlink" href="#Setup-of-nornir_rich" title="Permalink to this headline">¶</a></h2>
+<p>TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_regexp</span><span class="p">,</span> <span class="n">test_until</span><span class="p">,</span> <span class="n">test_timing</span><span class="p">,</span> <span class="n">test_jsonpath</span>
-
-<span class="n">vyos</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;vyos&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nornir_tests.plugins.processors</span> <span class="kn">import</span> <span class="n">TestsProcessor</span>
+<span class="n">nr</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TestsProcessor</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Run-task-and-include-jsonpath-assertion">
+<h2>Run task and include jsonpath assertion<a class="headerlink" href="#Run-task-and-include-jsonpath-assertion" title="Permalink to this headline">¶</a></h2>
+<p>In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">vyos</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;vyos&#39;</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">task</span><span class="o">=</span><span class="n">napalm_get</span><span class="p">,</span>
@@ -502,21 +486,21 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_get*********************************************************
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_get**********************************************************************
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> *****************************************</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> ******************************************************</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_get ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_get ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -560,12 +544,15 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="Run-ping-with-timing-requirements">
+<h2>Run ping with timing requirements<a class="headerlink" href="#Run-ping-with-timing-requirements" title="Permalink to this headline">¶</a></h2>
 <p>Next a ping is sent to the vyos device using the timing test. As can be seen in the output, this gives runtime of the task and can be enhanced with min_run_time and max_run_time to affect the task result if the fail_task argument is used. If a failure occurs in the test and fail_task is set to True, then the task will be marked as failed.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -584,21 +571,21 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_ping********************************************************
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_ping*********************************************************************
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> *****************************************</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> ******************************************************</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_ping ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_ping ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -609,11 +596,11 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     'success': {
         'probes_sent': 5,
         'packet_loss': 0,
-        'rtt_min': 2.94,
-        'rtt_max': 3.829,
-        'rtt_avg': 3.301,
-        'rtt_stddev': 0.318,
-        'results': [{'ip_address': '192.168.99.1', 'rtt': 3.301}]
+        'rtt_min': 2.479,
+        'rtt_max': 3.979,
+        'rtt_avg': 3.35,
+        'rtt_stddev': 0.498,
+        'results': [{'ip_address': '192.168.99.1', 'rtt': 3.35}]
     }
 }
 </pre></div>
@@ -623,19 +610,22 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_timing</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">min_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900057.2015827</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900062.1134906</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599948791.055417</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599948795.9735277</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="Get-unfailed-task-to-fail-due-to-assertion">
+<h2>Get unfailed task to fail due to assertion<a class="headerlink" href="#Get-unfailed-task-to-fail-due-to-assertion" title="Permalink to this headline">¶</a></h2>
 <p>The next example shows how the result failed state can be affected by a test.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -654,21 +644,21 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_ping********************************************************
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_ping*********************************************************************
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> *****************************************</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> ******************************************************</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">vvvv napalm_ping ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">vvvv napalm_ping ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -679,11 +669,11 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     'success': {
         'probes_sent': 5,
         'packet_loss': 0,
-        'rtt_min': 2.836,
-        'rtt_max': 3.931,
-        'rtt_avg': 3.319,
-        'rtt_stddev': 0.407,
-        'results': [{'ip_address': '192.168.99.1', 'rtt': 3.319}]
+        'rtt_min': 2.825,
+        'rtt_max': 3.55,
+        'rtt_avg': 3.301,
+        'rtt_stddev': 0.275,
+        'results': [{'ip_address': '192.168.99.1', 'rtt': 3.301}]
     }
 }
 </pre></div>
@@ -693,115 +683,34 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">test_timing</span><span style="color: #800000; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #800000">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #800000">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #800000">=</span><span style="color: #008000">''</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">min_run_time</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">1</span><span style="color: #800000">, </span>
-<span style="color: #808000; font-style: italic">t0</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">1599900079.2495282</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">1599900084.1648505</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #800000; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">t0</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">1599948799.784683</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">1599948804.7002904</span><span style="color: #800000">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #800000">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #800000; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </pre></div>
 </div>
-<p>Tests can be stacked and the entire task and associated tests can be retried using test_until. The next test shows how a rebooted device can be retried until it comes back up using only tests. As napalm for vyos doesn’t currently support CLI, I rebooted it manually and ran the ping below to show it was down.</p>
+</div>
+<div class="section" id="Combining-tests">
+<h2>Combining tests<a class="headerlink" href="#Combining-tests" title="Permalink to this headline">¶</a></h2>
+<p>Tests can be stacked and the entire task and associated tests can be retried using test_until. The next test shows how a rebooted device can be retried until it comes back up using only tests.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">nr</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_failed_hosts</span><span class="p">()</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">task</span><span class="o">=</span><span class="n">napalm_ping</span><span class="p">,</span>
-    <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
+<span class="n">rr</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+    <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="n">task</span><span class="o">=</span><span class="n">netmiko_send_command</span><span class="p">,</span>
+        <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;reboot now&#39;</span>
+    <span class="p">)</span>
 <span class="p">)</span>
-<span class="n">rr</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_ping********************************************************
-</pre></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> *****************************************</span>
-</pre></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">vvvv napalm_ping ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
-</pre></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Traceback (most recent call last):
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir/core/task.py", line
-98, in start
-    r = self.task(self, **self.params)
-  File "/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/nornir_napalm/plugin
-s/tasks/napalm_ping.py", line 37, in napalm_ping
-    result = device.ping(
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/napalm_vyos/vyos.py", line
-857, in ping
-    output_ping = self.device.send_command(command)
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/utilities.py", line
-363, in wrapper_decorator
-    return func(self, *args, **kwargs)
-  File "/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connect
-ion.py", line 1426, in send_command
-    prompt = self.find_prompt(delay_factor=delay_factor)
-  File "/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connect
-ion.py", line 1154, in find_prompt
-    self.write_channel(self.RETURN)
-  File "/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connect
-ion.py", line 453, in write_channel
-    self._write_channel(out_data)
-  File "/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/netmiko/base_connect
-ion.py", line 411, in _write_channel
-    self.remote_conn.sendall(write_bytes(out_data, encoding=self.encoding))
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py", line
-846, in sendall
-    sent = self.send(s)
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py", line
-801, in send
-    return self._send(s, m)
-  File
-"/home/patrick/dev/nornir_tests/.venv/lib/python3.8/site-packages/paramiko/channel.py", line
-1198, in _send
-    raise socket.error("Socket is closed")
-OSError: Socket is closed
 
-</pre></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800000">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
-</pre></div>
-</div>
-<p>After rebooting and failing the ping above, the get command is started with test_until and test_jsonpath. test_jsonpath was set to fail the task so that test_until would continue to loop.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">nr</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_failed_hosts</span><span class="p">()</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">task</span><span class="o">=</span><span class="n">napalm_get</span><span class="p">,</span>
     <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
@@ -818,21 +727,49 @@ OSError: Socket is closed
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_get*********************************************************
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netmiko_send_command************************************************************
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> *****************************************</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> ******************************************************</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_get ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv netmiko_send_command ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END netmiko_send_command ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">napalm_get**********************************************************************
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #000080">* vyos ** changed = </span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #000080"> ******************************************************</span>
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">vvvv napalm_get ** changed = False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -877,20 +814,20 @@ OSError: Socket is closed
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_until</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">initial_delay</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">15</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">retries</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">10</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">delay</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">15</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">reset_conns</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900118.5495498</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900155.2910137</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">36.74146389961243</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">delay</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">15</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">reset_conns</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599948814.8986952</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599948871.6749067</span><span style="color: #005f00">, </span>
+<span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">56.77621150016785</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 </pre></div>
 </div>
 <p>Not bad. The result above shows that it must have failed on its first try but by 36 seconds it was able to pass the test_jsonpath test and the call to napalm_get and so test_until finished up.</p>
 <p>This was pretty haphazard but other tutorials will go into more details about each of the tests.</p>
-<p>Last thing.</p>
+</div>
 </div>
 
 

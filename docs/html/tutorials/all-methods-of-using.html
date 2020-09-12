@@ -34,6 +34,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using test_timing" href="using-test-timing.html" />
@@ -412,7 +413,7 @@ div.rendered_html tbody tr:hover {
 <h1>All methods of using tests<a class="headerlink" href="#All-methods-of-using-tests" title="Permalink to this headline">¶</a></h1>
 <p>There are some things you can and some things you can’t do with tests. This tutorial will show all of them.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -433,7 +434,7 @@ div.rendered_html tbody tr:hover {
     <span class="p">},</span>
 <span class="p">)</span>
 
-<span class="n">rr</span> <span class="o">=</span> <span class="n">RichResults</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">67</span><span class="p">)</span>
+<span class="n">rr</span> <span class="o">=</span> <span class="n">RichResults</span><span class="p">()</span>
 <span class="n">nr</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TestsProcessor</span><span class="p">())</span>
 
 <span class="n">vyos</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;vyos&quot;</span><span class="p">)</span>
@@ -444,7 +445,7 @@ div.rendered_html tbody tr:hover {
 <h2>&#64; style decorator use<a class="headerlink" href="#@-style-decorator-use" title="Permalink to this headline">¶</a></h2>
 <p>This will only work as designed if not using task.run inside the function. If there were a bunch of task.run statements in the function the decorators applied using &#64; syntax would not get applied.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -521,7 +522,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_timing</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">min_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">5</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898472.8542182</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898474.881877</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900666.7532384</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900668.680688</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -529,7 +530,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_until</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">initial_delay</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">retries</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">5</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">delay</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">5</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">reset_conns</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898461.220833</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898474.8818874</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">13.661054372787476</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">reset_conns</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900655.1243348</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900668.680702</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">13.55636715888977</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -543,7 +544,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Using-nr.run-with-tasks-that-return-results">
 <h2>Using nr.run with tasks that return results<a class="headerlink" href="#Using-nr.run-with-tasks-that-return-results" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -612,7 +613,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_timing</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">min_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898474.9777625</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898476.989867</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900668.7280276</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900670.7398703</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -635,7 +636,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Using-task.run-inside-grouped-task">
 <h2>Using task.run inside grouped task<a class="headerlink" href="#Using-task.run-inside-grouped-task" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -693,7 +694,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">TestList(tests=[test_timing(fail_task=False, passed=True, exception='', min_run_time=0,
-max_run_time=9223372036854775807, t0=1599898477.0901484, t1=1599898482.0033119,
+max_run_time=9223372036854775807, t0=1599900670.7962654, t1=1599900675.7109098,
 run_time=-1)])
 </pre></div>
 </div>
@@ -702,7 +703,7 @@ run_time=-1)])
 </div>
 <div class="output_area rendered_html docutils container">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #005f00">test_timing</span><span style="color: #005f00; font-weight: bold">(</span><span style="color: #808000; font-style: italic">fail_task</span><span style="color: #005f00">=</span><span style="color: #ff0000; font-style: italic">False</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">passed</span><span style="color: #005f00">=</span><span style="color: #00ff00; font-style: italic">True</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">exception</span><span style="color: #005f00">=</span><span style="color: #008000">''</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">min_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">0</span><span style="color: #005f00">, </span>
-<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898477.0901484</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599898482.0033119</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
+<span style="color: #808000; font-style: italic">max_run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">9223372036854775807</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t0</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900670.7962654</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">t1</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">1599900675.7109098</span><span style="color: #005f00">, </span><span style="color: #808000; font-style: italic">run_time</span><span style="color: #005f00">=</span><span style="color: #000080; font-weight: bold">-1</span><span style="color: #005f00; font-weight: bold">)</span>
 </pre></div>
 </div>
 <div class="nboutput docutils container">
@@ -741,6 +742,15 @@ result_attr='result', matches=['interfaces.eth0.is_up'])])
 <div class="section" id="Not-supported">
 <h2>Not supported<a class="headerlink" href="#Not-supported" title="Permalink to this headline">¶</a></h2>
 <p>Testing a grouped_task at the level of running nr.run will not work. There is not much you would be able to test without really complex logic anyhow considering this always returns an AggregatedResult.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
