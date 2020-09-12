@@ -86,7 +86,7 @@ class test_jsonpath(Test):
     host_data: str = ""
     one_of: bool = False
     result_attr: str = "result"
-    matches: List[str] = field(default_factory=list, repr=False)
+    matches: List[str] = field(default_factory=list)
     match: List[DatumInContext] = field(default_factory=list, repr=False)
 
     def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:

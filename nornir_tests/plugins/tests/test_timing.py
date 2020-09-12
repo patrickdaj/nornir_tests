@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Callable, Any
 import sys
 import time
@@ -7,7 +7,7 @@ from nornir.core.task import Result
 
 from .test import Test
 
-
+@dataclass
 class test_timing(Test):
     """Test decorator for timing
 

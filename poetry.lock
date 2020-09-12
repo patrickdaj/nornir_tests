@@ -1787,8 +1787,8 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "cdda4fadc5d2c070dbfbee5c6f8d8bd7144312e42b8bab25b42a4f75da9513b9"
-python-versions = "^3.6"
+content-hash = "19f3c58fbdbf48718e55bd403a233a6a2561a90c1b5ec8d6816a554de5990e44"
+python-versions = "3.6"
 
 [metadata.files]
 alabaster = [
