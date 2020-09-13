@@ -1,11 +1,9 @@
 Examples
 =========
 
-.. _examples:
-
 .. toctree::
     :maxdepth: 3
-    :caption: Examples
+    :caption: Contents
     :glob:
 
     introduction
