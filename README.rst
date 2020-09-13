@@ -43,9 +43,9 @@ Common Uses
 * Nest multiple tests
 
 Usage
---------
+-----
 
-`examples <https://patrickdaj.github.io/nornir_tests/examples>`__
+`Detailed examples <https://patrickdaj.github.io/nornir_tests/html/examples>`__
 
 
 How it works
