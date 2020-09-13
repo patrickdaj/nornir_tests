@@ -10,7 +10,7 @@
    :caption: Contents:
 
    api/index
-   examples/index
+   tutorials/index
 
 
 Indices and tables

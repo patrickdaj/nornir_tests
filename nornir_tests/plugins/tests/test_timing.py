@@ -7,6 +7,7 @@ from nornir.core.task import Result
 
 from .test import Test
 
+
 @dataclass
 class test_timing(Test):
     """Test decorator for timing
@@ -17,11 +18,12 @@ class test_timing(Test):
         min_run_time (int, optional): Required minimum runtime. Defaults to 0.
         max_run_time (int, optional): Required maximum runtime. Defaults to sys.maxsize.
     """
+
     min_run_time: int = 0
     max_run_time: int = sys.maxsize
-    t0: int = -1
-    t1: int = -1
-    run_time: int = -1
+    t0: float = -1
+    t1: float = -1
+    run_time: float = -1
 
     def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
         """Method decorator to perform timing on result of task

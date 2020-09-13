@@ -4,9 +4,10 @@ from jsonpath_ng import parse
 from typing import Callable, Any, List
 from assertpy import assert_that
 
-from nornir.core.task import Result
+from nornir.core.task import Result, Task
 
 from .test import Test
+
 
 @dataclass
 class test_lxml(Test):
@@ -23,8 +24,10 @@ class test_lxml(Test):
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
         text (bool, optional): compare text value ie. <element>text</element>.
         attrib (str, optional): compare attribute value ie. <element @attrib='whatever'>.
-        fail_task (bool, optional): Determines whether test failure results causes setting result failure.
+        fail_task (bool, optional): Determines whether test failure results causes setting
+            result failure.
     """
+
     text: bool = False
     host_data: str = ""
     xpath: str = ""
@@ -36,7 +39,9 @@ class test_lxml(Test):
     matches: List[str] = field(default_factory=list)
     match: List[Any] = field(default_factory=list, repr=False)
 
-    def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:
+    def run(
+        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
+    ) -> Result:
         """Method decorator to perform lxml find and compare on result of task
 
         Args:
@@ -62,10 +67,9 @@ class test_lxml(Test):
 
                 self.value = new_value[0].value if new_value[0] else self.value
 
-
             if isinstance(attr_data, str):
                 attr_data = etree.fromstring(attr_data)
-                
+
             self.match = attr_data.findall(self.xpath)
 
             if not self.match:
@@ -82,7 +86,7 @@ class test_lxml(Test):
                         assert_obj = assert_that(match)
 
                     assert_method = getattr(assert_obj, self.assertion)
-                    
+
                     if self.value:
                         assert_method(self.value)
                     else:
@@ -94,7 +98,6 @@ class test_lxml(Test):
                 except Exception as e:
                     if not self.one_of or (match == self.match[-1] and not self.passed):
                         raise Exception(e)
-
 
         except Exception as e:
             self.passed = False

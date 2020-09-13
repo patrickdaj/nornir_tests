@@ -2,9 +2,10 @@ from dataclasses import dataclass
 from typing import Callable, Any
 import time
 
-from nornir.core.task import Result
+from nornir.core.task import Result, Task
 
 from .test import Test
+
 
 @dataclass
 class test_until(Test):
@@ -19,15 +20,18 @@ class test_until(Test):
             Defaults to False.
         fail_task (bool, optional): . Defaults to False.
     """
+
     initial_delay: int = 0
     retries: int = 0
     delay: int = 0
     reset_conns: bool = False
-    t0: int = -1
-    t1: int = -1
-    run_time: int = -1
+    t0: float = -1
+    t1: float = -1
+    run_time: float = -1
 
-    def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:
+    def run(
+        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
+    ) -> Result:
         """Method decorator to continue until result of task is not failed
 
         Args:
@@ -55,7 +59,7 @@ class test_until(Test):
             # no need to sleep if this is last iteration
             if self.passed or i == self.retries - 1:
                 break
-            
+
             else:
                 if self.reset_conns:
                     task.host.close_connections()

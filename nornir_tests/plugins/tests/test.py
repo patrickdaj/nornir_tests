@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
-import pprint
 
-from typing import Callable, List, Any
+from typing import Callable, List, Any, Union
 
-from nornir.core.task import Result
+from nornir.core.task import Result, Task
 
 
 def apply_tests(
@@ -24,6 +23,7 @@ def apply_tests(
 
     return wrapped
 
+
 @dataclass
 class Test:
     """Test for Nornir task
@@ -33,11 +33,14 @@ class Test:
     those executed with nornir.run or task.run.  Grouped tasks cannot be decorated but
     the tasks in the grouped tasks function can.
     """
+
+    exception: Union[Exception, None] = None
     fail_task: bool = False
     passed: bool = False
-    exception: str = ''
 
-    def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
+    def run(
+        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
+    ) -> Result:
         """run should be implemented in derived classes"""
         raise Exception("Not implemented in base class")
 
@@ -68,9 +71,11 @@ class Test:
             result.tests = TestList()
             result.tests.append(self)
 
+
 @dataclass
 class TestList(object):
     """List type container of Test objects"""
+
     tests: List[Test] = field(default_factory=list)
 
     def __getitem__(self, key: int) -> Test:

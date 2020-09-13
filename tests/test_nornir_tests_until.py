@@ -6,11 +6,14 @@ from nornir.core.task import Result
 
 counter = 0
 
+
 def just_fail(task):
     return Result(host=task.host, failed=True)
 
+
 def just_pass(task):
     return Result(host=task.host, failed=False)
+
 
 def generate_exception(task):
     global counter
@@ -18,6 +21,7 @@ def generate_exception(task):
         counter += 1
         raise Exception("I gonna die")
     return Result(host=task.host, failed=False)
+
 
 def test_until_passed(nornir):
 
@@ -50,25 +54,22 @@ def test_until_on_failed(nornir):
 def test_exception_catch(nornir):
 
     results = nornir.run(
-        name='exception',
+        name="exception",
         task=generate_exception,
-        tests=[
-            test_until(delay=1, retries=5)
-        ]
+        tests=[test_until(delay=1, retries=5)],
     )
 
     for host, result in results.items():
         assert not result[0].failed
         assert result[0].tests[0].run_time > 0
 
+
 def test_initial_delay(nornir):
 
     results = nornir.run(
-        name='exception',
+        name="exception",
         task=just_pass,
-        tests=[
-            test_until(delay=0, retries=0, initial_delay=1)
-        ]
+        tests=[test_until(delay=0, retries=0, initial_delay=1)],
     )
 
     for host, result in results.items():

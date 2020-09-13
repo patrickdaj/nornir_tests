@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+<style>
+.r1 {color: #000000; text-decoration: underline}
+.r2 {color: #000000; font-weight: bold; text-decoration: underline}
+.r3 {color: #000080; font-weight: bold; text-decoration: underline}
+.r4 {color: #000080}
+.r5 {font-weight: bold}
+.r6 {color: #008000}
+.r7 {color: #000080; font-weight: bold}
+.r8 {color: #808000; font-style: italic}
+.r9 {color: #800080; font-style: italic}
+.r10 {color: #00ff00; font-style: italic}
+.r11 {color: #ff0000; font-style: italic}
+body {
+    color: #000000;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<html>
+<body>
+    <code>
+        <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span class="r1">Check Interface </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
+<span class="r4">* vyos </span>
+  ╭─ Check Interface  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │    result = <span class="r5">{</span>                                                                                                                                    │
+  │                 <span class="r6">'interfaces_ip'</span>: <span class="r5">{</span>                                                                                                               │
+  │                     <span class="r6">'eth0'</span>: <span class="r5">{</span><span class="r6">'ipv4'</span>: <span class="r5">{</span><span class="r6">'192.168.99.170'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">24</span><span class="r5">}}}</span>,                                                                 │
+  │                     <span class="r6">'lo'</span>: <span class="r5">{</span><span class="r6">'ipv4'</span>: <span class="r5">{</span><span class="r6">'127.0.0.1'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">8</span><span class="r5">}}</span>, <span class="r6">'ipv6'</span>: <span class="r5">{</span><span class="r6">'::1'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">128</span><span class="r5">}}}</span>                                 │
+  │                 <span class="r5">}</span>                                                                                                                                │
+  │             <span class="r5">}</span>                                                                                                                                    │
+  │    tests 🟢 test_jsonpath<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r10">True</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">assertion</span>=<span class="r6">'contains_key'</span>, <span class="r8">value</span>=<span class="r6">'192.168.99.170'</span>,                         │
+  │             <span class="r8">path</span>=<span class="r6">'interfaces_ip.eth0.ipv4'</span>, <span class="r8">host_data</span>=<span class="r6">''</span>, <span class="r8">one_of</span>=<span class="r11">False</span>, <span class="r8">result_attr</span>=<span class="r6">'result'</span>, <span class="r8">matches</span>=<span class="r5">[</span><span class="r6">'interfaces_ip.eth0.ipv4'</span><span class="r5">])</span>               │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+<span class="r1">netmiko_send_command </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
+<span class="r4">* vyos </span>
+ ✔ netmiko_send_command 
+
+<span class="r1">napalm_get </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
+<span class="r4">* vyos </span>
+  ╭─ napalm_get  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │    result = <span class="r5">{</span>                                                                                                                                    │
+  │                 <span class="r6">'interfaces'</span>: <span class="r5">{</span>                                                                                                                  │
+  │                     <span class="r6">'eth0'</span>: <span class="r5">{</span>                                                                                                                    │
+  │                         <span class="r6">'is_up'</span>: <span class="r10">True</span>,                                                                                                           │
+  │                         <span class="r6">'is_enabled'</span>: <span class="r10">True</span>,                                                                                                      │
+  │                         <span class="r6">'description'</span>: <span class="r6">''</span>,                                                                                                       │
+  │                         <span class="r6">'last_flapped'</span>: <span class="r7">-1.0</span>,                                                                                                    │
+  │                         <span class="r6">'mtu'</span>: <span class="r7">-1</span>,                                                                                                               │
+  │                         <span class="r6">'speed'</span>: <span class="r7">0</span>,                                                                                                              │
+  │                         <span class="r6">'mac_address'</span>: <span class="r6">'08:00:27:e0:28:63'</span>                                                                                       │
+  │                     <span class="r5">}</span>,                                                                                                                           │
+  │                     <span class="r6">'lo'</span>: <span class="r5">{</span>                                                                                                                      │
+  │                         <span class="r6">'is_up'</span>: <span class="r10">True</span>,                                                                                                           │
+  │                         <span class="r6">'is_enabled'</span>: <span class="r10">True</span>,                                                                                                      │
+  │                         <span class="r6">'description'</span>: <span class="r6">''</span>,                                                                                                       │
+  │                         <span class="r6">'last_flapped'</span>: <span class="r7">-1.0</span>,                                                                                                    │
+  │                         <span class="r6">'mtu'</span>: <span class="r7">-1</span>,                                                                                                               │
+  │                         <span class="r6">'speed'</span>: <span class="r7">0</span>,                                                                                                              │
+  │                         <span class="r6">'mac_address'</span>: <span class="r6">'00:00:00:00:00:00'</span>                                                                                       │
+  │                     <span class="r5">}</span>                                                                                                                            │
+  │                 <span class="r5">}</span>                                                                                                                                │
+  │             <span class="r5">}</span>                                                                                                                                    │
+  │    tests 🟢 test_jsonpath<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r10">True</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">assertion</span>=<span class="r6">'is_true'</span>, <span class="r8">value</span>=<span class="r9">None</span>, <span class="r8">path</span>=<span class="r6">'interfaces.eth0.is_up'</span>,            │
+  │             <span class="r8">host_data</span>=<span class="r6">''</span>, <span class="r8">one_of</span>=<span class="r11">False</span>, <span class="r8">result_attr</span>=<span class="r6">'result'</span>, <span class="r8">matches</span>=<span class="r5">[</span><span class="r6">'interfaces.eth0.is_up'</span><span class="r5">])</span>                                                 │
+  │          🟢 test_until<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r11">False</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">initial_delay</span>=<span class="r7">15</span>, <span class="r8">retries</span>=<span class="r7">10</span>, <span class="r8">delay</span>=<span class="r7">15</span>, <span class="r8">reset_conns</span>=<span class="r10">True</span>,                   │
+  │             <span class="r8">t0</span>=<span class="r7">1600040300.389752</span>, <span class="r8">t1</span>=<span class="r7">1600040357.0873864</span>, <span class="r8">run_time</span>=<span class="r7">56.69763445854187</span><span class="r5">)</span>                                                             │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+</pre>
+    </code>
+</body>
+</html>

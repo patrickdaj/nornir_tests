@@ -3,9 +3,9 @@ from assertpy import assert_that
 from jsonpath_ng import parse
 from jsonpath_ng.jsonpath import DatumInContext
 from json import loads
-from typing import Callable, Any, List, Union
+from typing import Callable, Any, List
 
-from nornir.core.task import Result
+from nornir.core.task import Result, Task
 
 from .test import Test
 
@@ -30,53 +30,11 @@ class test_jsonpath(Test):
         value (str, optional): Data to use for comparison.
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
         assertion (str, optional): Any method of assertpy.assert_that object.
-        one_of (bool, optional): When found values is > 1, allow one match to pass otherwise all returned must match.
+        one_of (bool, optional): When found values is > 1, allow one match to pass otherwise
+            all returned must match.
         host_data (str, optional): jsonpath starting at task.host.data to use for comparison.
-        fail_task (bool, optional): Determines whether test failure results causes setting result failure.
-
-    Examples:
-        >>> nr.run(
-            task=netmiko_send_command,
-            command_string='show ntp',
-            name='Check NTP Sync',
-            tests=[
-                test_jsonpath(
-                    path='$..ntp-servers', 
-                    operation='is_equal_to', 
-                    one_of=True, 
-                    value='In Sync', 
-                    fail_task=True
-                ),
-                test_jsonpath(
-                    path='$.synced',
-                    operation='is_in',
-                    host_data='$.ntp_servers'
-                    fail_task=True
-                )
-            ]
-        )
-        >>>
-        >>> test_jsonpath(
-                path='$.synced',
-                operation='is_in',
-                host_data='$.ntp_servers'
-                fail_task=True
-            )
-            @test_jsonpath(
-                path='$..ntp-servers',
-                operation='is_equal_to',
-                one_of=True,
-                value='In Sync',
-                fail_task=True
-            )
-        >>> def check_ntp_sync(task):
-            return netmiko_send_command(
-                task=task,
-                command_string='show ntp'
-            )
-        >>>
-        >>> nr.run(check_ntp_sync, name='Check NTP Sync')
-        >>>
+        fail_task (bool, optional): Determines whether test failure results causes setting
+            result failure.
 
     """
 
@@ -89,7 +47,9 @@ class test_jsonpath(Test):
     matches: List[str] = field(default_factory=list)
     match: List[DatumInContext] = field(default_factory=list, repr=False)
 
-    def run(self, func: Callable[..., Any], task, *args: str, **kwargs: str) -> Result:
+    def run(
+        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
+    ) -> Result:
         """Method decorator to perform jsonpath parse and find on result of task
 
         Args:
@@ -98,7 +58,7 @@ class test_jsonpath(Test):
         Returns:
             `nornir.core.task.Result`: Result of task after executed and decorated by test_jsonpath
         """
-    
+
         result = func(task, *args, **kwargs)
 
         try:

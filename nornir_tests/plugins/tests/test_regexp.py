@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Any, List
+from typing import Callable, Any, Match, Optional, Union
 import re
 
 from nornir.core.task import Result
@@ -7,6 +7,7 @@ from nornir.core.task import Result
 from .test import Test
 
 
+@dataclass
 class test_regexp(Test):
     """Test decorator using regexp
 
@@ -15,9 +16,10 @@ class test_regexp(Test):
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
 
     """
-    regexp: str = ''
+
+    matches: Union[Optional[Match[Any]], None] = field(default=None, repr=False)
+    regexp: str = ""
     result_attr: str = "result"
-    matches: re.Match = field(repr=False)
 
     def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
         """Method decorator to perform regexp on result of task
@@ -43,7 +45,7 @@ class test_regexp(Test):
 
             if not self.passed:
                 raise Exception(f"no match found for regexp {self.regexp}")
-          
+
         except Exception as e:
             self.result = False
             self.exception = e

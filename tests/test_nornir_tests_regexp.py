@@ -35,4 +35,4 @@ def test_regexp_failed(nornir, fail):
         assert hasattr(result[0], "tests")
         assert result[0].failed == fail
         assert len(result[0].tests) > 0
-        assert result[0].tests[0].msg.find("no match found for regex") != -1
+        assert str(result[0].tests[0].exception).find("no match found for regex") != -1
