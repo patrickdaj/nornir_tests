@@ -6,4 +6,6 @@ API
     :caption: Contents
     :glob:
 
-    *
+    processors
+    tests
+    tasks

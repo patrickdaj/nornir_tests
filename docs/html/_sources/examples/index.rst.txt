@@ -13,5 +13,3 @@ Examples
     using-test-lxml
     using-test-jsonpath
     using-test-until
-
-.. 
