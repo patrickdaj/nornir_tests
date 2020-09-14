@@ -84,7 +84,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 </ul>
 
             
@@ -223,12 +223,69 @@
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://patrickdaj.github.io/nornir_tests/html/examples">Detailed examples</a></p>
+<p>This is a simple example of using nornir_tests to run a command with an assertion and then
+perform an action and combine assertions to wait for a successful result.  More examples can
+be seen in the documentation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir_netmiko.tasks</span> <span class="kn">import</span> <span class="n">netmiko_send_command</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir_napalm.plugins.tasks</span> <span class="kn">import</span> <span class="n">napalm_get</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_until</span><span class="p">,</span> <span class="n">test_jsonpath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir</span> <span class="kn">import</span> <span class="n">InitNornir</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir_utils.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.processors</span> <span class="kn">import</span> <span class="n">TestsProcessor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nr</span> <span class="o">=</span> <span class="n">InitNornir</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">inventory</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;plugin&quot;</span><span class="p">:</span> <span class="s2">&quot;SimpleInventory&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>                <span class="s2">&quot;host_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/hosts.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="s2">&quot;group_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/groups.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="s2">&quot;defaults_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/defaults.yaml&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="p">},</span>
+<span class="gp">... </span>        <span class="p">},</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nr</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TestsProcessor</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vyos</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;vyos&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print_result</span><span class="p">(</span><span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;reboot now&#39;</span><span class="p">))</span>
+<span class="go">netmiko_send_command************************************************************</span>
+<span class="go">* vyos ** changed : False ******************************************************</span>
+<span class="go">vvvv netmiko_send_command ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<span class="go">^^^^ END netmiko_send_command ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print_result</span><span class="p">(</span><span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">task</span><span class="o">=</span><span class="n">napalm_get</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>            <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>            <span class="n">test_until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="p">]</span>
+<span class="gp">... </span>    <span class="p">),</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">])</span>
+<span class="go">napalm_get**********************************************************************</span>
+<span class="go">* vyos ** changed : False ******************************************************</span>
+<span class="go">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<span class="go">TestList(tests=[test_jsonpath(exception=None, fail_task=True, passed=True, assertion=&#39;is_true&#39;,</span>
+<span class="go">value=None, path=&#39;interfaces.eth0.is_up&#39;, host_data=&#39;&#39;, one_of=False, result_attr=&#39;result&#39;,</span>
+<span class="go">matches=[&#39;interfaces.eth0.is_up&#39;]), test_until(exception=None, fail_task=False, passed=True,</span>
+<span class="go">initial_delay=15, retries=10, delay=15, reset_conns=True, t0=1600059187.4073257,</span>
+<span class="go">t1=1600059228.9614654, run_time=41.554139614105225)])</span>
+<span class="go">{ &#39;interfaces&#39;: { &#39;eth0&#39;: { &#39;description&#39;: &#39;&#39;,</span>
+<span class="go">                            &#39;is_enabled&#39;: True,</span>
+<span class="go">                            &#39;is_up&#39;: True,</span>
+<span class="go">                            &#39;last_flapped&#39;: -1.0,</span>
+<span class="go">                            &#39;mac_address&#39;: &#39;08:00:27:e0:28:63&#39;,</span>
+<span class="go">                            &#39;mtu&#39;: -1,</span>
+<span class="go">                            &#39;speed&#39;: 0},</span>
+<span class="go">                &#39;lo&#39;: { &#39;description&#39;: &#39;&#39;,</span>
+<span class="go">                        &#39;is_enabled&#39;: True,</span>
+<span class="go">                        &#39;is_up&#39;: True,</span>
+<span class="go">                        &#39;last_flapped&#39;: -1.0,</span>
+<span class="go">                        &#39;mac_address&#39;: &#39;00:00:00:00:00:00&#39;,</span>
+<span class="go">                        &#39;mtu&#39;: -1,</span>
+<span class="go">                        &#39;speed&#39;: 0}}}</span>
+<span class="go">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><p>Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
+<p>Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
 no way to use normal &#64; decorator syntax as these need to be applied before function definitions.
 That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
 paired with a special processor that looks for them in task.params.</p>
@@ -238,7 +295,6 @@ it does not really work for anything that doesn’t return a result.  So wrappin
 defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
 currently possible but the tasks within the grouped task are.  Nornir run commands that return
 results work fine.</p>
-</div></blockquote>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -255,14 +311,14 @@ results work fine.</p>
 <li class="toctree-l2"><a class="reference internal" href="api/tasks.html">tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/introduction.html">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/all-methods-of-using.html">All methods of using tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/using-test-timing.html">Using test_timing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/using-test-regexp.html">Using test_regexp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/using-test-jsonpath.html">Using test_jsonpath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/using-test-until.html">Using test_until</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/all-methods-of-using.html">All methods of using tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-timing.html">Using test_timing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-regexp.html">Using test_regexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-lxml.html">Using test_lxml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-until.html">Using test_until</a></li>
 </ul>
 </li>
 </ul>

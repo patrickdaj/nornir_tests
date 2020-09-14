@@ -55,149 +55,65 @@ Common Uses
 Usage
 -----
 This is a simple example of using nornir_tests to run a command with an assertion and then 
-perform an action and combine assertions to wait for a successful result.  The output is from
-another plugin that better prints tests but using standard print_result works fine too if it
-is included in vars.
+perform an action and combine assertions to wait for a successful result.  More examples can
+be seen in the documentation.
 
 .. code-block:: python
 
-    from nornir_napalm.plugins.tasks import napalm_get
-    from nornir_netmiko.tasks import netmiko_send_command
-    from nornir_rich.plugins.functions import RichResults
-    from nornir_tests.plugins.tests import test_until, test_jsonpath
-    from nornir_tests.plugins.processors import TestsProcessor
-    from nornir import InitNornir
-
-    nr = InitNornir(
-        inventory={
-            "plugin": "SimpleInventory",
-            "options": {
-                "host_file": "data/hosts.yaml",
-                "group_file": "data/groups.yaml",
-                "defaults_file": "data/defaults.yaml",
-            },
-        },
-    )
-
-    rr = RichResults(record=True)
-
-    nr.processors.append(TestsProcessor())
-
-    vyos = nr.filter(name='vyos')
-
-
-    # Using @decorator syntax
-    @test_jsonpath(
-        path='interfaces_ip.eth0.ipv4', 
-        assertion='contains_key', 
-        value='192.168.99.170', 
-        fail_task=True
-    )
-    def check_interface(task):
-        return napalm_get(task, getters=['interfaces_ip'])
-
-    result = vyos.run(check_interface, name='Check Interface')
-    rr.print(result)
-
-    rr.print(
-        vyos.run(
-            task=netmiko_send_command,
-            command_string='reboot now'
-        )
-    )
-
-    # Using the TestsProcessor to wrap the task
-    result = vyos.run(
-        task=napalm_get,
-        getters=['interfaces'],
-        tests=[
-            test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
-            test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),
-        ]
-    )
-
-    rr.print(result)
-    rr.write()
-
-
-Execution of this using nornir_rich produces the following output:
-
-.. raw:: html
-    <!DOCTYPE html>
-    <head>
-    <style>
-    .r1 {color: #000000; text-decoration: underline}
-    .r2 {color: #000000; font-weight: bold; text-decoration: underline}
-    .r3 {color: #000080; font-weight: bold; text-decoration: underline}
-    .r4 {color: #000080}
-    .r5 {font-weight: bold}
-    .r6 {color: #008000}
-    .r7 {color: #000080; font-weight: bold}
-    .r8 {color: #808000; font-style: italic}
-    .r9 {color: #800080; font-style: italic}
-    .r10 {color: #00ff00; font-style: italic}
-    .r11 {color: #ff0000; font-style: italic}
-    body {
-        color: #000000;
-        background-color: #ffffff;
-    }
-    </style>
-    </head>
-    <html>
-    <body>
-        <code>
-            <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span class="r1">Check Interface </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
-    <span class="r4">* vyos </span>
-    ╭─ Check Interface  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-    │    result = <span class="r5">{</span>                                                                                                                                    │
-    │                 <span class="r6">'interfaces_ip'</span>: <span class="r5">{</span>                                                                                                               │
-    │                     <span class="r6">'eth0'</span>: <span class="r5">{</span><span class="r6">'ipv4'</span>: <span class="r5">{</span><span class="r6">'192.168.99.170'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">24</span><span class="r5">}}}</span>,                                                                 │
-    │                     <span class="r6">'lo'</span>: <span class="r5">{</span><span class="r6">'ipv4'</span>: <span class="r5">{</span><span class="r6">'127.0.0.1'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">8</span><span class="r5">}}</span>, <span class="r6">'ipv6'</span>: <span class="r5">{</span><span class="r6">'::1'</span>: <span class="r5">{</span><span class="r6">'prefix_length'</span>: <span class="r7">128</span><span class="r5">}}}</span>                                 │
-    │                 <span class="r5">}</span>                                                                                                                                │
-    │             <span class="r5">}</span>                                                                                                                                    │
-    │    tests 🟢 test_jsonpath<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r10">True</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">assertion</span>=<span class="r6">'contains_key'</span>, <span class="r8">value</span>=<span class="r6">'192.168.99.170'</span>,                         │
-    │             <span class="r8">path</span>=<span class="r6">'interfaces_ip.eth0.ipv4'</span>, <span class="r8">host_data</span>=<span class="r6">''</span>, <span class="r8">one_of</span>=<span class="r11">False</span>, <span class="r8">result_attr</span>=<span class="r6">'result'</span>, <span class="r8">matches</span>=<span class="r5">[</span><span class="r6">'interfaces_ip.eth0.ipv4'</span><span class="r5">])</span>               │
-    ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-    <span class="r1">netmiko_send_command </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
-    <span class="r4">* vyos </span>
-    ✔ netmiko_send_command 
-
-    <span class="r1">napalm_get </span><span class="r2">(</span><span class="r1">hosts: </span><span class="r3">1</span><span class="r2">)</span>
-    <span class="r4">* vyos </span>
-    ╭─ napalm_get  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-    │    result = <span class="r5">{</span>                                                                                                                                    │
-    │                 <span class="r6">'interfaces'</span>: <span class="r5">{</span>                                                                                                                  │
-    │                     <span class="r6">'eth0'</span>: <span class="r5">{</span>                                                                                                                    │
-    │                         <span class="r6">'is_up'</span>: <span class="r10">True</span>,                                                                                                           │
-    │                         <span class="r6">'is_enabled'</span>: <span class="r10">True</span>,                                                                                                      │
-    │                         <span class="r6">'description'</span>: <span class="r6">''</span>,                                                                                                       │
-    │                         <span class="r6">'last_flapped'</span>: <span class="r7">-1.0</span>,                                                                                                    │
-    │                         <span class="r6">'mtu'</span>: <span class="r7">-1</span>,                                                                                                               │
-    │                         <span class="r6">'speed'</span>: <span class="r7">0</span>,                                                                                                              │
-    │                         <span class="r6">'mac_address'</span>: <span class="r6">'08:00:27:e0:28:63'</span>                                                                                       │
-    │                     <span class="r5">}</span>,                                                                                                                           │
-    │                     <span class="r6">'lo'</span>: <span class="r5">{</span>                                                                                                                      │
-    │                         <span class="r6">'is_up'</span>: <span class="r10">True</span>,                                                                                                           │
-    │                         <span class="r6">'is_enabled'</span>: <span class="r10">True</span>,                                                                                                      │
-    │                         <span class="r6">'description'</span>: <span class="r6">''</span>,                                                                                                       │
-    │                         <span class="r6">'last_flapped'</span>: <span class="r7">-1.0</span>,                                                                                                    │
-    │                         <span class="r6">'mtu'</span>: <span class="r7">-1</span>,                                                                                                               │
-    │                         <span class="r6">'speed'</span>: <span class="r7">0</span>,                                                                                                              │
-    │                         <span class="r6">'mac_address'</span>: <span class="r6">'00:00:00:00:00:00'</span>                                                                                       │
-    │                     <span class="r5">}</span>                                                                                                                            │
-    │                 <span class="r5">}</span>                                                                                                                                │
-    │             <span class="r5">}</span>                                                                                                                                    │
-    │    tests 🟢 test_jsonpath<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r10">True</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">assertion</span>=<span class="r6">'is_true'</span>, <span class="r8">value</span>=<span class="r9">None</span>, <span class="r8">path</span>=<span class="r6">'interfaces.eth0.is_up'</span>,            │
-    │             <span class="r8">host_data</span>=<span class="r6">''</span>, <span class="r8">one_of</span>=<span class="r11">False</span>, <span class="r8">result_attr</span>=<span class="r6">'result'</span>, <span class="r8">matches</span>=<span class="r5">[</span><span class="r6">'interfaces.eth0.is_up'</span><span class="r5">])</span>                                                 │
-    │          🟢 test_until<span class="r5">(</span><span class="r8">exception</span>=<span class="r9">None</span>, <span class="r8">fail_task</span>=<span class="r11">False</span>, <span class="r8">passed</span>=<span class="r10">True</span>, <span class="r8">initial_delay</span>=<span class="r7">15</span>, <span class="r8">retries</span>=<span class="r7">10</span>, <span class="r8">delay</span>=<span class="r7">15</span>, <span class="r8">reset_conns</span>=<span class="r10">True</span>,                   │
-    │             <span class="r8">t0</span>=<span class="r7">1600040300.389752</span>, <span class="r8">t1</span>=<span class="r7">1600040357.0873864</span>, <span class="r8">run_time</span>=<span class="r7">56.69763445854187</span><span class="r5">)</span>                                                             │
-    ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-    </pre>
-        </code>
-    </body>
-    </html>
+    >>> from nornir_netmiko.tasks import netmiko_send_command
+    >>> from nornir_napalm.plugins.tasks import napalm_get
+    >>> from nornir_tests.plugins.tests import test_until, test_jsonpath
+    >>> from nornir import InitNornir
+    >>> from nornir_utils.plugins.functions import print_result
+    >>> from nornir_tests.plugins.processors import TestsProcessor
+    >>> nr = InitNornir(
+    ...         inventory={
+    ...             "plugin": "SimpleInventory",
+    ...             "options": {
+    ...                 "host_file": "data/hosts.yaml",
+    ...                 "group_file": "data/groups.yaml",
+    ...                 "defaults_file": "data/defaults.yaml",
+    ...             },
+    ...         },
+    ...     )
+    >>> nr.processors.append(TestsProcessor())
+    >>> vyos = nr.filter(name='vyos')
+    >>> print_result(vyos.run(task=netmiko_send_command, command_string='reboot now'))
+    netmiko_send_command************************************************************
+    * vyos ** changed : False ******************************************************
+    vvvv netmiko_send_command ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO
+    ^^^^ END netmiko_send_command ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    >>> print_result(vyos.run(
+    ...         task=napalm_get,
+    ...         getters=['interfaces'],
+    ...         tests=[
+    ...             test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
+    ...             test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),
+    ...         ]
+    ...     ), vars=['tests', 'result'])
+    napalm_get**********************************************************************
+    * vyos ** changed : False ******************************************************
+    vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO
+    TestList(tests=[test_jsonpath(exception=None, fail_task=True, passed=True, assertion='is_true', 
+    value=None, path='interfaces.eth0.is_up', host_data='', one_of=False, result_attr='result', 
+    matches=['interfaces.eth0.is_up']), test_until(exception=None, fail_task=False, passed=True, 
+    initial_delay=15, retries=10, delay=15, reset_conns=True, t0=1600059187.4073257, 
+    t1=1600059228.9614654, run_time=41.554139614105225)])
+    { 'interfaces': { 'eth0': { 'description': '',
+                                'is_enabled': True,
+                                'is_up': True,
+                                'last_flapped': -1.0,
+                                'mac_address': '08:00:27:e0:28:63',
+                                'mtu': -1,
+                                'speed': 0},
+                    'lo': { 'description': '',
+                            'is_enabled': True,
+                            'is_up': True,
+                            'last_flapped': -1.0,
+                            'mac_address': '00:00:00:00:00:00',
+                            'mtu': -1,
+                            'speed': 0}}}
+    ^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
