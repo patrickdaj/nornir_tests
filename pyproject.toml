@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nornir_tests"
-version = "0.1.0a4"
+version = "0.1.0a5"
 description = ""
 authors = ["Patrick Avery <patrickdaj@gmail.com>"]
 
