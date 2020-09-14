@@ -26,13 +26,12 @@ sphinxcontrib-napoleon = "^0.7"
 nbsphinx = "^0.6.1"
 sphinx-issues = "^1.2.0"
 sphinx_rtd_theme = "^0.4.3"
-nornir-napalm = "*"
-napalm-vyos = "*"
-nornir-utils = "*"
+#nornir-napalm = "*"
+#napalm-vyos = "*"
+#nornir-utils = "*"
 # no pypi package yet, will remove eventually
-nornir-netmiko = {path = "/home/patrick/dev/nornir_netmiko"}
-#nornir-rich = {version = "^0.1.1a7", allow-prereleases = true}
-nornir-rich = {path = "/home/patrick/dev/nornir_rich"}
+#nornir-netmiko = {path = "/home/patrick/dev/nornir_netmiko"}
+#nornir-rich = {version = "*", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry>=0.12"]
