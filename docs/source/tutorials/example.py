@@ -20,34 +20,37 @@ rr = RichResults()
 
 nr.processors.append(TestsProcessor())
 
-vyos = nr.filter(name='vyos')
+vyos = nr.filter(name="vyos")
 
 
 # Using @decorator syntax
-@test_jsonpath(path='interfaces_ip.eth0.ipv4', assertion='contains_key', value='192.168.99.170', fail_task=True)
-def check_interface(task):
-    return napalm_get(task, getters=['interfaces_ip'])
-
-result = vyos.run(check_interface, name='Check Interface')
-
-rr.print(result, vars=['result', 'tests'])
-
-rr.print(
-    vyos.run(
-        task=netmiko_send_command,
-        command_string='reboot now'
-    )
+@test_jsonpath(
+    path="interfaces_ip.eth0.ipv4",
+    assertion="contains_key",
+    value="192.168.99.170",
+    fail_task=True,
 )
+def check_interface(task):
+    return napalm_get(task, getters=["interfaces_ip"])
+
+
+result = vyos.run(check_interface, name="Check Interface")
+
+rr.print(result, vars=["result", "tests"])
+
+rr.print(vyos.run(task=netmiko_send_command, command_string="reboot now"))
 
 # Using the TestsProcessor to wrap the task
 result = vyos.run(
     task=napalm_get,
-    getters=['interfaces'],
+    getters=["interfaces"],
     tests=[
-        test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
+        test_jsonpath(
+            path="interfaces.eth0.is_up", assertion="is_true", fail_task=True
+        ),
         test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),
-    ]
+    ],
 )
 
-rr.print(result, vars=['result', 'tests'])
+rr.print(result, vars=["result", "tests"])
 rr.write()

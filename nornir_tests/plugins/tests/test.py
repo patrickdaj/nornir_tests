@@ -1,9 +1,9 @@
 import copy
 from dataclasses import dataclass, field
 
-from typing import Callable, List, Any, Union
+from nornir.core.task import Task, Result
 
-from nornir.core.task import Result, Task
+from typing import Callable, List, Any, Union
 
 
 def apply_tests(

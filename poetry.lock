@@ -1819,6 +1819,14 @@ version = "3.5.1"
 notebook = ">=4.4.1"
 
 [[package]]
+category = "main"
+description = "Module for decorators, wrappers and monkey patching."
+name = "wrapt"
+optional = false
+python-versions = "*"
+version = "1.12.1"
+
+[[package]]
 category = "dev"
 description = "YAML loader and dump for PyYAML allowing to keep keys order."
 name = "yamlordereddictloader"
@@ -1843,8 +1851,8 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "08a2a3f4aafb7c5ff21723c024605a969e5e89f3e2cc9fb04491bf628bbcd5f6"
-python-versions = ">=3.6,<4.0"
+content-hash = "5e71f47726267cd1970bd731824de3ae6eb546ddd167c93a861ad471128b4f16"
+python-versions = "3.6" #">=3.6,<4.0"
 
 [metadata.files]
 alabaster = [
@@ -2721,6 +2729,9 @@ webencodings = [
 widgetsnbextension = [
     {file = "widgetsnbextension-3.5.1-py2.py3-none-any.whl", hash = "sha256:bd314f8ceb488571a5ffea6cc5b9fc6cba0adaf88a9d2386b93a489751938bcd"},
     {file = "widgetsnbextension-3.5.1.tar.gz", hash = "sha256:079f87d87270bce047512400efd70238820751a11d2d8cb137a5a5bdbaf255c7"},
+]
+wrapt = [
+    {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
 ]
 yamlordereddictloader = [
     {file = "yamlordereddictloader-0.4.0.tar.gz", hash = "sha256:7f30f0b99ea3f877f7cb340c570921fa9d639b7f69cba18be051e27f8de2080e"},

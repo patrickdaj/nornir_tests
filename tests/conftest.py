@@ -31,7 +31,8 @@ def nornir(request):
     nornir.data = global_data
     nornir.processors.append(TestsProcessor())
 
-    return nornir.filter(name='test')
+    return nornir.filter(name="test")
+
 
 @pytest.fixture(scope="session", autouse=True)
 def nornir2(request):
@@ -54,6 +55,7 @@ def nornir2(request):
     nornir.processors.append(TestsProcessor())
 
     return nornir
+
 
 @pytest.fixture(scope="function", autouse=True)
 def reset_data():
