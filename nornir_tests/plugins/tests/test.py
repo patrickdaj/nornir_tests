@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass, field
 
 from typing import Callable, List, Any, Union
@@ -66,10 +67,10 @@ class Test:
             result (`nornir.core.task.Result`): task results object
         """
         if getattr(result, "tests", None):
-            result.tests.append(self)
+            result.tests.append(copy.deepcopy(self))
         else:
             result.tests = TestList()
-            result.tests.append(self)
+            result.tests.append(copy.deepcopy(self))
 
 
 @dataclass

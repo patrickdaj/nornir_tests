@@ -15,3 +15,20 @@ test:
         duplicate: 10
       path2:
         duplicate: 99
+test2:
+  hostname: test2
+  username: test2
+  password: test2
+  data:
+    dns_primary: 10.254.0.16
+    dns_servers:
+      - 10.254.0.1
+      - 10.254.0.2
+    domain: domain.com
+    domain2: domain2.com
+    domains: [ domain.com, domain2.com ]
+    duplicate_data:
+      path1:
+        duplicate: 10
+      path2:
+        duplicate: 99
