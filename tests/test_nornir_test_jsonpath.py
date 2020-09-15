@@ -25,8 +25,21 @@ def get_json_dict(task):
         result = Result(host=task.host, result=json.load(f))
     return result
 
-def test_multi_host_fail_host_test2(nornir):
-    results = nornir.run(
+@test_jsonpath(path="$.dns_servers", assertion="contains", host_data="$.dns_primary")
+def decorated(task):
+    return get_json_dict(task)
+
+def test_multi_host_fail_host_test2_decorator(nornir2):
+    results = nornir2.run(decorated)
+
+    assert results['test'][0].tests[0].passed
+    assert not results['test2'][0].tests[0].passed
+
+    for result in results.values():
+        assert len(result[0].tests) == 1
+
+def test_multi_host_fail_host_test2(nornir2):
+    results = nornir2.run(
         task=get_json_dict,
         tests=[
             test_jsonpath(
@@ -39,7 +52,6 @@ def test_multi_host_fail_host_test2(nornir):
 
     for result in results.values():
         assert len(result[0].tests) == 1
-
 
 def test_contains_passed(nornir):
     results = nornir.run(
