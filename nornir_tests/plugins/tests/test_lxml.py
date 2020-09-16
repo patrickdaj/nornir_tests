@@ -2,16 +2,18 @@ import wrapt
 from dataclasses import dataclass, field
 import lxml.etree as etree
 from jsonpath_ng import parse
-from typing import Callable, Any, List, Union
+from typing import Any, List, Union, Callable, Dict
 from assertpy import assert_that
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Result
+
 
 @dataclass
 class XmlPathRecord:
     assertion: str = "is_equal_to"
     passed: bool = False
     matches: List[str] = field(default_factory=list)
+    match: Union[etree._ElementTree, None] = None
     one_of: bool = False
     value: Any = None
     xpath: str = ""
@@ -21,6 +23,7 @@ class XmlPathRecord:
     host_data: str = ""
     fail_task: bool = False
     exception: Union[Exception, None] = None
+
 
 def test_lxml(
     assertion: str = "is_equal_to",
@@ -32,7 +35,7 @@ def test_lxml(
     result_attr: str = "result",
     host_data: str = "",
     fail_task: bool = False,
-):
+) -> Result:
     """Test decorator using lxml
 
     This test is based off of the `lxml <https://github.com/h2non/jsonpath-ng>`__ implementation.
@@ -51,7 +54,12 @@ def test_lxml(
     """
 
     @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwargs) -> Result:
+    def wrapper(
+        wrapped: Callable[..., Any],
+        instance: object,
+        args: List[Any],
+        kwargs: Dict[str, Any],
+    ) -> Result:
 
         test = XmlPathRecord(
             assertion=assertion,
@@ -62,7 +70,7 @@ def test_lxml(
             host_data=host_data,
             fail_task=fail_task,
             attrib=attrib,
-            text=text
+            text=text,
         )
 
         if len(args) > 0:
@@ -116,7 +124,9 @@ def test_lxml(
                     test.matches.append(attr_data.getroottree().getpath(submatch))
 
                 except Exception as e:
-                    if not test.one_of or (submatch == test.match[-1] and not test.passed):
+                    if not test.one_of or (
+                        submatch == test.match[-1] and not test.passed
+                    ):
                         raise Exception(e)
 
         except Exception as e:
@@ -132,9 +142,5 @@ def test_lxml(
             result.failed = True
 
         return result
+
     return wrapper
-
-
-
-
-

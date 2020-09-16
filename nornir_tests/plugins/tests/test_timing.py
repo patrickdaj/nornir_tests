@@ -1,6 +1,6 @@
 import wrapt
 from dataclasses import dataclass
-from typing import Callable, Any, Union
+from typing import Union, Callable, Dict, List, Any
 import sys
 import time
 
@@ -10,13 +10,14 @@ from nornir.core.task import Result
 @dataclass
 class TimingRecord:
     passed: bool = False
+    t0: float = -1
     t1: float = -1
-    t2: float = -1
     run_time: float = -1
     fail_task: bool = False
     exception: Union[Exception, None] = None
     min_run_time: int = 0
     max_run_time: int = 0
+
 
 def test_timing(
     min_run_time: int = 0,
@@ -24,8 +25,8 @@ def test_timing(
     t0: float = -1,
     t1: float = -1,
     run_time: float = -1,
-    fail_task: bool = False
-):
+    fail_task: bool = False,
+) -> Result:
     """Test decorator for timing
 
     Args:
@@ -34,19 +35,18 @@ def test_timing(
         min_run_time (int, optional): Required minimum runtime. Defaults to 0.
         max_run_time (int, optional): Required maximum runtime. Defaults to sys.maxsize.
     """
+
     @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwargs) -> Result:
+    def wrapper(
+        wrapped: Callable[..., Any],
+        instance: object,
+        args: List[Any],
+        kwargs: Dict[str, Any],
+    ) -> Result:
 
         test = TimingRecord(
-            fail_task=fail_task,
-            min_run_time=min_run_time,
-            max_run_time=max_run_time
+            fail_task=fail_task, min_run_time=min_run_time, max_run_time=max_run_time
         )
-
-        if len(args) > 0:
-            task = args[0]
-        else:
-            task = kwargs["task"]
 
         test.t0 = time.time()
         result = wrapped(*args, **kwargs)
@@ -67,4 +67,5 @@ def test_timing(
         result.tests.append(test)
 
         return result
+
     return wrapper

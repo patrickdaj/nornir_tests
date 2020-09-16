@@ -1,24 +1,26 @@
 import wrapt
 from dataclasses import dataclass, field
-from typing import Callable, Any, Match, Optional, Union, List
+from typing import Union, Optional, Match, Any, TypeVar, Callable, Dict, List
 import re
 
 from nornir.core.task import Result
+
+F = TypeVar("F", bound=Callable[..., Any])
+
 
 @dataclass
 class RegexpRecord:
     regexp: str = ""
     passed: bool = False
-    matches: List[str] = field(default_factory=list)
+    matches: Optional[Match[Any]] = field(default=None)
     result_attr: str = "result"
     fail_task: bool = False
     exception: Union[Exception, None] = None
 
+
 def test_regexp(
-    regexp: str = "",
-    result_attr: str = "result",
-    fail_task: bool = False
-):
+    regexp: str = "", result_attr: str = "result", fail_task: bool = False
+) -> Result:
     """Test decorator using regexp
 
     Args:
@@ -28,18 +30,18 @@ def test_regexp(
     """
 
     @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwargs) -> Result:
+    def wrapper(
+        wrapped: Callable[..., Any],
+        instance: object,
+        args: List[Any],
+        kwargs: Dict[str, Any],
+    ) -> Result:
 
         test = RegexpRecord(
             regexp=regexp,
             result_attr=result_attr,
             fail_task=fail_task,
         )
-
-        if len(args) > 0:
-            task = args[0]
-        else:
-            task = kwargs["task"]
 
         result = wrapped(*args, **kwargs)
 
@@ -69,4 +71,5 @@ def test_regexp(
         result.tests.append(test)
 
         return result
+
     return wrapper
