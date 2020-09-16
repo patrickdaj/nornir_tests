@@ -1,9 +1,9 @@
 import wrapt
 from dataclasses import dataclass, field
 from assertpy import assert_that
-from jsonpath_ng import parse
+from jsonpath_ng import parse, DatumInContext
 from json import loads
-from typing import Any, List, Union
+from typing import Any, List, Union, Callable, Dict
 
 from nornir.core.task import Result
 
@@ -13,6 +13,7 @@ class JsonPathRecord:
     assertion: str = "is_equal_to"
     passed: bool = False
     matches: List[str] = field(default_factory=list)
+    match: Union[DatumInContext, None] = None
     one_of: bool = False
     value: Any = None
     path: str = ""
@@ -20,6 +21,7 @@ class JsonPathRecord:
     host_data: str = ""
     fail_task: bool = False
     exception: Union[Exception, None] = None
+
 
 def test_jsonpath(
     assertion: str = "is_equal_to",
@@ -29,7 +31,7 @@ def test_jsonpath(
     result_attr: str = "result",
     host_data: str = "",
     fail_task: bool = False,
-):
+) -> Result:
     """Test decorator using jsonpath
 
     This test is based off of the `jsonpath_ng <https://github.com/h2non/jsonpath-ng>`__
@@ -57,7 +59,12 @@ def test_jsonpath(
     """
 
     @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwargs) -> Result:
+    def wrapper(
+        wrapped: Callable[..., Any],
+        instance: object,
+        args: List[Any],
+        kwargs: Dict[str, Any],
+    ) -> Result:
 
         test = JsonPathRecord(
             assertion=assertion,

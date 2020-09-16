@@ -19,9 +19,11 @@ def get_json_str(task):
         result = Result(host=task.host, result=f.read())
     return result
 
+
 @t_jsonpath(path="$.dns_servers", assertion="contains", host_data="$.dns_primary")
 def decorator(task):
     return get_json_str(task)
+
 
 def get_json_dict(task):
     with open(os.path.join(dir_path, "data/netjson-config.json"), "r") as f:
@@ -44,14 +46,16 @@ def test_multi_host_fail_host_test2(two_hosts):
     for result in results.values():
         assert len(result[0].tests) == 1
 
+
 def test_multi_host_fail_host_test2_decorator(two_hosts):
     results = two_hosts.run(decorator)
-    
+
     assert results["test"][0].tests[0].passed
     assert not results["test2"][0].tests[0].passed
 
     for result in results.values():
         assert len(result[0].tests) == 1
+
 
 def test_contains_passed(single_host):
     results = single_host.run(

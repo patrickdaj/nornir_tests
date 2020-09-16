@@ -6,6 +6,7 @@ from .test_regexp import test_regexp
 from .test_jsonpath import test_jsonpath
 from .test_lxml import test_lxml
 
+
 def apply_tests(
     task: Callable[..., Any], tests: List[Callable[..., Any]]
 ) -> Callable[..., Any]:
@@ -23,6 +24,7 @@ def apply_tests(
         wrapped = wrapper(wrapped)
 
     return wrapped
+
 
 __all__ = [
     "apply_tests",

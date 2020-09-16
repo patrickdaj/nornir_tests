@@ -1,22 +1,24 @@
 import wrapt
 from dataclasses import dataclass
-from typing import Callable, Any, Union
+from typing import Union, Any, List, Dict, Callable
 import time
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Result
+
 
 @dataclass
 class UntilRecord:
     passed: bool = False
+    t0: float = -1
     t1: float = -1
-    t2: float = -1
     run_time: float = -1
     fail_task: bool = False
     exception: Union[Exception, None] = None
     initial_delay: float = 0
-    retries: float = 0
+    retries: int = 0
     delay: float = 0
     reset_conns: bool = False
+
 
 def test_until(
     initial_delay: int = 0,
@@ -26,10 +28,15 @@ def test_until(
     t0: float = -1,
     t1: float = -1,
     run_time: float = -1,
-    fail_task: bool = False
-):
+    fail_task: bool = False,
+) -> Result:
     @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwargs) -> Result:
+    def wrapper(
+        wrapped: Callable[..., Any],
+        instance: object,
+        args: List[Any],
+        kwargs: Dict[str, Any],
+    ) -> Result:
 
         test = UntilRecord(
             initial_delay=initial_delay,
@@ -78,4 +85,5 @@ def test_until(
         result.tests.append(test)
 
         return result
+
     return wrapper
