@@ -1,15 +1,31 @@
+import wrapt
 from dataclasses import dataclass
-from typing import Callable, Any
+from typing import Callable, Any, Union
 import sys
 import time
 
 from nornir.core.task import Result
 
-from .test import Test
-
 
 @dataclass
-class test_timing(Test):
+class TimingRecord:
+    passed: bool = False
+    t1: float = -1
+    t2: float = -1
+    run_time: float = -1
+    fail_task: bool = False
+    exception: Union[Exception, None] = None
+    min_run_time: int = 0
+    max_run_time: int = 0
+
+def test_timing(
+    min_run_time: int = 0,
+    max_run_time: int = sys.maxsize,
+    t0: float = -1,
+    t1: float = -1,
+    run_time: float = -1,
+    fail_task: bool = False
+):
     """Test decorator for timing
 
     Args:
@@ -18,35 +34,37 @@ class test_timing(Test):
         min_run_time (int, optional): Required minimum runtime. Defaults to 0.
         max_run_time (int, optional): Required maximum runtime. Defaults to sys.maxsize.
     """
+    @wrapt.decorator
+    def wrapper(wrapped, instance, args, kwargs) -> Result:
 
-    min_run_time: int = 0
-    max_run_time: int = sys.maxsize
-    t0: float = -1
-    t1: float = -1
-    run_time: float = -1
-
-    def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
-        """Method decorator to perform timing on result of task
-
-        Args:
-            func (Callable[..., Any]): Decorated function
-
-        Returns:
-            `nornir.core.task.Result`: Result of task after executed and decorated by test_timing
-        """
-        self.t0 = time.time()
-        result = func(*args, **kwargs)
-        self.t1 = time.time()
-
-        result.run_time = self.t1 - self.t0
-
-        self.passed = (
-            result.run_time > self.min_run_time and result.run_time < self.max_run_time
+        test = TimingRecord(
+            fail_task=fail_task,
+            min_run_time=min_run_time,
+            max_run_time=max_run_time
         )
 
-        if self.fail_task and not self.passed:
+        if len(args) > 0:
+            task = args[0]
+        else:
+            task = kwargs["task"]
+
+        test.t0 = time.time()
+        result = wrapped(*args, **kwargs)
+        test.t1 = time.time()
+
+        result.run_time = test.t1 - test.t0
+
+        test.passed = (
+            result.run_time > test.min_run_time and result.run_time < test.max_run_time
+        )
+
+        if test.fail_task and not test.passed:
             result.failed = True
 
-        self._add_test(result)
+        if not getattr(result, "tests", None):
+            setattr(result, "tests", [])
+
+        result.tests.append(test)
 
         return result
+    return wrapper

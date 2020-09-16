@@ -23,9 +23,9 @@ def generate_exception(task):
     return Result(host=task.host, failed=False)
 
 
-def test_until_passed(nornir):
+def test_until_passed(single_host):
 
-    results = nornir.run(
+    results = single_host.run(
         task=echo_data,
         name="whatever",
         z="zzzsuperpassword!dkfj",
@@ -37,9 +37,9 @@ def test_until_passed(nornir):
         assert result[0].tests[0].run_time > 0
 
 
-def test_until_on_failed(nornir):
+def test_until_on_failed(single_host):
 
-    results = nornir.run(
+    results = single_host.run(
         name="whatever",
         task=just_fail,
         tests=[test_until(delay=1, retries=6)],
@@ -51,9 +51,9 @@ def test_until_on_failed(nornir):
         assert not result[0].tests[0].passed
 
 
-def test_exception_catch(nornir):
+def test_exception_catch(single_host):
 
-    results = nornir.run(
+    results = single_host.run(
         name="exception",
         task=generate_exception,
         tests=[test_until(delay=1, retries=5)],
@@ -64,9 +64,9 @@ def test_exception_catch(nornir):
         assert result[0].tests[0].run_time > 0
 
 
-def test_initial_delay(nornir):
+def test_initial_delay(single_host):
 
-    results = nornir.run(
+    results = single_host.run(
         name="exception",
         task=just_pass,
         tests=[test_until(delay=0, retries=0, initial_delay=1)],

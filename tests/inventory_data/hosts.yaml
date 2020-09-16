@@ -2,6 +2,8 @@ test:
   hostname: test
   username: test
   password: test
+  groups:
+    - two_hosts
   data:
     dns_primary: 10.254.0.1
     dns_servers:
@@ -19,6 +21,8 @@ test2:
   hostname: test2
   username: test2
   password: test2
+  groups:
+    - two_hosts
   data:
     dns_primary: 10.254.0.16
     dns_servers:

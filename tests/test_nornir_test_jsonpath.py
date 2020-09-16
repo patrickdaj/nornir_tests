@@ -29,8 +29,8 @@ def get_json_dict(task):
     return result
 
 
-def test_multi_host_fail_host_test2(nornir2):
-    results = nornir2.run(
+def test_multi_host_fail_host_test2(two_hosts):
+    results = two_hosts.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -44,8 +44,8 @@ def test_multi_host_fail_host_test2(nornir2):
     for result in results.values():
         assert len(result[0].tests) == 1
 
-def test_multi_host_fail_host_test2_decorator(nornir2):
-    results = nornir2.run(decorator)
+def test_multi_host_fail_host_test2_decorator(two_hosts):
+    results = two_hosts.run(decorator)
     
     assert results["test"][0].tests[0].passed
     assert not results["test2"][0].tests[0].passed
@@ -53,8 +53,8 @@ def test_multi_host_fail_host_test2_decorator(nornir2):
     for result in results.values():
         assert len(result[0].tests) == 1
 
-def test_contains_passed(nornir):
-    results = nornir.run(
+def test_contains_passed(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(path="$.dns_search", assertion="contains", host_data="$.domain")
@@ -65,8 +65,8 @@ def test_contains_passed(nornir):
         assert result[0].tests[0].passed
 
 
-def test_match_len_one(nornir):
-    results = nornir.run(
+def test_match_len_one(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -80,8 +80,8 @@ def test_match_len_one(nornir):
         assert len(result[0].tests[0].matches) == 1
 
 
-def test_contains_failed(nornir):
-    results = nornir.run(
+def test_contains_failed(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(path="$.dns_search", assertion="contains", host_data="$.domain2")
@@ -93,8 +93,8 @@ def test_contains_failed(nornir):
         assert str(result[0].tests[0].exception).find("Expected") != -1
 
 
-def test_found_duplicate_host_data(nornir):
-    results = nornir.run(
+def test_found_duplicate_host_data(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -110,8 +110,8 @@ def test_found_duplicate_host_data(nornir):
         )
 
 
-def test_path_not_found(nornir):
-    results = nornir.run(
+def test_path_not_found(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(path="$.invalid", assertion="contains", host_data="$.domain")
@@ -123,8 +123,8 @@ def test_path_not_found(nornir):
         assert str(result[0].tests[0].exception) == "no match found from path $.invalid"
 
 
-def test_with_one_of_single_match(nornir):
-    results = nornir.run(
+def test_with_one_of_single_match(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -141,8 +141,8 @@ def test_with_one_of_single_match(nornir):
         assert len(result[0].tests[0].matches) == 1
 
 
-def test_without_one_of_single_match(nornir):
-    results = nornir.run(
+def test_without_one_of_single_match(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -158,8 +158,8 @@ def test_without_one_of_single_match(nornir):
         assert str(result[0].tests[0].exception).find("Expected") != -1
 
 
-def test_with_one_of_multi_match(nornir):
-    results = nornir.run(
+def test_with_one_of_multi_match(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -176,8 +176,8 @@ def test_with_one_of_multi_match(nornir):
         assert len(result[0].tests[0].matches) > 1
 
 
-def test_without_one_of_multi_match_failed(nornir):
-    results = nornir.run(
+def test_without_one_of_multi_match_failed(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(path="$.interfaces..mask", assertion="is_equal_to", value="24")
@@ -188,8 +188,8 @@ def test_without_one_of_multi_match_failed(nornir):
         assert not result[0].tests[0].passed
 
 
-def test_without_one_of_multi_match_passed(nornir):
-    results = nornir.run(
+def test_without_one_of_multi_match_passed(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value="1500")
@@ -200,8 +200,8 @@ def test_without_one_of_multi_match_passed(nornir):
         assert not result[0].tests[0].passed
 
 
-def test_dont_fail_task(nornir):
-    results = nornir.run(
+def test_dont_fail_task(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[t_jsonpath(path="$.dns_servers", assertion="contains", value="8.8.8.8")],
     )
@@ -211,8 +211,8 @@ def test_dont_fail_task(nornir):
         assert not result[0].failed
 
 
-def test_fail_task(nornir):
-    results = nornir.run(
+def test_fail_task(single_host):
+    results = single_host.run(
         task=get_json_dict,
         tests=[
             t_jsonpath(
@@ -229,8 +229,8 @@ def test_fail_task(nornir):
         assert result[0].failed
 
 
-def test_string_input(nornir):
-    results = nornir.run(
+def test_string_input(single_host):
+    results = single_host.run(
         task=get_json_str,
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value=1500)
@@ -241,8 +241,8 @@ def test_string_input(nornir):
         assert result[0].tests[0].passed
 
 
-def test_invalid_input(nornir):
-    results = nornir.run(
+def test_invalid_input(single_host):
+    results = single_host.run(
         task=get_invalid_json,
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value="1500")

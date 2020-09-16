@@ -21,7 +21,6 @@ class JsonPathRecord:
     fail_task: bool = False
     exception: Union[Exception, None] = None
 
-
 def test_jsonpath(
     assertion: str = "is_equal_to",
     value: Any = None,

@@ -1,74 +1,81 @@
+import wrapt
 from dataclasses import dataclass
-from typing import Callable, Any
+from typing import Callable, Any, Union
 import time
 
 from nornir.core.task import Result, Task
 
-from .test import Test
-
-
 @dataclass
-class test_until(Test):
-    """Test decorator to continue until task result is not failed
-
-    Args:
-        initial_delay (int, optional): Initial delay before trying first try.
-            Defaults to 0.
-        retries (int, optional): Number of retries. Defaults to 0.
-        delay (int, optional): Time between retries. Defaults to 0.
-        reset_conns (bool, optional): Reset connections between retries.
-            Defaults to False.
-        fail_task (bool, optional): . Defaults to False.
-    """
-
-    initial_delay: int = 0
-    retries: int = 0
-    delay: int = 0
-    reset_conns: bool = False
-    t0: float = -1
+class UntilRecord:
+    passed: bool = False
     t1: float = -1
+    t2: float = -1
     run_time: float = -1
+    fail_task: bool = False
+    exception: Union[Exception, None] = None
+    initial_delay: float = 0
+    retries: float = 0
+    delay: float = 0
+    reset_conns: bool = False
 
-    def run(
-        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
-    ) -> Result:
-        """Method decorator to continue until result of task is not failed
+def test_until(
+    initial_delay: int = 0,
+    retries: int = 0,
+    delay: int = 0,
+    reset_conns: bool = False,
+    t0: float = -1,
+    t1: float = -1,
+    run_time: float = -1,
+    fail_task: bool = False
+):
+    @wrapt.decorator
+    def wrapper(wrapped, instance, args, kwargs) -> Result:
 
-        Args:
-            func (Callable[..., Any]): Decorated function
+        test = UntilRecord(
+            initial_delay=initial_delay,
+            retries=retries,
+            delay=delay,
+            reset_conns=reset_conns,
+            fail_task=fail_task,
+        )
 
-        Returns:
-            `nornir.core.task.Result`: Result of task after executed and decorated by test_until
-        """
+        if len(args) > 0:
+            task = args[0]
+        else:
+            task = kwargs["task"]
 
-        self.t0 = time.time()
+        test.t0 = time.time()
 
-        if self.initial_delay:
-            time.sleep(self.initial_delay)
+        if test.initial_delay:
+            time.sleep(test.initial_delay)
 
-        for i in range(self.retries + 1):
+        for i in range(test.retries + 1):
             try:
-                result = func(task, *args, **kwargs)
+                result = wrapped(*args, **kwargs)
                 if not result.failed:
-                    self.passed = True
+                    test.passed = True
             except Exception as e:
                 # pass last exception back to nornir
-                if i == self.retries - 1:
+                if i == test.retries - 1:
                     raise e
 
             # no need to sleep if this is last iteration
-            if self.passed or i == self.retries - 1:
+            if test.passed or i == test.retries - 1:
                 break
 
             else:
-                if self.reset_conns:
+                if test.reset_conns:
                     task.host.close_connections()
-                time.sleep(self.delay)
+                time.sleep(test.delay)
 
-        self.t1 = time.time()
+        test.t1 = time.time()
 
-        self.run_time = self.t1 - self.t0
+        test.run_time = test.t1 - test.t0
 
-        self._add_test(result)
+        if not getattr(result, "tests", None):
+            setattr(result, "tests", [])
+
+        result.tests.append(test)
 
         return result
+    return wrapper

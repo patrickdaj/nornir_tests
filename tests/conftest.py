@@ -1,6 +1,7 @@
 import os
 
 from nornir import InitNornir
+from nornir.core.filter import F
 from nornir.core.state import GlobalState
 
 from nornir_tests.plugins.processors import TestsProcessor
@@ -35,7 +36,7 @@ def nornir(request):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def nornir2(request):
+def nornir(request):
     """Initializes nornir"""
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -55,6 +56,14 @@ def nornir2(request):
     nornir.processors.append(TestsProcessor())
 
     return nornir
+
+@pytest.fixture(scope="session", autouse=True)
+def single_host(nornir):
+    return nornir.filter(name='test')
+
+@pytest.fixture(scope="session", autouse=True)
+def two_hosts(nornir):
+    return nornir.filter(F(groups__contains="two_hosts"))
 
 
 @pytest.fixture(scope="function", autouse=True)

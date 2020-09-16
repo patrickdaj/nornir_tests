@@ -1,16 +1,38 @@
+import wrapt
 from dataclasses import dataclass, field
 import lxml.etree as etree
 from jsonpath_ng import parse
-from typing import Callable, Any, List
+from typing import Callable, Any, List, Union
 from assertpy import assert_that
 
 from nornir.core.task import Result, Task
 
-from .test import Test
-
-
 @dataclass
-class test_lxml(Test):
+class XmlPathRecord:
+    assertion: str = "is_equal_to"
+    passed: bool = False
+    matches: List[str] = field(default_factory=list)
+    one_of: bool = False
+    value: Any = None
+    xpath: str = ""
+    attrib: str = ""
+    text: bool = False
+    result_attr: str = "result"
+    host_data: str = ""
+    fail_task: bool = False
+    exception: Union[Exception, None] = None
+
+def test_lxml(
+    assertion: str = "is_equal_to",
+    value: Any = None,
+    xpath: str = "",
+    attrib: str = "",
+    text: bool = False,
+    one_of: bool = False,
+    result_attr: str = "result",
+    host_data: str = "",
+    fail_task: bool = False,
+):
     """Test decorator using lxml
 
     This test is based off of the `lxml <https://github.com/h2non/jsonpath-ng>`__ implementation.
@@ -28,36 +50,34 @@ class test_lxml(Test):
             result failure.
     """
 
-    text: bool = False
-    host_data: str = ""
-    xpath: str = ""
-    one_of: bool = False
-    value: str = ""
-    attrib: str = ""
-    result_attr: str = "result"
-    assertion: str = "is_equal_to"
-    matches: List[str] = field(default_factory=list)
-    match: List[Any] = field(default_factory=list, repr=False)
+    @wrapt.decorator
+    def wrapper(wrapped, instance, args, kwargs) -> Result:
 
-    def run(
-        self, func: Callable[..., Any], task: Task, *args: str, **kwargs: str
-    ) -> Result:
-        """Method decorator to perform lxml find and compare on result of task
+        test = XmlPathRecord(
+            assertion=assertion,
+            one_of=one_of,
+            value=value,
+            xpath=xpath,
+            result_attr=result_attr,
+            host_data=host_data,
+            fail_task=fail_task,
+            attrib=attrib,
+            text=text
+        )
 
-        Args:
-            func (Callable[..., Any]): Decorated function
+        if len(args) > 0:
+            task = args[0]
+        else:
+            task = kwargs["task"]
 
-        Returns:
-            `nornir.core.task.Result`: Result of task after executed and decorated by test_jsonpath
-        """
+        result = wrapped(*args, **kwargs)
 
-        result = func(task, *args, **kwargs)
         try:
-            attr_data = getattr(result, self.result_attr)
+            attr_data = getattr(result, test.result_attr)
 
-            # self.host_data always preferred
-            if self.host_data:
-                new_value = parse(self.host_data).find(task.host.data)
+            # test.host_data always preferred
+            if test.host_data:
+                new_value = parse(test.host_data).find(task.host.data)
 
                 if len(new_value) > 1:
                     raise Exception("host_data can only return one match")
@@ -65,47 +85,56 @@ class test_lxml(Test):
                 elif not new_value:
                     raise Exception("host_data not found")
 
-                self.value = new_value[0].value if new_value[0] else self.value
+                test.value = new_value[0].value if new_value[0] else test.value
 
             if isinstance(attr_data, str):
                 attr_data = etree.fromstring(attr_data)
 
-            self.match = attr_data.findall(self.xpath)
+            test.match = attr_data.findall(test.xpath)
 
-            if not self.match:
-                raise Exception(f"no match found from path {self.xpath}")
+            if not test.match:
+                raise Exception(f"no match found from path {test.xpath}")
 
-            for match in self.match:
+            for submatch in test.match:
 
                 try:
-                    if self.text:
-                        assert_obj = assert_that(match.text)
-                    elif self.attrib:
-                        assert_obj = assert_that(match.attrib[self.attrib])
+                    if test.text:
+                        assert_obj = assert_that(submatch.text)
+                    elif test.attrib:
+                        assert_obj = assert_that(submatch.attrib[test.attrib])
                     else:
-                        assert_obj = assert_that(match)
+                        assert_obj = assert_that(submatch)
 
-                    assert_method = getattr(assert_obj, self.assertion)
+                    assert_method = getattr(assert_obj, test.assertion)
 
-                    if self.value:
-                        assert_method(self.value)
+                    if test.value:
+                        assert_method(test.value)
                     else:
                         assert_method()
 
-                    self.passed = True
-                    self.matches.append(attr_data.getroottree().getpath(match))
+                    test.passed = True
+                    test.matches.append(attr_data.getroottree().getpath(submatch))
 
                 except Exception as e:
-                    if not self.one_of or (match == self.match[-1] and not self.passed):
+                    if not test.one_of or (submatch == test.match[-1] and not test.passed):
                         raise Exception(e)
 
         except Exception as e:
-            self.passed = False
-            self.exception = e
+            test.passed = False
+            test.exception = e
 
-        self._add_test(result)
+        if not getattr(result, "tests", None):
+            setattr(result, "tests", [])
 
-        if not self.passed and self.fail_task:
+        result.tests.append(test)
+
+        if not test.passed and test.fail_task:
             result.failed = True
 
         return result
+    return wrapper
+
+
+
+
+

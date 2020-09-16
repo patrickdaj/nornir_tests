@@ -5,8 +5,8 @@ from nornir_tests.plugins.tests import test_regexp
 from nornir_utils.plugins.tasks.data import echo_data
 
 
-def test_regexp_not_failed(nornir):
-    results = nornir.run(
+def test_regexp_not_failed(single_host):
+    results = single_host.run(
         task=echo_data,
         z="zzzsuperpassword!dkfj",
         tests=[test_regexp(result_attr="result", regexp=r".*uperpas*word")],
@@ -20,8 +20,8 @@ def test_regexp_not_failed(nornir):
 
 
 @pytest.mark.parametrize("fail", [True, False])
-def test_regexp_failed(nornir, fail):
-    results = nornir.run(
+def test_regexp_failed(single_host, fail):
+    results = single_host.run(
         task=echo_data,
         z="zzzsuperpassword!dkfj",
         tests=[

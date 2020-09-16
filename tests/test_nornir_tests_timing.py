@@ -6,8 +6,8 @@ from nornir_utils.plugins.tasks.data import echo_data
 
 
 @pytest.mark.parametrize("fail_task", [True, False])
-def test_failed_argument_values(nornir, fail_task):
-    results = nornir.run(
+def test_failed_argument_values(single_host, fail_task):
+    results = single_host.run(
         task=echo_data,
         x=5,
         y=10,
@@ -22,8 +22,8 @@ def test_failed_argument_values(nornir, fail_task):
         assert result[0].tests[0].t1 > result[0].tests[0].t0
 
 
-def test_no_arguments_not_failed(nornir):
-    results = nornir.run(task=echo_data, x=5, y=10, tests=[test_timing()])
+def test_no_arguments_not_failed(single_host):
+    results = single_host.run(task=echo_data, x=5, y=10, tests=[test_timing()])
 
     for host, result in results.items():
         assert hasattr(result[0], "run_time")

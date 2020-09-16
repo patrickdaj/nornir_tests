@@ -1,14 +1,24 @@
+import wrapt
 from dataclasses import dataclass, field
-from typing import Callable, Any, Match, Optional, Union
+from typing import Callable, Any, Match, Optional, Union, List
 import re
 
 from nornir.core.task import Result
 
-from .test import Test
-
-
 @dataclass
-class test_regexp(Test):
+class RegexpRecord:
+    regexp: str = ""
+    passed: bool = False
+    matches: List[str] = field(default_factory=list)
+    result_attr: str = "result"
+    fail_task: bool = False
+    exception: Union[Exception, None] = None
+
+def test_regexp(
+    regexp: str = "",
+    result_attr: str = "result",
+    fail_task: bool = False
+):
     """Test decorator using regexp
 
     Args:
@@ -17,42 +27,46 @@ class test_regexp(Test):
 
     """
 
-    matches: Union[Optional[Match[Any]], None] = field(default=None, repr=False)
-    regexp: str = ""
-    result_attr: str = "result"
+    @wrapt.decorator
+    def wrapper(wrapped, instance, args, kwargs) -> Result:
 
-    def run(self, func: Callable[..., Any], *args: str, **kwargs: str) -> Result:
-        """Method decorator to perform regexp on result of task
+        test = RegexpRecord(
+            regexp=regexp,
+            result_attr=result_attr,
+            fail_task=fail_task,
+        )
 
-        Args:
-            func (Callable[..., Any]): Decorated function
+        if len(args) > 0:
+            task = args[0]
+        else:
+            task = kwargs["task"]
 
-        Returns:
-            `nornir.core.task.Result`: Result of task after executed and decorated by test_regexp
-        """
-
-        result = func(*args, **kwargs)
+        result = wrapped(*args, **kwargs)
 
         try:
-            text = getattr(result, self.result_attr, None)
+            text = getattr(result, test.result_attr, None)
 
             if not isinstance(text, str):
                 text = repr(text)
 
-            self.matches = re.search(self.regexp, text)
+            test.matches = re.search(test.regexp, text)
 
-            self.passed = True if self.matches else False
+            test.passed = True if test.matches else False
 
-            if not self.passed:
-                raise Exception(f"no match found for regexp {self.regexp}")
+            if not test.passed:
+                raise Exception(f"no match found for regexp {test.regexp}")
 
         except Exception as e:
-            self.result = False
-            self.exception = e
+            test.passed = False
+            test.exception = e
 
-        if self.fail_task and not self.result:
+        if test.fail_task and not test.passed:
             result.failed = True
 
-        self._add_test(result)
+        if not getattr(result, "tests", None):
+            setattr(result, "tests", [])
+
+        result.tests.append(test)
 
         return result
+    return wrapper

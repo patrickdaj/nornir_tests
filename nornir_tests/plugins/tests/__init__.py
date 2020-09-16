@@ -1,10 +1,28 @@
-# from .test_changed import test_changed
+from typing import Callable, List, Any
+
 from .test_timing import test_timing
 from .test_until import test_until
-from .test import apply_tests
 from .test_regexp import test_regexp
 from .test_jsonpath import test_jsonpath
 from .test_lxml import test_lxml
+
+def apply_tests(
+    task: Callable[..., Any], tests: List[Callable[..., Any]]
+) -> Callable[..., Any]:
+    """Apply tests (decorators) to task
+
+    Args:
+        task (Callable[..., Any]): nornir task
+        tests (List[Callable[..., Any]]): test decorators to apply
+
+    Returns:
+        Callable[..., Any]: Decorated function
+    """
+    wrapped = task
+    for wrapper in tests:
+        wrapped = wrapper(wrapped)
+
+    return wrapped
 
 __all__ = [
     "apply_tests",

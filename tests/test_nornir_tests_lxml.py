@@ -28,8 +28,8 @@ def get_list(task):
     return Result(host=task.host, result=[1, 2, 3])
 
 
-def test_is_equal_passed_and_len_one(nornir):
-    results = nornir.run(
+def test_is_equal_passed_and_len_one(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -46,8 +46,8 @@ def test_is_equal_passed_and_len_one(nornir):
         assert len(result[0].tests[0].matches) == 1
 
 
-def test_is_equal_passed_attribute(nornir):
-    results = nornir.run(
+def test_is_equal_passed_attribute(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -65,8 +65,8 @@ def test_is_equal_passed_attribute(nornir):
         assert len(result[0].tests[0].matches) == 1
 
 
-def test_contains_failed(nornir):
-    results = nornir.run(
+def test_contains_failed(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -83,8 +83,8 @@ def test_contains_failed(nornir):
         assert str(result[0].tests[0].exception).find("Expected") != -1
 
 
-def test_found_no_host_data(nornir):
-    results = nornir.run(
+def test_found_no_host_data(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -101,8 +101,8 @@ def test_found_no_host_data(nornir):
         assert str(result[0].tests[0].exception) == "host_data not found"
 
 
-def test_found_duplicate_host_data(nornir):
-    results = nornir.run(
+def test_found_duplicate_host_data(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -121,8 +121,8 @@ def test_found_duplicate_host_data(nornir):
         )
 
 
-def test_path_not_found(nornir):
-    results = nornir.run(
+def test_path_not_found(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -139,8 +139,8 @@ def test_path_not_found(nornir):
         )
 
 
-def test_with_one_of_single_match(nornir):
-    results = nornir.run(
+def test_with_one_of_single_match(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -158,8 +158,8 @@ def test_with_one_of_single_match(nornir):
         assert len(result[0].tests[0].matches) == 1
 
 
-def test_without_one_of_single_match(nornir):
-    results = nornir.run(
+def test_without_one_of_single_match(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -175,8 +175,8 @@ def test_without_one_of_single_match(nornir):
         assert str(result[0].tests[0].exception).find("Expected") != -1
 
 
-def test_with_one_of_multi_match(nornir):
-    results = nornir.run(
+def test_with_one_of_multi_match(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -194,8 +194,8 @@ def test_with_one_of_multi_match(nornir):
         assert len(result[0].tests[0].matches) > 1
 
 
-def test_without_one_of_multi_match_failed(nornir):
-    results = nornir.run(
+def test_without_one_of_multi_match_failed(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -208,8 +208,8 @@ def test_without_one_of_multi_match_failed(nornir):
         assert not result[0].tests[0].passed
 
 
-def test_without_one_of_multi_match_passed(nornir):
-    results = nornir.run(
+def test_without_one_of_multi_match_passed(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[test_lxml(xpath="alarm-rate", assertion="is_equal_to", value="10000")],
     )
@@ -218,8 +218,8 @@ def test_without_one_of_multi_match_passed(nornir):
         assert not result[0].tests[0].passed
 
 
-def test_dont_fail_task(nornir):
-    results = nornir.run(
+def test_dont_fail_task(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[test_lxml(xpath="alarm-rate", assertion="is_equal_to", value="-1")],
     )
@@ -229,8 +229,8 @@ def test_dont_fail_task(nornir):
         assert not result[0].failed
 
 
-def test_fail_task(nornir):
-    results = nornir.run(
+def test_fail_task(single_host):
+    results = single_host.run(
         task=get_xml_etree,
         tests=[
             test_lxml(
@@ -244,8 +244,8 @@ def test_fail_task(nornir):
         assert result[0].failed
 
 
-def test_string_input(nornir):
-    results = nornir.run(
+def test_string_input(single_host):
+    results = single_host.run(
         task=get_xml_str,
         tests=[
             test_lxml(
@@ -261,8 +261,8 @@ def test_string_input(nornir):
         assert result[0].tests[0].passed
 
 
-def test_invalid_input(nornir):
-    results = nornir.run(
+def test_invalid_input(single_host):
+    results = single_host.run(
         task=get_non_xml_str,
         tests=[test_lxml(xpath=".//whatever", assertion="is_equal_to", value="1500")],
     )
