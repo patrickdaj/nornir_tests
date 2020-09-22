@@ -88,8 +88,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Nornir-initialization">Nornir initialization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Setup-of-nornir_rich">Setup of nornir_rich</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Run-task-and-include-jsonpath-assertion">Run task and include jsonpath assertion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Imports-of-nornir_tests-libraries">Imports of nornir_tests libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-first-wrapped-task">Run first wrapped task</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Run-ping-with-timing-requirements">Run ping with timing requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Get-unfailed-task-to-fail-due-to-assertion">Get unfailed task to fail due to assertion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Combining-tests">Combining tests</a></li>
@@ -443,9 +443,9 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </div>
 </div>
 </div>
-<div class="section" id="Setup-of-nornir_rich">
-<h2>Setup of nornir_rich<a class="headerlink" href="#Setup-of-nornir_rich" title="Permalink to this headline">¶</a></h2>
-<p>TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation.</p>
+<div class="section" id="Imports-of-nornir_tests-libraries">
+<h2>Imports of nornir_tests libraries<a class="headerlink" href="#Imports-of-nornir_tests-libraries" title="Permalink to this headline">¶</a></h2>
+<p>The print_result in nornir_utils works fine if ‘tests’ is added to vars. There is also a modified version of print_result included in nornir_tests that provides a bit better reporting of test records.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -458,8 +458,8 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </div>
 </div>
 </div>
-<div class="section" id="Run-task-and-include-jsonpath-assertion">
-<h2>Run task and include jsonpath assertion<a class="headerlink" href="#Run-task-and-include-jsonpath-assertion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Run-first-wrapped-task">
+<h2>Run first wrapped task<a class="headerlink" href="#Run-first-wrapped-task" title="Permalink to this headline">¶</a></h2>
 <p>In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -665,8 +665,8 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 
 </pre></div></div>
 </div>
-<p>Not bad. The result above shows that it must have failed on its first try but by 30+ seconds it was able to pass the test_jsonpath test and the call to napalm_get and so test_until finished up.</p>
-<p>This was pretty haphazard but other tutorials will go into more details about each of the tests.</p>
+<p>The result above shows that it must have failed on its first try but around the one minute mark it was able to pass the test_jsonpath test and so test_until finished up.</p>
+<p>Check out all the other tutorials to see each in more detail.</p>
 </div>
 </div>
 

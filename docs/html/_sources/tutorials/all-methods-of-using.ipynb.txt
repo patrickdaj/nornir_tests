@@ -148,13 +148,6 @@
     "\n",
     "Testing a grouped_task at the level of running nr.run will not work.  There is not much you would be able to test without really complex logic anyhow considering this always returns an AggregatedResult."
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {

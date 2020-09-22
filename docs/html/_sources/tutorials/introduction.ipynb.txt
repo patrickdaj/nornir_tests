@@ -46,9 +46,9 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## Setup of nornir_rich\n",
+    "## Imports of nornir_tests libraries\n",
     "\n",
-    "TestsProcessor is appended to the processors list and the inventory is shown. This can be done using config.yaml as well or a few other ways that are covered in the Nornir documentation."
+    "The print_result in nornir_utils works fine if 'tests' is added to vars.  There is also a modified version of print_result included in nornir_tests that provides a bit better reporting of test records."
    ]
   },
   {
@@ -68,7 +68,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## Run task and include jsonpath assertion\n",
+    "## Run first wrapped task\n",
     "\n",
     "In the first example, a vyos router interface facts are obtained using napalm and a test is run to validate the result."
    ]
@@ -214,9 +214,9 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Not bad.  The result above shows that it must have failed on its first try but by 30+ seconds it was able to pass the test_jsonpath test and the call to napalm_get and so test_until finished up.\n",
+    "The result above shows that it must have failed on its first try but around the one minute mark it was able to pass the test_jsonpath test and so test_until finished up.\n",
     "\n",
-    "This was pretty haphazard but other tutorials will go into more details about each of the tests."
+    "Check out all the other tutorials to see each in more detail."
    ]
   }
  ],
