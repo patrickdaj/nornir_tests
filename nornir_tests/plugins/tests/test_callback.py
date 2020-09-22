@@ -10,6 +10,9 @@ from .test import TestRecord
 class CallbackRecord(TestRecord):
     custom: Any = None
 
+    result_keys = ["exception", "custom"]
+    repr_keys = ["fail_task"]
+
 
 def test_callback(
     callback: Callable[..., Any],

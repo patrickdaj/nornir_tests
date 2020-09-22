@@ -19,6 +19,17 @@ class JsonPathRecord(TestRecord):
     result_attr: str = "result"
     host_data: str = ""
 
+    result_keys = ["exception", "matches"]
+    repr_keys = [
+        "fail_task",
+        "host_data",
+        "result_attr",
+        "path",
+        "value",
+        "one_of",
+        "assertion",
+    ]
+
 
 def test_jsonpath(
     assertion: str = "is_equal_to",

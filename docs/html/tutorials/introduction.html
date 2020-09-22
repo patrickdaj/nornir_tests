@@ -502,12 +502,10 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 &#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
 &#39;mtu&#39;:-1,
 &#39;speed&#39;:0}}}
-<span class="ansi-green-fg">P JsonPathRecord</span>
-<span class="ansi-green-fg">{&#39;assertion&#39;: &#39;is_true&#39;,
- &#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;],
- &#39;passed&#39;: True,
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;,
  &#39;path&#39;: &#39;interfaces.eth0.is_up&#39;,
  &#39;result_attr&#39;: &#39;result&#39;}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;]}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -542,17 +540,15 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
 {&#39;success&#39;:{&#39;packet_loss&#39;:0,
 &#39;probes_sent&#39;:5,
-&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 3.348}],
-&#39;rtt_avg&#39;:3.348,
-&#39;rtt_max&#39;:4.104,
-&#39;rtt_min&#39;:3.015,
-&#39;rtt_stddev&#39;:0.393}}
-<span class="ansi-green-fg">P TimingRecord</span>
-<span class="ansi-green-fg">{&#39;max_run_time&#39;: 9223372036854775807,
- &#39;passed&#39;: True,
- &#39;run_time&#39;: 4.914320945739746,
- &#39;t0&#39;: 1600799127.7280967,
- &#39;t1&#39;: 1600799132.6424177}</span>
+&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 4.288}],
+&#39;rtt_avg&#39;:4.288,
+&#39;rtt_max&#39;:6.675,
+&#39;rtt_min&#39;:3.434,
+&#39;rtt_stddev&#39;:1.216}}
+<span class="ansi-green-fg">P TimingRecord - {&#39;max_run_time&#39;: 9223372036854775807}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 4.914522171020508,
+ &#39;t0&#39;: 1600801169.7141054,
+ &#39;t1&#39;: 1600801174.6286275}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -587,17 +583,15 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 <span class="ansi-red-intense-fg ansi-bold">vvvv napalm_ping ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
 {&#39;success&#39;:{&#39;packet_loss&#39;:0,
 &#39;probes_sent&#39;:5,
-&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 3.679}],
-&#39;rtt_avg&#39;:3.679,
-&#39;rtt_max&#39;:4.421,
-&#39;rtt_min&#39;:3.164,
-&#39;rtt_stddev&#39;:0.451}}
-<span class="ansi-red-fg">F TimingRecord</span>
-<span class="ansi-red-fg">{&#39;fail_task&#39;: True,
- &#39;max_run_time&#39;: 1,
- &#39;run_time&#39;: 4.912051200866699,
- &#39;t0&#39;: 1600799132.864174,
- &#39;t1&#39;: 1600799137.776225}</span>
+&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 3.342}],
+&#39;rtt_avg&#39;:3.342,
+&#39;rtt_max&#39;:4.664,
+&#39;rtt_min&#39;:2.631,
+&#39;rtt_stddev&#39;:0.696}}
+<span class="ansi-red-fg">F TimingRecord - {&#39;fail_task&#39;: True, &#39;max_run_time&#39;: 1}</span>
+<span class="ansi-red-fg">{&#39;run_time&#39;: 4.914187431335449,
+ &#39;t0&#39;: 1600801174.8475542,
+ &#39;t1&#39;: 1600801179.7617416}</span>
 <span class="ansi-red-intense-fg ansi-bold">^^^^ END napalm_ping ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -658,22 +652,15 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 &#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
 &#39;mtu&#39;:-1,
 &#39;speed&#39;:0}}}
-<span class="ansi-green-fg">P JsonPathRecord</span>
-<span class="ansi-green-fg">{&#39;assertion&#39;: &#39;is_true&#39;,
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;,
  &#39;fail_task&#39;: True,
- &#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;],
- &#39;passed&#39;: True,
  &#39;path&#39;: &#39;interfaces.eth0.is_up&#39;,
  &#39;result_attr&#39;: &#39;result&#39;}</span>
-<span class="ansi-green-fg">P UntilRecord</span>
-<span class="ansi-green-fg">{&#39;delay&#39;: 15,
- &#39;initial_delay&#39;: 15,
- &#39;passed&#39;: True,
- &#39;reset_conns&#39;: True,
- &#39;retries&#39;: 10,
- &#39;run_time&#39;: 56.7043993473053,
- &#39;t0&#39;: 1600799143.5114207,
- &#39;t1&#39;: 1600799200.21582}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;]}</span>
+<span class="ansi-green-fg">P UntilRecord - {&#39;delay&#39;: 15, &#39;initial_delay&#39;: 15, &#39;reset_conns&#39;: True, &#39;retries&#39;: 10}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 56.76758694648743,
+ &#39;t0&#39;: 1600801185.3881028,
+ &#39;t1&#39;: 1600801242.1556897}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>

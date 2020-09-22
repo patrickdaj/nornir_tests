@@ -478,27 +478,19 @@ div.rendered_html tbody tr:hover {
 &#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
 &#39;mtu&#39;:-1,
 &#39;speed&#39;:0}}}
-<span class="ansi-green-fg">P JsonPathRecord</span>
-<span class="ansi-green-fg">{&#39;assertion&#39;: &#39;is_true&#39;,
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;,
  &#39;fail_task&#39;: True,
- &#39;matches&#39;: [&#39;interfaces.eth0.is_enabled&#39;],
- &#39;passed&#39;: True,
  &#39;path&#39;: &#39;interfaces.eth0.is_enabled&#39;,
  &#39;result_attr&#39;: &#39;result&#39;}</span>
-<span class="ansi-green-fg">P TimingRecord</span>
-<span class="ansi-green-fg">{&#39;fail_task&#39;: True,
- &#39;max_run_time&#39;: 5,
- &#39;passed&#39;: True,
- &#39;run_time&#39;: 2.0243887901306152,
- &#39;t0&#39;: 1600799355.6681094,
- &#39;t1&#39;: 1600799357.6924982}</span>
-<span class="ansi-green-fg">P UntilRecord</span>
-<span class="ansi-green-fg">{&#39;delay&#39;: 5,
- &#39;passed&#39;: True,
- &#39;retries&#39;: 5,
- &#39;run_time&#39;: 13.634037733078003,
- &#39;t0&#39;: 1600799344.0584702,
- &#39;t1&#39;: 1600799357.692508}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces.eth0.is_enabled&#39;]}</span>
+<span class="ansi-green-fg">P TimingRecord - {&#39;fail_task&#39;: True, &#39;max_run_time&#39;: 5}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 2.0251331329345703,
+ &#39;t0&#39;: 1600801296.0013554,
+ &#39;t1&#39;: 1600801298.0264885}</span>
+<span class="ansi-green-fg">P UntilRecord - {&#39;delay&#39;: 5, &#39;retries&#39;: 5}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 13.532038927078247,
+ &#39;t0&#39;: 1600801284.494459,
+ &#39;t1&#39;: 1600801298.0264978}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END at_syntax_test ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -545,18 +537,14 @@ div.rendered_html tbody tr:hover {
 &#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
 &#39;mtu&#39;:-1,
 &#39;speed&#39;:0}}}
-<span class="ansi-green-fg">P TimingRecord</span>
-<span class="ansi-green-fg">{&#39;max_run_time&#39;: 9223372036854775807,
- &#39;passed&#39;: True,
- &#39;run_time&#39;: 2.0112156867980957,
- &#39;t0&#39;: 1600799358.0724504,
- &#39;t1&#39;: 1600799360.083666}</span>
-<span class="ansi-green-fg">P JsonPathRecord</span>
-<span class="ansi-green-fg">{&#39;assertion&#39;: &#39;is_true&#39;,
- &#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;],
- &#39;passed&#39;: True,
+<span class="ansi-green-fg">P TimingRecord - {&#39;max_run_time&#39;: 9223372036854775807}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 2.011794090270996,
+ &#39;t0&#39;: 1600801298.441358,
+ &#39;t1&#39;: 1600801300.4531522}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;,
  &#39;path&#39;: &#39;interfaces.eth0.is_up&#39;,
  &#39;result_attr&#39;: &#39;result&#39;}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;]}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -601,17 +589,15 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-green-intense-fg ansi-bold">---- napalm_ping ** changed : False -------------------------------------------- INFO</span>
 {&#39;success&#39;:{&#39;packet_loss&#39;:0,
 &#39;probes_sent&#39;:5,
-&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 4.95}],
-&#39;rtt_avg&#39;:4.95,
-&#39;rtt_max&#39;:10.631,
-&#39;rtt_min&#39;:3.356,
-&#39;rtt_stddev&#39;:2.842}}
-<span class="ansi-green-fg">P TimingRecord</span>
-<span class="ansi-green-fg">{&#39;max_run_time&#39;: 9223372036854775807,
- &#39;passed&#39;: True,
- &#39;run_time&#39;: 4.912161350250244,
- &#39;t0&#39;: 1600799360.4213412,
- &#39;t1&#39;: 1600799365.3335025}</span>
+&#39;results&#39;:[{&#39;ip_address&#39;: &#39;192.168.99.1&#39;, &#39;rtt&#39;: 3.588}],
+&#39;rtt_avg&#39;:3.588,
+&#39;rtt_max&#39;:4.07,
+&#39;rtt_min&#39;:3.105,
+&#39;rtt_stddev&#39;:0.35}}
+<span class="ansi-green-fg">P TimingRecord - {&#39;max_run_time&#39;: 9223372036854775807}</span>
+<span class="ansi-green-fg">{&#39;run_time&#39;: 4.9137420654296875,
+ &#39;t0&#39;: 1600801300.7780375,
+ &#39;t1&#39;: 1600801305.6917796}</span>
 <span class="ansi-green-intense-fg ansi-bold">---- napalm_get ** changed : False --------------------------------------------- INFO</span>
 {&#39;interfaces&#39;:{&#39;eth0&#39;:{&#39;description&#39;:&#39;&#39;,
 &#39;is_enabled&#39;:True,
@@ -627,12 +613,10 @@ div.rendered_html tbody tr:hover {
 &#39;mac_address&#39;:&#39;00:00:00:00:00:00&#39;,
 &#39;mtu&#39;:-1,
 &#39;speed&#39;:0}}}
-<span class="ansi-green-fg">P JsonPathRecord</span>
-<span class="ansi-green-fg">{&#39;assertion&#39;: &#39;is_true&#39;,
- &#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;],
- &#39;passed&#39;: True,
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;,
  &#39;path&#39;: &#39;interfaces.eth0.is_up&#39;,
  &#39;result_attr&#39;: &#39;result&#39;}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces.eth0.is_up&#39;]}</span>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>

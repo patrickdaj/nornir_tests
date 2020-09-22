@@ -16,6 +16,9 @@ class TimingRecord(TestRecord):
     min_run_time: int = 0
     max_run_time: int = 0
 
+    result_keys = ["exception", "t0", "t1", "run_time"]
+    repr_keys = ["fail_task", "min_run_time", "max_run_time"]
+
 
 def test_timing(
     min_run_time: int = 0,

@@ -17,6 +17,9 @@ class UntilRecord(TestRecord):
     delay: float = 0
     reset_conns: bool = False
 
+    result_keys = ["exception", "t0", "t1", "run_time"]
+    repr_keys = ["fail_task", "initial_delay", "retries", "delay", "reset_conns"]
+
 
 def test_until(
     initial_delay: float = 0,

@@ -18,6 +18,9 @@ class RegexpRecord(TestRecord):
     value: Any = None
     host_data: str = ""
 
+    result_keys = ["exception", "matches"]
+    repr_keys = ["fail_task", "result_attr", "one_of", "value", "host_data"]
+
 
 def test_regexp(
     regexp: str = "",

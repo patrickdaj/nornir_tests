@@ -71,12 +71,8 @@ def _print_individual_result(
             for test in x:
                 color = _get_test_color(test.passed)
                 status = "P" if test.passed else "F"
-                print(
-                    "{}{}{} {}".format(
-                        Style.DIM, color, status, test.__class__.__name__
-                    )
-                )
-                print("{}{}{}".format(Style.DIM, color, pprint.pformat(test.as_dict())))
+                print("{}{}{} {}".format(Style.DIM, color, status, test.requirement()))
+                print("{}{}{}".format(Style.DIM, color, pprint.pformat(test.result())))
 
         elif isinstance(x, BaseException):
             # for consistency between py3.6 and py3.7

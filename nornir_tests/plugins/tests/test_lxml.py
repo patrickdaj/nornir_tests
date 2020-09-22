@@ -21,6 +21,18 @@ class XmlPathRecord(TestRecord):
     result_attr: str = "result"
     host_data: str = ""
 
+    result_keys = ["exception", "matches"]
+    repr_keys = [
+        "fail_task",
+        "one_of",
+        "value",
+        "xpath",
+        "attrib",
+        "text",
+        "result_attr",
+        "host_data",
+    ]
+
 
 def test_lxml(
     assertion: str = "is_equal_to",
