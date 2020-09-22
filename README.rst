@@ -41,7 +41,7 @@ _____
 Tasks
 _____
 
-* ** wrap_task ** - Wrap a nornir task with tests without having to use @ decorator syntax
+* **wrap_task** - Wrap a nornir task with tests without having to use @ decorator syntax
 
 
 Common Uses
@@ -62,7 +62,7 @@ main ways to wrap.
 
 Wrap a subtask that returns a direct result without task.run:
 
-... code-block:: python
+.. code-block:: python
 
     @test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
     @test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)

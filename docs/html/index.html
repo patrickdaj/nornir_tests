@@ -206,7 +206,7 @@ it came back.  It utilizes a few different libraries to hopefully make things a 
 <div class="section" id="tasks">
 <h3>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>** wrap_task ** - Wrap a nornir task with tests without having to use &#64; decorator syntax</p></li>
+<li><p><strong>wrap_task</strong> - Wrap a nornir task with tests without having to use &#64; decorator syntax</p></li>
 </ul>
 </div>
 </div>
@@ -227,12 +227,12 @@ it came back.  It utilizes a few different libraries to hopefully make things a 
 <p>All Nornir functions that return a Result should be wrappable in nornir_tests.  There are two
 main ways to wrap.</p>
 <p>Wrap a subtask that returns a direct result without task.run:</p>
-<p>… code-block:: python</p>
-<blockquote>
-<div><p>&#64;test_jsonpath(path=’interfaces.eth0.is_up’, assertion=’is_true’, fail_task=True),
-&#64;test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)</p>
-<p>vyos.run(napalm_get, getters=[‘interfaces’])</p>
-</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="nd">@test_until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
 <p>The second and probably easier method is to wrap the task directly:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
