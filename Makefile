@@ -20,7 +20,7 @@ docker:
 .PHONY: pytest
 pytest:
 	poetry run pytest -vs ${ARGS} .
-	poetry run pytest --nbval -vs ${ARGS} docs/source/tutorials
+#	poetry run pytest --nbval -vs ${ARGS} docs/source/tutorials
 
 .PHONY: black
 black:
