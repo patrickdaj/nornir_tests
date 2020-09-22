@@ -13,7 +13,7 @@ class JsonPathRecord:
     assertion: str = "is_equal_to"
     passed: bool = False
     matches: List[str] = field(default_factory=list)
-    match: Union[DatumInContext, None] = None
+    match: Union[DatumInContext, None] = field(default=None, repr=False)
     one_of: bool = False
     value: Any = None
     path: str = ""

@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="tasks" href="tasks.html" />
-    <link rel="prev" title="processors" href="processors.html" /> 
+    <link rel="prev" title="API" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,7 +85,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="processors.html">processors</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">tasks</a></li>
 </ul>
@@ -204,6 +203,21 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="nornir_tests.plugins.tests.test_callback">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator using custom callback</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> (<em>Callable</em>) – Callback function</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
+result failure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="nornir_tests.plugins.tests.test_jsonpath">
 <code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_jsonpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using jsonpath</p>
@@ -258,13 +272,18 @@ result failure.</p></li>
 
 <dl class="py function">
 <dt id="nornir_tests.plugins.tests.test_regexp">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_regexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regexp</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_regexp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_regexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regexp</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_not_none'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_regexp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using regexp</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>regexp</strong> (<em>str</em><em>, </em><em>optional</em>) – Regular expression to use for matching.</p></li>
 <li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).</p></li>
+<li><p><strong>value</strong> (<em>str</em><em>, </em><em>optional</em>) – Data to use for comparison.</p></li>
+<li><p><strong>assertion</strong> (<em>str</em><em>, </em><em>optional</em>) – Any method of assertpy.assert_that object.</p></li>
+<li><p><strong>one_of</strong> (<em>bool</em><em>, </em><em>optional</em>) – When found values is &gt; 1, allow one match to pass otherwise
+all returned must match.</p></li>
+<li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath starting at task.host.data to use for comparison.</p></li>
 </ul>
 </dd>
 </dl>
@@ -299,7 +318,7 @@ setting result failure. Defaults to False.</p></li>
         <a href="tasks.html" class="btn btn-neutral float-right" title="tasks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="processors.html" class="btn btn-neutral float-left" title="processors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

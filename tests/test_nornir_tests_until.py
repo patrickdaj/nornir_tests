@@ -1,4 +1,5 @@
-from nornir_tests.plugins.tests import test_until
+from nornir_tests.plugins.tests import test_until as t_until
+from nornir_tests.plugins.tasks import wrap_task
 
 from nornir_utils.plugins.tasks.data import echo_data
 
@@ -26,10 +27,10 @@ def generate_exception(task):
 def test_until_passed(single_host):
 
     results = single_host.run(
-        task=echo_data,
+        task=wrap_task(echo_data),
         name="whatever",
         z="zzzsuperpassword!dkfj",
-        tests=[test_until(delay=1, retries=6)],
+        tests=[t_until(delay=1, retries=6)],
     )
 
     for host, result in results.items():
@@ -41,8 +42,8 @@ def test_until_on_failed(single_host):
 
     results = single_host.run(
         name="whatever",
-        task=just_fail,
-        tests=[test_until(delay=1, retries=6)],
+        task=wrap_task(just_fail),
+        tests=[t_until(delay=1, retries=6)],
     )
 
     for host, result in results.items():
@@ -55,8 +56,8 @@ def test_exception_catch(single_host):
 
     results = single_host.run(
         name="exception",
-        task=generate_exception,
-        tests=[test_until(delay=1, retries=5)],
+        task=wrap_task(generate_exception),
+        tests=[t_until(delay=1, retries=5)],
     )
 
     for host, result in results.items():
@@ -68,10 +69,11 @@ def test_initial_delay(single_host):
 
     results = single_host.run(
         name="exception",
-        task=just_pass,
-        tests=[test_until(delay=0, retries=0, initial_delay=1)],
+        task=wrap_task(just_pass),
+        tests=[t_until(delay=0, retries=0, initial_delay=1)],
     )
 
     for host, result in results.items():
         assert not result[0].failed
         assert result[0].tests[0].run_time > 1
+        assert result[0].tests[0].run_time < 2

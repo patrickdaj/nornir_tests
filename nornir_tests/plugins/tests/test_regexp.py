@@ -14,18 +14,33 @@ class RegexpRecord:
     passed: bool = False
     matches: Optional[Match[Any]] = field(default=None)
     result_attr: str = "result"
+    one_of: bool = False
+    value: Any = None
+    host_data: str = ""
     fail_task: bool = False
     exception: Union[Exception, None] = None
 
 
 def test_regexp(
-    regexp: str = "", result_attr: str = "result", fail_task: bool = False
+    regexp: str = "",
+    result_attr: str = "result",
+    assertion: str = "is_not_none",
+    value: Any = None,
+    path: str = "",
+    one_of: bool = False,
+    host_data: str = "",
+    fail_task: bool = False,
 ) -> Result:
     """Test decorator using regexp
 
     Args:
         regexp (str, optional): Regular expression to use for matching.
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
+        value (str, optional): Data to use for comparison.
+        assertion (str, optional): Any method of assertpy.assert_that object.
+        one_of (bool, optional): When found values is > 1, allow one match to pass otherwise
+            all returned must match.
+        host_data (str, optional): jsonpath starting at task.host.data to use for comparison.
 
     """
 

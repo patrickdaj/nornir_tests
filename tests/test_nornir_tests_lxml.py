@@ -1,7 +1,8 @@
 import lxml
 import os
 
-from nornir_tests.plugins.tests import test_lxml
+from nornir_tests.plugins.tests import test_lxml as t_lxml
+from nornir_tests.plugins.tasks import wrap_task
 
 from nornir.core.task import Result
 
@@ -30,9 +31,9 @@ def get_list(task):
 
 def test_is_equal_passed_and_len_one(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath='.//monitor-profile/entry[@name="default"]/interval',
                 assertion="is_equal_to",
                 text=True,
@@ -48,9 +49,9 @@ def test_is_equal_passed_and_len_one(single_host):
 
 def test_is_equal_passed_attribute(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//system/match-list/entry",
                 assertion="is_equal_to",
                 value="System_Log_Forwarding",
@@ -67,9 +68,9 @@ def test_is_equal_passed_attribute(single_host):
 
 def test_contains_failed(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath='.//monitor-profile/entry[@name="default"]/interval',
                 assertion="is_equal_to",
                 text=True,
@@ -85,9 +86,9 @@ def test_contains_failed(single_host):
 
 def test_found_no_host_data(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath='.//monitor-profile/entry[@name="default"]/interval',
                 assertion="is_equal_to",
                 text=True,
@@ -103,9 +104,9 @@ def test_found_no_host_data(single_host):
 
 def test_found_duplicate_host_data(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath='.//monitor-profile/entry[@name="default"]/interval',
                 assertion="is_equal_to",
                 text=True,
@@ -123,9 +124,9 @@ def test_found_duplicate_host_data(single_host):
 
 def test_path_not_found(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//invalid/invalid", assertion="contains", host_data="$.domain"
             )
         ],
@@ -141,9 +142,9 @@ def test_path_not_found(single_host):
 
 def test_with_one_of_single_match(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//ike-crypto-profiles/entry[@name='default']/encryption/member",
                 assertion="is_equal_to",
                 value="aes-128-cbc",
@@ -160,9 +161,9 @@ def test_with_one_of_single_match(single_host):
 
 def test_without_one_of_single_match(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//entry/encryption/member",
                 assertion="is_equal_to",
                 value="aes-128-cbc",
@@ -177,9 +178,9 @@ def test_without_one_of_single_match(single_host):
 
 def test_with_one_of_multi_match(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//wildfire-action",
                 assertion="is_equal_to",
                 value="reset-both",
@@ -196,9 +197,9 @@ def test_with_one_of_multi_match(single_host):
 
 def test_without_one_of_multi_match_failed(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//wildfire-action", assertion="is_equal_to", value="reset-both"
             )
         ],
@@ -210,8 +211,8 @@ def test_without_one_of_multi_match_failed(single_host):
 
 def test_without_one_of_multi_match_passed(single_host):
     results = single_host.run(
-        task=get_xml_etree,
-        tests=[test_lxml(xpath="alarm-rate", assertion="is_equal_to", value="10000")],
+        task=wrap_task(get_xml_etree),
+        tests=[t_lxml(xpath="alarm-rate", assertion="is_equal_to", value="10000")],
     )
 
     for result in results.values():
@@ -220,8 +221,8 @@ def test_without_one_of_multi_match_passed(single_host):
 
 def test_dont_fail_task(single_host):
     results = single_host.run(
-        task=get_xml_etree,
-        tests=[test_lxml(xpath="alarm-rate", assertion="is_equal_to", value="-1")],
+        task=wrap_task(get_xml_etree),
+        tests=[t_lxml(xpath="alarm-rate", assertion="is_equal_to", value="-1")],
     )
 
     for result in results.values():
@@ -231,9 +232,9 @@ def test_dont_fail_task(single_host):
 
 def test_fail_task(single_host):
     results = single_host.run(
-        task=get_xml_etree,
+        task=wrap_task(get_xml_etree),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath="alarm-rate", assertion="is_equal_to", value="-1", fail_task=True
             )
         ],
@@ -246,9 +247,9 @@ def test_fail_task(single_host):
 
 def test_string_input(single_host):
     results = single_host.run(
-        task=get_xml_str,
+        task=wrap_task(get_xml_str),
         tests=[
-            test_lxml(
+            t_lxml(
                 xpath=".//minimum-length",
                 assertion="is_equal_to",
                 value="12",
@@ -263,8 +264,8 @@ def test_string_input(single_host):
 
 def test_invalid_input(single_host):
     results = single_host.run(
-        task=get_non_xml_str,
-        tests=[test_lxml(xpath=".//whatever", assertion="is_equal_to", value="1500")],
+        task=wrap_task(get_non_xml_str),
+        tests=[t_lxml(xpath=".//whatever", assertion="is_equal_to", value="1500")],
     )
 
     for result in results.values():

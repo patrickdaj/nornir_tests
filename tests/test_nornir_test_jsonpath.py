@@ -2,6 +2,7 @@ import json
 import os
 
 from nornir_tests.plugins.tests import test_jsonpath as t_jsonpath
+from nornir_tests.plugins.tasks import wrap_task
 
 from nornir.core.task import Result
 
@@ -33,7 +34,7 @@ def get_json_dict(task):
 
 def test_multi_host_fail_host_test2(two_hosts):
     results = two_hosts.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.dns_servers", assertion="contains", host_data="$.dns_primary"
@@ -59,7 +60,7 @@ def test_multi_host_fail_host_test2_decorator(two_hosts):
 
 def test_contains_passed(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(path="$.dns_search", assertion="contains", host_data="$.domain")
         ],
@@ -71,7 +72,7 @@ def test_contains_passed(single_host):
 
 def test_match_len_one(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.type", assertion="is_equal_to", value="DeviceConfiguration"
@@ -86,7 +87,7 @@ def test_match_len_one(single_host):
 
 def test_contains_failed(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(path="$.dns_search", assertion="contains", host_data="$.domain2")
         ],
@@ -99,7 +100,7 @@ def test_contains_failed(single_host):
 
 def test_found_duplicate_host_data(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.dns_search", assertion="contains", host_data="$..duplicate"
@@ -116,7 +117,7 @@ def test_found_duplicate_host_data(single_host):
 
 def test_path_not_found(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(path="$.invalid", assertion="contains", host_data="$.domain")
         ],
@@ -129,7 +130,7 @@ def test_path_not_found(single_host):
 
 def test_with_one_of_single_match(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.interfaces..address",
@@ -147,7 +148,7 @@ def test_with_one_of_single_match(single_host):
 
 def test_without_one_of_single_match(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.interfaces..address",
@@ -164,7 +165,25 @@ def test_without_one_of_single_match(single_host):
 
 def test_with_one_of_multi_match(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
+        tests=[
+            t_jsonpath(
+                path="$.interfaces..mask",
+                assertion="is_equal_to",
+                value=24,
+                one_of=True,
+            )
+        ],
+    )
+
+    for result in results.values():
+        assert result[0].tests[0].passed
+        assert len(result[0].tests[0].matches) > 1
+
+
+def test_with_one_of_multi_match_task(single_host):
+    results = single_host.run(
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.interfaces..mask",
@@ -182,7 +201,7 @@ def test_with_one_of_multi_match(single_host):
 
 def test_without_one_of_multi_match_failed(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(path="$.interfaces..mask", assertion="is_equal_to", value="24")
         ],
@@ -194,7 +213,7 @@ def test_without_one_of_multi_match_failed(single_host):
 
 def test_without_one_of_multi_match_passed(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value="1500")
         ],
@@ -206,7 +225,7 @@ def test_without_one_of_multi_match_passed(single_host):
 
 def test_dont_fail_task(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[t_jsonpath(path="$.dns_servers", assertion="contains", value="8.8.8.8")],
     )
 
@@ -217,7 +236,7 @@ def test_dont_fail_task(single_host):
 
 def test_fail_task(single_host):
     results = single_host.run(
-        task=get_json_dict,
+        task=wrap_task(get_json_dict),
         tests=[
             t_jsonpath(
                 path="$.dns_servers",
@@ -235,7 +254,7 @@ def test_fail_task(single_host):
 
 def test_string_input(single_host):
     results = single_host.run(
-        task=get_json_str,
+        task=wrap_task(get_json_str),
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value=1500)
         ],
@@ -247,7 +266,7 @@ def test_string_input(single_host):
 
 def test_invalid_input(single_host):
     results = single_host.run(
-        task=get_invalid_json,
+        task=wrap_task(get_invalid_json),
         tests=[
             t_jsonpath(path="$.interfaces..mtu", assertion="is_equal_to", value="1500")
         ],

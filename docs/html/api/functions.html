@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tasks &mdash; nornir_tests 0.1.0 documentation</title>
+  <title>functions &mdash; nornir_tests 0.1.0 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tutorials" href="../tutorials/index.html" />
-    <link rel="prev" title="tests" href="tests.html" /> 
+    <link rel="prev" title="tasks" href="tasks.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,7 +86,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tests.html">tests</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html">tasks</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
@@ -137,13 +138,13 @@
         
           <li><a href="index.html">API</a> &raquo;</li>
         
-      <li>tasks</li>
+      <li>functions</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/api/tasks.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/functions.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -180,18 +181,16 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="module-nornir_tests.plugins.tasks">
-<span id="tasks"></span><h1>tasks<a class="headerlink" href="#module-nornir_tests.plugins.tasks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-nornir_tests.plugins.functions">
+<span id="functions"></span><h1>functions<a class="headerlink" href="#module-nornir_tests.plugins.functions" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="nornir_tests.plugins.tasks.wrap_task">
-<code class="sig-prename descclassname">nornir_tests.plugins.tasks.</code><code class="sig-name descname">wrap_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wrapper</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enabled</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">adapter</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tasks.wrap_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrap task without using &#64; decorator syntax</p>
-<p>This function return</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>wrapped</strong> (<em>Callable</em>) – The task.task function argument</p>
-</dd>
-</dl>
+<dt id="nornir_tests.plugins.functions.print_result">
+<code class="sig-prename descclassname">nornir_tests.plugins.functions.</code><code class="sig-name descname">print_result</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span><span class="p">:</span> <span class="n">nornir.core.task.Result</span></em>, <em class="sig-param"><span class="n">vars</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">failed</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">severity_level</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nornir_tests.plugins.functions.print_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints an object of type <cite>nornir.core.task.Result</cite>
+:param result: from a previous task
+:param vars: Which attributes you want to print
+:param failed: if <code class="docutils literal notranslate"><span class="pre">True</span></code> assume the task failed
+:param severity_level: Print only errors with this severity level or higher</p>
 </dd></dl>
 
 </div>
@@ -207,7 +206,7 @@
         <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="tests.html" class="btn btn-neutral float-left" title="tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tasks.html" class="btn btn-neutral float-left" title="tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

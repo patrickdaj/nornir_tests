@@ -4,8 +4,6 @@ from nornir import InitNornir
 from nornir.core.filter import F
 from nornir.core.state import GlobalState
 
-from nornir_tests.plugins.processors import TestsProcessor
-
 import pytest
 
 
@@ -30,7 +28,6 @@ def nornir(request):
     )
 
     nornir.data = global_data
-    nornir.processors.append(TestsProcessor())
 
     return nornir
 

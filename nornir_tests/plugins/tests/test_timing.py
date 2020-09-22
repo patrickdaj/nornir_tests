@@ -52,10 +52,10 @@ def test_timing(
         result = wrapped(*args, **kwargs)
         test.t1 = time.time()
 
-        result.run_time = test.t1 - test.t0
+        test.run_time = test.t1 - test.t0
 
         test.passed = (
-            result.run_time > test.min_run_time and result.run_time < test.max_run_time
+            test.run_time > test.min_run_time and test.run_time < test.max_run_time
         )
 
         if test.fail_task and not test.passed:

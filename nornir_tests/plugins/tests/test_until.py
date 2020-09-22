@@ -21,9 +21,9 @@ class UntilRecord:
 
 
 def test_until(
-    initial_delay: int = 0,
+    initial_delay: float = 0,
     retries: int = 0,
-    delay: int = 0,
+    delay: float = 0,
     reset_conns: bool = False,
     t0: float = -1,
     t1: float = -1,
@@ -76,7 +76,6 @@ def test_until(
                 time.sleep(test.delay)
 
         test.t1 = time.time()
-
         test.run_time = test.t1 - test.t0
 
         if not getattr(result, "tests", None):
