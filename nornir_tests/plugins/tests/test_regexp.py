@@ -1,24 +1,22 @@
 import wrapt
 from dataclasses import dataclass, field
-from typing import Union, Optional, Match, Any, TypeVar, Callable, Dict, List
+from typing import Optional, Match, Any, TypeVar, Callable, Dict, List
 import re
 
 from nornir.core.task import Result
+from .test import TestRecord
 
 F = TypeVar("F", bound=Callable[..., Any])
 
 
 @dataclass
-class RegexpRecord:
+class RegexpRecord(TestRecord):
     regexp: str = ""
-    passed: bool = False
     matches: Optional[Match[Any]] = field(default=None)
     result_attr: str = "result"
     one_of: bool = False
     value: Any = None
     host_data: str = ""
-    fail_task: bool = False
-    exception: Union[Exception, None] = None
 
 
 def test_regexp(

@@ -2,18 +2,17 @@ import wrapt
 from dataclasses import dataclass, field
 import lxml.etree as etree
 from jsonpath_ng import parse
-from typing import Any, List, Union, Callable, Dict
+from typing import Any, List, Callable, Dict
 from assertpy import assert_that
 
 from nornir.core.task import Result
+from .test import TestRecord
 
 
 @dataclass
-class XmlPathRecord:
+class XmlPathRecord(TestRecord):
     assertion: str = "is_equal_to"
-    passed: bool = False
     matches: List[str] = field(default_factory=list)
-    match: Union[etree._ElementTree, None] = None
     one_of: bool = False
     value: Any = None
     xpath: str = ""
@@ -21,8 +20,6 @@ class XmlPathRecord:
     text: bool = False
     result_attr: str = "result"
     host_data: str = ""
-    fail_task: bool = False
-    exception: Union[Exception, None] = None
 
 
 def test_lxml(
@@ -98,12 +95,12 @@ def test_lxml(
             if isinstance(attr_data, str):
                 attr_data = etree.fromstring(attr_data)
 
-            test.match = attr_data.findall(test.xpath)
+            match = attr_data.findall(test.xpath)
 
-            if not test.match:
+            if not match:
                 raise Exception(f"no match found from path {test.xpath}")
 
-            for submatch in test.match:
+            for submatch in match:
 
                 try:
                     if test.text:
@@ -124,9 +121,7 @@ def test_lxml(
                     test.matches.append(attr_data.getroottree().getpath(submatch))
 
                 except Exception as e:
-                    if not test.one_of or (
-                        submatch == test.match[-1] and not test.passed
-                    ):
+                    if not test.one_of or (submatch == match[-1] and not test.passed):
                         raise Exception(e)
 
         except Exception as e:

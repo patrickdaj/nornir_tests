@@ -1,15 +1,14 @@
 import wrapt
 from dataclasses import dataclass
-from typing import Any, List, Union, Callable, Dict
+from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
+from .test import TestRecord
 
 
 @dataclass
-class CallbackRecord:
-    passed: bool = False
-    fail_task: bool = False
-    exception: Union[Exception, None] = None
+class CallbackRecord(TestRecord):
+    custom: Any = None
 
 
 def test_callback(

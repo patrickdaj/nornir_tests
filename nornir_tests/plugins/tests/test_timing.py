@@ -1,20 +1,18 @@
 import wrapt
 from dataclasses import dataclass
-from typing import Union, Callable, Dict, List, Any
+from typing import Callable, Dict, List, Any
 import sys
 import time
 
 from nornir.core.task import Result
+from .test import TestRecord
 
 
 @dataclass
-class TimingRecord:
-    passed: bool = False
+class TimingRecord(TestRecord):
     t0: float = -1
     t1: float = -1
     run_time: float = -1
-    fail_task: bool = False
-    exception: Union[Exception, None] = None
     min_run_time: int = 0
     max_run_time: int = 0
 

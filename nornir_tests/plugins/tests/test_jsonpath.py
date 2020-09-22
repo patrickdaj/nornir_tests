@@ -1,26 +1,23 @@
 import wrapt
 from dataclasses import dataclass, field
 from assertpy import assert_that
-from jsonpath_ng import parse, DatumInContext
+from jsonpath_ng import parse
 from json import loads
-from typing import Any, List, Union, Callable, Dict
+from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
+from .test import TestRecord
 
 
 @dataclass
-class JsonPathRecord:
+class JsonPathRecord(TestRecord):
     assertion: str = "is_equal_to"
-    passed: bool = False
     matches: List[str] = field(default_factory=list)
-    match: Union[DatumInContext, None] = field(default=None, repr=False)
     one_of: bool = False
     value: Any = None
     path: str = ""
     result_attr: str = "result"
     host_data: str = ""
-    fail_task: bool = False
-    exception: Union[Exception, None] = None
 
 
 def test_jsonpath(
@@ -98,12 +95,12 @@ def test_jsonpath(
             if isinstance(json_data, str):
                 json_data = loads(json_data)
 
-            test.match = parse(test.path).find(json_data)
+            match = parse(test.path).find(json_data)
 
-            if not test.match:
+            if not match:
                 raise Exception(f"no match found from path {test.path}")
 
-            for submatch in test.match:
+            for submatch in match:
                 assert_obj = assert_that(submatch.value)
                 assert_method = getattr(assert_obj, test.assertion)
                 try:
@@ -116,9 +113,7 @@ def test_jsonpath(
                     test.passed = True
 
                 except Exception as e:
-                    if not test.one_of or (
-                        submatch == test.match[-1] and not test.passed
-                    ):
+                    if not test.one_of or (submatch == match[-1] and not test.passed):
                         raise Exception(e)
 
         except Exception as e:
