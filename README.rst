@@ -11,6 +11,13 @@ nornir_tests
 
 Collection of test/assertion plugins for `nornir <github.com/nornir-automation/nornir/>`_
 
+The point of nornir_tests is to provide a bit more flexibility in how the data that is sent back from
+a task run is validated.  When using a task like napalm_get or netmiko_send_command, the results
+come back in a variety of forms and typically code needs to be written to validate it.  One issue
+with this methodology is that you can't impact the result passed/failed attribute.  nornir_tests
+is meant to validate the result data and make sure the returned result is correct and not just that
+it came back.  It utilizes a few different libraries to hopefully make things a bit easier to test.
+
 Installation
 ------------
 
@@ -28,24 +35,20 @@ _____
 * **test_jsonpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
 * **test_timing** - Gather timing info from tasks
 * **test_wait** - Re-run tasks until assertions pass
-* **test_xpath** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **test_lxml** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **test_callback** - Run a custom callback to handle results
 
 Tasks
 _____
 
-* ** test ** - Run test_regexp, test_jsonpath, or test_xpath or a combination as a task
-
-Processors
-__________
-
-* **TestProcessor** - Lightly modified processor to allow for tasks to be decorated at run-time
+* ** wrap_task ** - Wrap a nornir task with tests without having to use @ decorator syntax
 
 
 Common Uses
 -----------
 
-* Timing a task and making sure it completes within x seconds
-* Faling a task if it isn't changed
+* Validating returned results and modifying Result object based on test parameters
+* Timing a task and making sure it completes within a certain amount of time
 * Faling a task if text is not in results attribute
 * Using jsonpath or xpath to assert a value at a particular path
 * Passing a task for an expected exception
@@ -54,68 +57,34 @@ Common Uses
 
 Usage
 -----
-This is a simple example of using nornir_tests to run a command with an assertion and then 
-perform an action and combine assertions to wait for a successful result.  More examples can
-be seen in the documentation.
+All Nornir functions that return a Result should be wrappable in nornir_tests.  There are two
+main ways to wrap.
+
+Wrap a subtask that returns a direct result without task.run:
+
+... code-block:: python
+
+    @test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
+    @test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)
+    
+    vyos.run(napalm_get, getters=['interfaces']) 
+
+The second and probably easier method is to wrap the task directly:
 
 .. code-block:: python
 
-    >>> from nornir_netmiko.tasks import netmiko_send_command
-    >>> from nornir_napalm.plugins.tasks import napalm_get
-    >>> from nornir_tests.plugins.tests import test_until, test_jsonpath
-    >>> from nornir import InitNornir
-    >>> from nornir_utils.plugins.functions import print_result
-    >>> from nornir_tests.plugins.processors import TestsProcessor
-    >>> nr = InitNornir(
-    ...         inventory={
-    ...             "plugin": "SimpleInventory",
-    ...             "options": {
-    ...                 "host_file": "data/hosts.yaml",
-    ...                 "group_file": "data/groups.yaml",
-    ...                 "defaults_file": "data/defaults.yaml",
-    ...             },
-    ...         },
-    ...     )
-    >>> nr.processors.append(TestsProcessor())
-    >>> vyos = nr.filter(name='vyos')
-    >>> print_result(vyos.run(task=netmiko_send_command, command_string='reboot now'))
-    netmiko_send_command************************************************************
-    * vyos ** changed : False ******************************************************
-    vvvv netmiko_send_command ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO
-    ^^^^ END netmiko_send_command ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    >>> print_result(vyos.run(
-    ...         task=napalm_get,
-    ...         getters=['interfaces'],
-    ...         tests=[
-    ...             test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
-    ...             test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),
-    ...         ]
-    ...     ), vars=['tests', 'result'])
-    napalm_get**********************************************************************
-    * vyos ** changed : False ******************************************************
-    vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO
-    TestList(tests=[test_jsonpath(exception=None, fail_task=True, passed=True, assertion='is_true', 
-    value=None, path='interfaces.eth0.is_up', host_data='', one_of=False, result_attr='result', 
-    matches=['interfaces.eth0.is_up']), test_until(exception=None, fail_task=False, passed=True, 
-    initial_delay=15, retries=10, delay=15, reset_conns=True, t0=1600059187.4073257, 
-    t1=1600059228.9614654, run_time=41.554139614105225)])
-    { 'interfaces': { 'eth0': { 'description': '',
-                                'is_enabled': True,
-                                'is_up': True,
-                                'last_flapped': -1.0,
-                                'mac_address': '08:00:27:e0:28:63',
-                                'mtu': -1,
-                                'speed': 0},
-                    'lo': { 'description': '',
-                            'is_enabled': True,
-                            'is_up': True,
-                            'last_flapped': -1.0,
-                            'mac_address': '00:00:00:00:00:00',
-                            'mtu': -1,
-                            'speed': 0}}}
-    ^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    vyos.run(
+        wrap_task(napalm_get), getters=['interfaces'],
+        tests=[
+            test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
+            test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)
+        ]
+    )
 
+The test results can be seen using the standard print_result in nornir_utils but an extended
+version of print_result is also included in this module to better print test records.
 
+For more details, see the `documentation <https://patrickdaj.github.io/nornir_tests/html/index.html>`__
 
 How it works
 ------------
