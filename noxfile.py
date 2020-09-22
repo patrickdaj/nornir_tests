@@ -21,25 +21,25 @@ def tests(session: Session) -> None:
     args = session.posargs
     session.run("poetry", "install", external=True)
     install_with_constraints(session, "pytest")
-    session.run("pytest")
+    session.run("pytest", *args)
 
 
 @nox.session(python="3.8")
 def black(session: Session) -> None:
     args = session.posargs
     install_with_constraints(session, "black")
-    session.run("black", "--check", ".")
+    session.run("black", "--check", ".", *args)
 
 
 @nox.session(python="3.8")
 def mypy(session: Session) -> None:
     args = session.posargs
     install_with_constraints(session, "mypy")
-    session.run("mypy", ".")
+    session.run("mypy", ".", *args)
 
 
 @nox.session(python="3.8")
 def pylama(session: Session) -> None:
     args = session.posargs
     install_with_constraints(session, "pylama")
-    session.run("pylama")
+    session.run("pylama", *args)
