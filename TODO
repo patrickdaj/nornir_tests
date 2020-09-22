@@ -1,7 +1,4 @@
 - Write doc tutorial for all tests and be realistic
-- Add custom or plugin type tests
 - Add logic to reorganize tests so that any test_until is last
-- Keep trying to figure out how to wrap grouped task 0
-- Not sure if it will make sense to wrap aggregates but for consistency it would be nice
-- Keep working on regexp
-- Other tests?
+- Make regexp work more like jsonpath and lxml
+- Add more tests for callback

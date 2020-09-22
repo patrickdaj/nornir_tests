@@ -52,9 +52,32 @@
    },
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mat_syntax_test******************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv at_syntax_test ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'interfaces'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'eth0'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m,\n\u001b[0m'lo'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'00:00:00:00:00:00'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mJsonPathRecord(assertion='is_true', passed=True, matches=['interfaces.eth0.is_enabled'], one_of=False, value=None, path='interfaces.eth0.is_enabled', result_attr='result', host_data='', fail_task=True, exception=None)\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600756331.6890907, t1=1600756333.7095463, run_time=2.0204555988311768, fail_task=True, exception=None, min_run_time=0, max_run_time=5)\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mUntilRecord(passed=True, t0=1600756320.0282028, t1=1600756333.7095551, run_time=13.681352376937866, fail_task=False, exception=None, initial_delay=0, retries=5, delay=5, reset_conns=False)\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END at_syntax_test ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "output_type": "stream",
+     "text": [
+      "\u001b[1m\u001b[36mat_syntax_test******************************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32mvvvv at_syntax_test ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n",
+      "\u001b[0m{\u001b[0m \u001b[0m'interfaces'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'eth0'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'description'\u001b[0m: \u001b[0m''\u001b[0m,\n",
+      "                            \u001b[0m'is_enabled'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                            \u001b[0m'is_up'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                            \u001b[0m'last_flapped'\u001b[0m: \u001b[0m-1.0\u001b[0m,\n",
+      "                            \u001b[0m'mac_address'\u001b[0m: \u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n",
+      "                            \u001b[0m'mtu'\u001b[0m: \u001b[0m-1\u001b[0m,\n",
+      "                            \u001b[0m'speed'\u001b[0m: \u001b[0m0\u001b[0m}\u001b[0m,\n",
+      "                  \u001b[0m'lo'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'description'\u001b[0m: \u001b[0m''\u001b[0m,\n",
+      "                          \u001b[0m'is_enabled'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                          \u001b[0m'is_up'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                          \u001b[0m'last_flapped'\u001b[0m: \u001b[0m-1.0\u001b[0m,\n",
+      "                          \u001b[0m'mac_address'\u001b[0m: \u001b[0m'00:00:00:00:00:00'\u001b[0m,\n",
+      "                          \u001b[0m'mtu'\u001b[0m: \u001b[0m-1\u001b[0m,\n",
+      "                          \u001b[0m'speed'\u001b[0m: \u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mJsonPathRecord(assertion='is_true', passed=True, matches=['interfaces.eth0.is_enabled'], one_of=False, value=None, path='interfaces.eth0.is_enabled', result_attr='result', host_data='', fail_task=True, exception=None)\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600757142.7333953, t1=1600757144.7553284, run_time=2.021933078765869, fail_task=True, exception=None, min_run_time=0, max_run_time=5)\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mUntilRecord(passed=True, t0=1600757131.1239686, t1=1600757144.755339, run_time=13.631370306015015, fail_task=False, exception=None, initial_delay=0, retries=5, delay=5, reset_conns=False)\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32m^^^^ END at_syntax_test ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n",
+      "\u001b[0m"
+     ]
     }
    ],
    "source": [
@@ -82,9 +105,31 @@
    },
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'interfaces'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'eth0'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m,\n\u001b[0m'lo'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'description'\u001b[0m:\u001b[0m''\u001b[0m,\n\u001b[0m'is_enabled'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'is_up'\u001b[0m:\u001b[0mTrue\u001b[0m,\n\u001b[0m'last_flapped'\u001b[0m:\u001b[0m-1.0\u001b[0m,\n\u001b[0m'mac_address'\u001b[0m:\u001b[0m'00:00:00:00:00:00'\u001b[0m,\n\u001b[0m'mtu'\u001b[0m:\u001b[0m-1\u001b[0m,\n\u001b[0m'speed'\u001b[0m:\u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600756334.0837142, t1=1600756336.1008391, run_time=2.017124891281128, fail_task=False, exception=None, min_run_time=0, max_run_time=9223372036854775807)\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mJsonPathRecord(assertion='is_true', passed=True, matches=['interfaces.eth0.is_up'], one_of=False, value=None, path='interfaces.eth0.is_up', result_attr='result', host_data='', fail_task=False, exception=None)\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "output_type": "stream",
+     "text": [
+      "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n",
+      "\u001b[0m{\u001b[0m \u001b[0m'interfaces'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'eth0'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'description'\u001b[0m: \u001b[0m''\u001b[0m,\n",
+      "                            \u001b[0m'is_enabled'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                            \u001b[0m'is_up'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                            \u001b[0m'last_flapped'\u001b[0m: \u001b[0m-1.0\u001b[0m,\n",
+      "                            \u001b[0m'mac_address'\u001b[0m: \u001b[0m'08:00:27:e0:28:63'\u001b[0m,\n",
+      "                            \u001b[0m'mtu'\u001b[0m: \u001b[0m-1\u001b[0m,\n",
+      "                            \u001b[0m'speed'\u001b[0m: \u001b[0m0\u001b[0m}\u001b[0m,\n",
+      "                  \u001b[0m'lo'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'description'\u001b[0m: \u001b[0m''\u001b[0m,\n",
+      "                          \u001b[0m'is_enabled'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                          \u001b[0m'is_up'\u001b[0m: \u001b[0mTrue\u001b[0m,\n",
+      "                          \u001b[0m'last_flapped'\u001b[0m: \u001b[0m-1.0\u001b[0m,\n",
+      "                          \u001b[0m'mac_address'\u001b[0m: \u001b[0m'00:00:00:00:00:00'\u001b[0m,\n",
+      "                          \u001b[0m'mtu'\u001b[0m: \u001b[0m-1\u001b[0m,\n",
+      "                          \u001b[0m'speed'\u001b[0m: \u001b[0m0\u001b[0m}\u001b[0m}\u001b[0m}\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600757144.8829095, t1=1600757146.8963735, run_time=2.0134639739990234, fail_task=False, exception=None, min_run_time=0, max_run_time=9223372036854775807)\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mJsonPathRecord(assertion='is_true', passed=True, matches=['interfaces.eth0.is_up'], one_of=False, value=None, path='interfaces.eth0.is_up', result_attr='result', host_data='', fail_task=False, exception=None)\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n",
+      "\u001b[0m"
+     ]
     }
    ],
    "source": [
@@ -114,9 +159,26 @@
    },
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mgrouped_task********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m---- napalm_ping ** changed : False -------------------------------------------- INFO\u001b[0m\n\u001b[0m{\u001b[0m\u001b[0m'success'\u001b[0m:\u001b[0m{\u001b[0m\u001b[0m'packet_loss'\u001b[0m:\u001b[0m0\u001b[0m,\n\u001b[0m'probes_sent'\u001b[0m:\u001b[0m5\u001b[0m,\n\u001b[0m'results'\u001b[0m:\u001b[0m[{'ip_address': '192.168.99.1', 'rtt': 3.662}]\u001b[0m,\n\u001b[0m'rtt_avg'\u001b[0m:\u001b[0m3.662\u001b[0m,\n\u001b[0m'rtt_max'\u001b[0m:\u001b[0m3.951\u001b[0m,\n\u001b[0m'rtt_min'\u001b[0m:\u001b[0m3.288\u001b[0m,\n\u001b[0m'rtt_stddev'\u001b[0m:\u001b[0m0.254\u001b[0m}\u001b[0m}\u001b[0m\n\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600756336.5187426, t1=1600756341.4312792, run_time=4.91253662109375, fail_task=False, exception=None, min_run_time=0, max_run_time=9223372036854775807)\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m---- wrap_task ** changed : False ---------------------------------------------- INFO\u001b[0m\n\u001b[0m<FunctionWrapper at 0x7fbbf80dea60 for Task at 0x7fbbf807ff70>\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "output_type": "stream",
+     "text": [
+      "\u001b[1m\u001b[36mgrouped_task********************************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[34m* vyos ** changed : False ******************************************************\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32mvvvv grouped_task ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32m---- napalm_ping ** changed : False -------------------------------------------- INFO\u001b[0m\n",
+      "\u001b[0m{\u001b[0m \u001b[0m'success'\u001b[0m: \u001b[0m{\u001b[0m \u001b[0m'packet_loss'\u001b[0m: \u001b[0m0\u001b[0m,\n",
+      "               \u001b[0m'probes_sent'\u001b[0m: \u001b[0m5\u001b[0m,\n",
+      "               \u001b[0m'results'\u001b[0m: \u001b[0m[{'ip_address': '192.168.99.1', 'rtt': 3.197}]\u001b[0m,\n",
+      "               \u001b[0m'rtt_avg'\u001b[0m: \u001b[0m3.197\u001b[0m,\n",
+      "               \u001b[0m'rtt_max'\u001b[0m: \u001b[0m4.089\u001b[0m,\n",
+      "               \u001b[0m'rtt_min'\u001b[0m: \u001b[0m2.596\u001b[0m,\n",
+      "               \u001b[0m'rtt_stddev'\u001b[0m: \u001b[0m0.563\u001b[0m}\u001b[0m}\u001b[0m\n",
+      "\u001b[0m> \u001b[2m\u001b[32mTimingRecord(passed=True, t0=1600757147.0274425, t1=1600757151.9415517, run_time=4.914109230041504, fail_task=False, exception=None, min_run_time=0, max_run_time=9223372036854775807)\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32m---- wrap_task ** changed : False ---------------------------------------------- INFO\u001b[0m\n",
+      "\u001b[0m<FunctionWrapper at 0x7fb70c63cee0 for Task at 0x7fb70c5e0b50>\u001b[0m\n",
+      "\u001b[0m\u001b[1m\u001b[32m^^^^ END grouped_task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n",
+      "\u001b[0m"
+     ]
     }
    ],
    "source": [
@@ -174,7 +236,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.8.2-final"
+   "version": "3.8.2"
   }
  },
  "nbformat": 4,
