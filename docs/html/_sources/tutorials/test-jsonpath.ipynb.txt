@@ -8,6 +8,12 @@
     "\n",
     "[test_jsonpath](../api/tasks.rst#nornir_tests.plugins.tests.test_jsonpath) uses jsonpath in conjunction with assertpy to validate task data.\n",
     "\n",
+    "This module combines the power of jsonpath and assertpy.  In order to use this module it is somewhat necessary to be familiar with both of those.  Links to them can be found below.\n",
+    "\n",
+    "* `jsonpath_ng <https://github.com/h2non/jsonpath-ng>`\n",
+    "* `assertpy <https://github.com/assertpy/assertpy>`\n",
+    "\n",
+    "\n",
     "Examples:"
    ]
   },
