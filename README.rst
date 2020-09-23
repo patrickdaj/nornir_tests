@@ -67,7 +67,7 @@ Wrap a subtask that returns a direct result without task.run:
     @test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True)
     @test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)
     def get_interfaces(task):
-        return napalm_get(getters=['interfaces'])
+        return napalm_get(task, getters=['interfaces'])
     
     vyos.run(get_interfaces) 
 

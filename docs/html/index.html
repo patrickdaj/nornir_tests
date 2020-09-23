@@ -230,7 +230,7 @@ main ways to wrap.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nd">@test_until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_interfaces</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">])</span>
 
 <span class="n">vyos</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_interfaces</span><span class="p">)</span>
 </pre></div>
@@ -283,8 +283,9 @@ results work fine.</p>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-timing.html">Using test_timing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-regexp.html">Using test_regexp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-jsonpath.html">Using test_jsonpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/test-jsonpath.html">test: test_jsonpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/using-test-until.html">Using test_until</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/script-conversion.html">Nornir with Tests</a></li>
 </ul>
 </li>
 </ul>

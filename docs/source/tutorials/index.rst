@@ -11,5 +11,6 @@ Tutorials
     using-test-timing
     using-test-regexp
     using-test-lxml
-    using-test-jsonpath
+    test-jsonpath
     using-test-until
+    script-conversion

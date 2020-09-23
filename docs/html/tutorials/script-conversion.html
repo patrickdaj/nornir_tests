@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tutorials &mdash; nornir_tests 0.1.0 documentation</title>
+  <title>Nornir with Tests &mdash; nornir_tests 0.1.0 documentation</title>
   
 
   
@@ -37,8 +37,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction" href="introduction.html" />
-    <link rel="prev" title="functions" href="../api/functions.html" /> 
+    <link rel="prev" title="Using test_until" href="using-test-until.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,15 +84,20 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: test_jsonpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html">test_jsonpath Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html#Nornir-toy-function-to-use-in-Examples">Nornir toy function to use in Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html#Initial-nornir-setup">Initial nornir setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html#Get-some-cat-facts-the-usual-Nornir-way">Get some cat facts the usual Nornir way</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html#Add-a-subtask-to-make-it-better">Add a subtask to make it better</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-test-jsonpath.html#Trying-it-test_jsonpath">Trying it test_jsonpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
-<li class="toctree-l2"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Nornir with Tests</a></li>
 </ul>
 </li>
 </ul>
@@ -141,13 +145,15 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tutorials</li>
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
+        
+      <li>Nornir with Tests</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/tutorials/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorials/script-conversion.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -184,34 +190,25 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Nornir-initialization">Nornir initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Imports-of-nornir_tests-libraries">Imports of nornir_tests libraries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Run-first-wrapped-task">Run first wrapped task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Run-ping-with-timing-requirements">Run ping with timing requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Get-unfailed-task-to-fail-due-to-assertion">Get unfailed task to fail due to assertion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#Combining-tests">Combining tests</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html#&#64;-style-decorator-use">&#64; style decorator use</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html#Using-nr.run-with-tasks-that-return-results">Using nr.run with tasks that return results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html#Using-task.run-inside-grouped-task">Using task.run inside grouped task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html#Not-supported">Not supported</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l1"><a class="reference internal" href="test-jsonpath.html">test: test_jsonpath</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
-<li class="toctree-l1"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
-</ul>
+<div class="section" id="nornir-with-tests">
+<h1>Nornir with Tests<a class="headerlink" href="#nornir-with-tests" title="Permalink to this headline">¶</a></h1>
+<p>The following is a fairly simple nornir script to upgrade an HA pair of PanOS firewalls.  The first
+section shows how it is written with standard Nornir and the second how it would be written with
+the addition of nornir_tests.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nornir</span> <span class="kn">import</span> <span class="n">InitNornir</span>
+
+<span class="n">nr</span> <span class="o">=</span> <span class="n">InitNornir</span><span class="p">()</span>
+
+<span class="n">fw1</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;fw1&#39;</span><span class="p">)</span>
+<span class="n">fw2</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;fw2&#39;</span><span class="p">)</span>
+<span class="n">fws</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">groups_in</span><span class="o">==</span><span class="s1">&#39;fws&#39;</span> <span class="o">&amp;</span> <span class="n">groups_in</span><span class="o">=</span><span class="s1">&#39;testbed1&#39;</span><span class="p">)</span>
+
+<span class="nd">@test_</span>
+<span class="k">def</span> <span class="nf">check_pending_changes</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;show pending-changes&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">result</span>
+</pre></div>
 </div>
 </div>
 
@@ -223,10 +220,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="../api/functions.html" class="btn btn-neutral float-left" title="functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="using-test-until.html" class="btn btn-neutral float-left" title="Using test_until" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -7,3 +7,8 @@ vyos:
   username: vyos
   password: vyos
   platform: vyos
+catfacts:
+  hostname: cat-fact.herokuapp.com
+  username:
+  password:
+  platform:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Using test_jsonpath &mdash; nornir_tests 0.1.0 documentation</title>
+  <title>test_jsonpath Examples &mdash; nornir_tests 0.1.0 documentation</title>
   
 
   
@@ -91,8 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Using test_jsonpath</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">test_jsonpath Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Nornir-toy-function-to-use-in-Examples">Nornir toy function to use in Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-nornir-setup">Initial nornir setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Get-some-cat-facts-the-usual-Nornir-way">Get some cat facts the usual Nornir way</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Add-a-subtask-to-make-it-better">Add a subtask to make it better</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Trying-it-test_jsonpath">Trying it test_jsonpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
+<li class="toctree-l2"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
 </ul>
 </li>
 </ul>
@@ -142,7 +148,7 @@
         
           <li><a href="index.html">Tutorials</a> &raquo;</li>
         
-      <li>Using test_jsonpath</li>
+      <li>test_jsonpath Examples</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -163,6 +169,224 @@
             
   
 <style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
@@ -185,8 +409,329 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="Using-test_jsonpath">
-<h1>Using test_jsonpath<a class="headerlink" href="#Using-test_jsonpath" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="test_jsonpath-Examples">
+<h1>test_jsonpath Examples<a class="headerlink" href="#test_jsonpath-Examples" title="Permalink to this headline">¶</a></h1>
+<p>The test_jsonpath test combines the power of jsonpath_ng which allows pulling out important data from JSON-like data structures and assertpy’s many assertions. For more information on those libraries see the links below. There is more than enough detail on using jsonpath_ng and assertpy at those links but some of the examples here will show a bit of how to use both of these libraries with test_jsonpath.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jsonpath_ng</span> <span class="pre">&lt;https://github.com/h2non/jsonpath-ng&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">assertpy</span> <span class="pre">&lt;https://github.com/assertpy/assertpy&gt;</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="Nornir-toy-function-to-use-in-Examples">
+<h1>Nornir toy function to use in Examples<a class="headerlink" href="#Nornir-toy-function-to-use-in-Examples" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">nornir.core.task</span> <span class="kn">import</span> <span class="n">Result</span>
+
+<span class="k">def</span> <span class="nf">get_facts</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">ammount</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">animal_type</span><span class="o">=</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s1">&#39;cat-fact.herokuapp.com&#39;</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://</span><span class="si">{}</span><span class="s1">/facts/random?animal_type=</span><span class="si">{}</span><span class="s1">&amp;amount=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">server</span><span class="p">,</span> <span class="n">animal_type</span><span class="p">,</span> <span class="n">ammount</span>
+    <span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Initial-nornir-setup">
+<h1>Initial nornir setup<a class="headerlink" href="#Initial-nornir-setup" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tasks</span> <span class="kn">import</span> <span class="n">wrap_task</span>
+<span class="kn">from</span> <span class="nn">nornir_napalm.plugins.tasks</span> <span class="kn">import</span> <span class="n">napalm_get</span><span class="p">,</span> <span class="n">napalm_ping</span>
+<span class="kn">from</span> <span class="nn">nornir_tests.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
+<span class="kn">from</span> <span class="nn">nornir</span> <span class="kn">import</span> <span class="n">InitNornir</span>
+
+<span class="n">nr</span> <span class="o">=</span> <span class="n">InitNornir</span><span class="p">(</span>
+    <span class="n">inventory</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;plugin&quot;</span><span class="p">:</span> <span class="s2">&quot;SimpleInventory&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;host_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/hosts.yaml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;group_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/groups.yaml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;defaults_file&quot;</span><span class="p">:</span> <span class="s2">&quot;data/defaults.yaml&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+<span class="n">catfacts</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;catfacts&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Get-some-cat-facts-the-usual-Nornir-way">
+<h1>Get some cat facts the usual Nornir way<a class="headerlink" href="#Get-some-cat-facts-the-usual-Nornir-way" title="Permalink to this headline">¶</a></h1>
+<p>If I simply print the result I am gonna have screens filled with cat/animal info that I really don’t want. So I can simply add some python right? Not easily without adding a subtask.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result</span> <span class="o">=</span> <span class="n">catfacts</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_facts</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Get some facts&#39;</span><span class="p">,</span> <span class="n">ammount</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">Get some facts******************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* catfacts ** changed : False **************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv Get some facts ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+[{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;59a60b896acf530020f3586d&#39;,
+&#39;createdAt&#39;:&#39;2018-03-19T20:20:03.727Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;Cat owners are 25% likely to pick George Harrison as their &#39;
+&#39;favorite Beatle.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;591f98b44c120c1529b375f2&#39;,
+&#39;createdAt&#39;:&#39;2018-01-04T01:10:54.673Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;api&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;When well treated, a cat can live twenty or more years but the &#39;
+&#39;average life span of a domestic cat is 14 years.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;5f0a15090fc09b00174aec96&#39;,
+&#39;createdAt&#39;:&#39;2020-07-11T19:37:45.398Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;text&#39;:&#39;1123405258.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5f0a15010fc09b00174aec95&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;5ece9fa9a0d2ec00178ae28e&#39;,
+&#39;createdAt&#39;:&#39;2020-05-27T17:13:13.215Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;text&#39;:&#39;Z.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5eccdd64ba0a92001760e263&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;58e00ba00aac31001185edfa&#39;,
+&#39;createdAt&#39;:&#39;2018-02-22T21:20:03.364Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;When cats leave their poop uncovered, it is a sign of aggression &#39;
+&#34;to let you know they don&#39;t fear you.&#34;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;58e007480aac31001185ecef&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;5d38b69a0f1c57001592f135&#39;,
+&#39;createdAt&#39;:&#39;2019-07-24T19:50:50.529Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#34;While we don&#39;t know the exact origins of the Russian Blue, it&#39;s &#34;
+&#39;commonly believed the breed comes from the Archangel Isles in &#39;
+&#34;northwestern Russia—the region&#39;s cold climate would certainly &#34;
+&#34;explain the breed&#39;s plush coat.&#34;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;591f97c28dec2e14e3c20af9&#39;,
+&#39;createdAt&#39;:&#39;2018-01-04T01:10:54.673Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;api&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;Has your cat ever brought its prey to your door? Cats do that &#39;
+&#39;because they regard their owners as their &#34;kittens.&#34; The cats are &#39;
+&#39;teaching their &#34;kittens&#34; how to hunt by bringing them food. Most &#39;
+&#34;people aren&#39;t too delighted when a pet brings in their kill. &#34;
+&#39;Instead of punishing your cat, praise it for its efforts, accept &#39;
+&#39;the prey, and then secretly throw it away.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;591f9890d369931519ce3541&#39;,
+&#39;createdAt&#39;:&#39;2018-01-04T01:10:54.673Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;api&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;Blue-eyed, pure white cats are frequently deaf.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;5d38b1d40f1c57001592f12c&#39;,
+&#39;createdAt&#39;:&#39;2019-07-24T19:30:28.671Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;status&#39;:{&#39;sentCount&#39;: 1, &#39;verified&#39;: True},
+&#39;text&#39;:&#39;During the heat of the summer, set out an extra bowl of water and &#39;
+&#39;place ice cubes in it to keep it cold and refreshing. Cats love &#39;
+&#34;to lie on cool surfaces when it&#39;s hot—if you don&#39;t have an tile &#34;
+&#39;in your home, consider buying a few ceramic tiles from a home &#39;
+&#39;improvement store for your cat to rest on.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-08-23T20:20:01.611Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5a9ac18c7478810ea6c06381&#39;},
+{&#39;__v&#39;:0,
+&#39;_id&#39;:&#39;5f65782b2da500001732b82a&#39;,
+&#39;createdAt&#39;:&#39;2020-09-19T03:16:59.381Z&#39;,
+&#39;deleted&#39;:False,
+&#39;source&#39;:&#39;user&#39;,
+&#39;text&#39;:&#39;Grateful.&#39;,
+&#39;type&#39;:&#39;cat&#39;,
+&#39;updatedAt&#39;:&#39;2020-09-19T03:16:59.381Z&#39;,
+&#39;used&#39;:False,
+&#39;user&#39;:&#39;5f6577fa2da500001732b829&#39;}]
+[{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;59a60b896acf530020f3586d&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;createdAt&#34;:&#34;2018-03-19T20:20:03.727Z&#34;,&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;,&#34;text&#34;:&#34;Cat owners are 25% likely to pick George Harrison as their favorite Beatle.&#34;,&#34;__v&#34;:0,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1}},{&#34;used&#34;:false,&#34;source&#34;:&#34;api&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;591f98b44c120c1529b375f2&#34;,&#34;__v&#34;:0,&#34;text&#34;:&#34;When well treated, a cat can live twenty or more years but the average life span of a domestic cat is 14 years.&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;createdAt&#34;:&#34;2018-01-04T01:10:54.673Z&#34;,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1},&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;5f0a15090fc09b00174aec96&#34;,&#34;user&#34;:&#34;5f0a15010fc09b00174aec95&#34;,&#34;text&#34;:&#34;1123405258.&#34;,&#34;createdAt&#34;:&#34;2020-07-11T19:37:45.398Z&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;__v&#34;:0},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;5ece9fa9a0d2ec00178ae28e&#34;,&#34;user&#34;:&#34;5eccdd64ba0a92001760e263&#34;,&#34;text&#34;:&#34;Z.&#34;,&#34;createdAt&#34;:&#34;2020-05-27T17:13:13.215Z&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;__v&#34;:0},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;58e00ba00aac31001185edfa&#34;,&#34;user&#34;:&#34;58e007480aac31001185ecef&#34;,&#34;text&#34;:&#34;When cats leave their poop uncovered, it is a sign of aggression to let you know they don&#39;t fear you.&#34;,&#34;__v&#34;:0,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;createdAt&#34;:&#34;2018-02-22T21:20:03.364Z&#34;,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1}},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;5d38b69a0f1c57001592f135&#34;,&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;,&#34;text&#34;:&#34;While we don&#39;t know the exact origins of the Russian Blue, it&#39;s commonly believed the breed comes from the Archangel Isles in northwestern Russia—the region&#39;s cold climate would certainly explain the breed&#39;s plush coat.&#34;,&#34;createdAt&#34;:&#34;2019-07-24T19:50:50.529Z&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;__v&#34;:0,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1}},{&#34;used&#34;:false,&#34;source&#34;:&#34;api&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;591f97c28dec2e14e3c20af9&#34;,&#34;__v&#34;:0,&#34;text&#34;:&#34;Has your cat ever brought its prey to your door? Cats do that because they regard their owners as their \&#34;kittens.\&#34; The cats are teaching their \&#34;kittens\&#34; how to hunt by bringing them food. Most people aren&#39;t too delighted when a pet brings in their kill. Instead of punishing your cat, praise it for its efforts, accept the prey, and then secretly throw it away.&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;createdAt&#34;:&#34;2018-01-04T01:10:54.673Z&#34;,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1},&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;},{&#34;used&#34;:false,&#34;source&#34;:&#34;api&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;591f9890d369931519ce3541&#34;,&#34;__v&#34;:0,&#34;text&#34;:&#34;Blue-eyed, pure white cats are frequently deaf.&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;createdAt&#34;:&#34;2018-01-04T01:10:54.673Z&#34;,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1},&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;5d38b1d40f1c57001592f12c&#34;,&#34;user&#34;:&#34;5a9ac18c7478810ea6c06381&#34;,&#34;text&#34;:&#34;During the heat of the summer, set out an extra bowl of water and place ice cubes in it to keep it cold and refreshing. Cats love to lie on cool surfaces when it&#39;s hot—if you don&#39;t have an tile in your home, consider buying a few ceramic tiles from a home improvement store for your cat to rest on.&#34;,&#34;createdAt&#34;:&#34;2019-07-24T19:30:28.671Z&#34;,&#34;updatedAt&#34;:&#34;2020-08-23T20:20:01.611Z&#34;,&#34;__v&#34;:0,&#34;status&#34;:{&#34;verified&#34;:true,&#34;sentCount&#34;:1}},{&#34;used&#34;:false,&#34;source&#34;:&#34;user&#34;,&#34;type&#34;:&#34;cat&#34;,&#34;deleted&#34;:false,&#34;_id&#34;:&#34;5f65782b2da500001732b82a&#34;,&#34;user&#34;:&#34;5f6577fa2da500001732b829&#34;,&#34;text&#34;:&#34;Grateful.&#34;,&#34;createdAt&#34;:&#34;2020-09-19T03:16:59.381Z&#34;,&#34;updatedAt&#34;:&#34;2020-09-19T03:16:59.381Z&#34;,&#34;__v&#34;:0}]
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END Get some facts ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Add-a-subtask-to-make-it-better">
+<h1>Add a subtask to make it better<a class="headerlink" href="#Add-a-subtask-to-make-it-better" title="Permalink to this headline">¶</a></h1>
+<p>By checking to make sure certain things happened in response I don’t have to waste my screen with all the output necessarily unless I want it. Still a bit clunky and doesn’t really provide me with what I need to see. Yeah I should be able to trust that the asserts meant everything is ok but I have a hard time with that and well I wanna see something.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">cat_validator</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">ammount</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">animal_type</span><span class="o">=</span><span class="s1">&#39;cat&#39;</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_facts</span><span class="p">,</span> <span class="n">ammount</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">catfacts</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cat_validator</span><span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;stderr&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">cat_validator*******************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* catfacts ** changed : False **************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv cat_validator ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<span class="ansi-green-intense-fg ansi-bold">---- get_facts ** changed : False ---------------------------------------------- INFO</span>
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END cat_validator ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Trying-it-test_jsonpath">
+<h1>Trying it test_jsonpath<a class="headerlink" href="#Trying-it-test_jsonpath" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">catfacts</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">get_facts</span><span class="p">),</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_length&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.[*]&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">11</span><span class="p">),</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_equal_to&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..type&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;cat&#39;</span><span class="p">),</span>
+        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..verified&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">jsonpath_ng</span> <span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="n">results</span><span class="p">[</span><span class="s1">&#39;catfacts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">result</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-cyan-intense-fg ansi-bold">get_facts***********************************************************************</span>
+<span class="ansi-blue-intense-fg ansi-bold">* catfacts ** changed : False **************************************************</span>
+<span class="ansi-green-intense-fg ansi-bold">vvvv get_facts ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_length&#39;,
+ &#39;path&#39;: &#39;$.[*]&#39;,
+ &#39;result_attr&#39;: &#39;result&#39;,
+ &#39;value&#39;: 11}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;[0]&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
+ &#39;path&#39;: &#39;$..type&#39;,
+ &#39;result_attr&#39;: &#39;result&#39;,
+ &#39;value&#39;: &#39;cat&#39;}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;type&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_true&#39;, &#39;path&#39;: &#39;$..verified&#39;, &#39;result_attr&#39;: &#39;result&#39;}</span>
+<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;status.verified&#39;]}</span>
+<span class="ansi-green-intense-fg ansi-bold">^^^^ END get_facts ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;used&#39;: False,
+ &#39;source&#39;: &#39;user&#39;,
+ &#39;type&#39;: &#39;cat&#39;,
+ &#39;deleted&#39;: False,
+ &#39;_id&#39;: &#39;5a4aab2c2c99ee00219e11c4&#39;,
+ &#39;updatedAt&#39;: &#39;2020-08-23T20:20:01.611Z&#39;,
+ &#39;createdAt&#39;: &#39;2018-02-09T21:20:03.152Z&#39;,
+ &#39;user&#39;: &#39;5a9ac18c7478810ea6c06381&#39;,
+ &#39;text&#39;: &#34;Hearing is the strongest of cat&#39;s senses: They can hear sounds as high as 64 kHz — compared with humans, who can hear only as high as 20 kHz.&#34;,
+ &#39;__v&#39;: 0,
+ &#39;status&#39;: {&#39;verified&#39;: True, &#39;sentCount&#39;: 1}}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 
 

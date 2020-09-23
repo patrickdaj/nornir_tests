@@ -1,0 +1,22 @@
+---
+rtr00:
+    hostname: rtr00
+    platform: mock
+    data:
+        mgmt_port: Management1
+    connection_options:
+        napalm:
+            extras:
+                optional_args:
+                    path: "mocked/rtr00"
+
+rtr01:
+    hostname: rtr01
+    platform: mock
+    data:
+        mgmt_port: Management2
+    connection_options:
+        napalm:
+            extras:
+                optional_args:
+                    path: "mocked/rtr01"
