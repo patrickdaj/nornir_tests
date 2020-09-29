@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Why nornir_tests? &mdash; nornir_tests 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> nornir_tests
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Tutorials</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nornir_tests</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Why nornir_tests?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/script-conversion copy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="why-nornir-tests">
+<h1>Why nornir_tests?<a class="headerlink" href="#why-nornir-tests" title="Permalink to this headline">¶</a></h1>
+<p>In the basic examples below each module is shown individually in more or less common Nornir from
+vs how nornir_tests can change/enhance the logic.</p>
+<div class="section" id="conditional-logic">
+<h2>Conditional logic<a class="headerlink" href="#conditional-logic" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">upgrade_if_bad_ver</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">host</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bad_version.0.1&#39;</span><span class="p">:</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;upgrade good_version.1.0&#39;</span><span class="p">)</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">upgrade_if_bad_ver</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conditional-logic-using-test-when-decorator">
+<h2>Conditional logic using test_when decorator<a class="headerlink" href="#conditional-logic-using-test-when-decorator" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@test_when</span><span class="p">(</span><span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$.version&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;bad_version.0.1&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">upgrade_if_bad_ver</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;upgrade good_version.1.0&#39;</span><span class="p">)</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">upgrade_if_bad_ver</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conditional-logic-using-wrap-task">
+<h2>Conditional logic using wrap_task<a class="headerlink" href="#conditional-logic-using-wrap-task" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">),</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;upgrade good_version.1.0&#39;</span><span class="p">,</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span><span class="n">test_when</span><span class="p">(</span><span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$.version&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;bad_version.0.1&#39;</span><span class="p">)]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>I guess I just get tired of if statements all over the place.  :)</p>
+</div>
+<div class="section" id="retry-behavior">
+<h2>Retry behavior<a class="headerlink" href="#retry-behavior" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reboot_device</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;reboot&#39;</span><span class="p">)</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;check device ready&#39;</span><span class="p">)</span>
+
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">reboot_device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retry-behavior-using-test-until">
+<h2>Retry behavior using test_until<a class="headerlink" href="#retry-behavior-using-test-until" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;reboot&#39;</span><span class="p">)</span>
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">),</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;check device read&#39;</span><span class="p">,</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span><span class="n">test_wait</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">30</span><span class="p">)]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="looping-behavior">
+<h2>Looping behavior<a class="headerlink" href="#looping-behavior" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Avery
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
