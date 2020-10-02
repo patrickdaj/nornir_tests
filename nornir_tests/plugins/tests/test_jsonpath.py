@@ -1,8 +1,9 @@
 import wrapt
+import copy
 from dataclasses import dataclass, field
 from assertpy import assert_that
 from jsonpath_ng import parse
-from json import loads
+from json import loads, dumps
 from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
@@ -18,6 +19,7 @@ class JsonPathRecord(TestRecord):
     path: str = ""
     result_attr: str = "result"
     host_data: str = ""
+    highlight: bool = False
 
     result_keys = ["exception", "matches"]
     repr_keys = [
@@ -28,8 +30,18 @@ class JsonPathRecord(TestRecord):
         "value",
         "one_of",
         "assertion",
+        "highlight"
     ]
 
+def apply_highlight(submatch, json_data_copy, passed, test):
+    if test.assertion == 'contains':
+        pass
+    else:
+        color = 'green' if passed else 'red'
+        submatch.full_path.update(
+            json_data_copy,
+            f"[{color}]{submatch.value}[/{color}]"
+        )
 
 def test_jsonpath(
     assertion: str = "is_equal_to",
@@ -106,6 +118,11 @@ def test_jsonpath(
             if isinstance(json_data, str):
                 json_data = loads(json_data)
 
+            if getattr(result, 'highlit', None):
+                json_data_copy = result.highlit
+            else:
+                json_data_copy = copy.deepcopy(json_data)
+
             match = parse(test.path).find(json_data)
 
             if not match:
@@ -123,7 +140,10 @@ def test_jsonpath(
                     test.matches.append(str(submatch.full_path))
                     test.passed = True
 
+                    apply_highlight(submatch, json_data_copy, True, test)
+
                 except Exception as e:
+                    apply_highlight(submatch, json_data_copy, False, test)
                     if not test.one_of or (submatch == match[-1] and not test.passed):
                         raise Exception(e)
 
@@ -135,6 +155,8 @@ def test_jsonpath(
             setattr(result, "tests", [])
 
         result.tests.append(test)
+        
+        setattr(result, "highlit", dumps(json_data_copy, indent='  '))
 
         if not test.passed and test.fail_task:
             result.failed = True

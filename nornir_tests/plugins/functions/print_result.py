@@ -4,6 +4,7 @@ import threading
 from typing import List, cast
 from collections import OrderedDict
 import json
+from rich.console import Console
 
 from colorama import Fore, Style, init
 
@@ -76,14 +77,17 @@ def _print_individual_result(
 
         elif isinstance(x, BaseException):
             # for consistency between py3.6 and py3.7
-            print(f"{x.__class__.__name__}{x.args}")
+            #print(f"{x.__class__.__name__}{x.args}")
+            Console().print(x)
         elif x and not isinstance(x, str):
             if isinstance(x, OrderedDict):
-                print(json.dumps(x, indent=2))
+                #print(json.dumps(x, indent=2))
+                Console().print(x, highlight=False)
             else:
-                pprint.pprint(x, indent=2)
+                #pprint.pprint(x, indent=2)
+                Console().print(x, highlight=False)
         elif x:
-            print(x)
+            Console().print(x, highlight=False, markup=True)
 
 
 def _print_result(
