@@ -14,5 +14,5 @@ __all__ = [
     "test_lxml",
     "test_callback",
     "test_loop",
-    "test_text"
+    "test_text",
 ]

@@ -1,11 +1,8 @@
-import json
 import os
 
 from nornir_tests.plugins.tasks import wrap_task
 from nornir_tests.plugins.tests import test_loop as t_loop
 from nornir_utils.plugins.tasks.data import echo_data
-
-from nornir.core.task import Result
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 

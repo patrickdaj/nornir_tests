@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 from assertpy import assert_that
 from jsonpath_ng import parse
 import re
-from json import loads
 from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
