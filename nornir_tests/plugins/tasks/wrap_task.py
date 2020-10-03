@@ -3,8 +3,34 @@ import wrapt
 from typing import Callable, List, Any, Dict
 from nornir.core.task import Result
 
-from nornir_tests.plugins.tests import apply_tests
+def apply_tests(
+    task: Callable[..., Any], tests: List[Callable[..., Any]]
+) -> Callable[..., Any]:
+    """Apply tests (decorators) to task
 
+    Args:
+        task (Callable[..., Any]): nornir task
+        tests (List[Callable[..., Any]]): test decorators to apply
+
+    Returns:
+        Callable[..., Any]: Decorated function
+    """
+    apply_last = False
+    wrapped = task
+
+    for wrapper in tests:
+
+        # always apply test_until last
+        if wrapper.__module__.endswith('test_until') and tests[-1] != wrapper:
+            apply_last = wrapper
+            continue
+
+        wrapped = wrapper(wrapped)
+
+    if apply_last:
+        wrapped = apply_last(wrapped)
+
+    return wrapped
 
 @wrapt.decorator
 def wrap_task(

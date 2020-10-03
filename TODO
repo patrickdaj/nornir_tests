@@ -1,4 +1,0 @@
-- Write doc tutorial for all tests and be realistic
-- Add logic to reorganize tests so that any test_until is last
-- Make regexp work more like jsonpath and lxml
-- Add more tests for callback
