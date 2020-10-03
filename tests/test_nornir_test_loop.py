@@ -23,10 +23,7 @@ def my_callback(result, test, task):
 
 def test_basic_loop(single_host):
     results = single_host.run(
-        task=wrap_task(echo_data),
-        tests=[
-            t_loop(placeholder='x', values=[1, 2, 3])
-        ]
+        task=wrap_task(echo_data), tests=[t_loop(placeholder="x", values=[1, 2, 3])]
     )
 
     for result in results.values():

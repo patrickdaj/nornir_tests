@@ -1,7 +1,8 @@
 import wrapt
 
-from typing import Callable, List, Any, Dict
+from typing import Optional, Callable, List, Any, Dict
 from nornir.core.task import Result
+
 
 def apply_tests(
     task: Callable[..., Any], tests: List[Callable[..., Any]]
@@ -15,13 +16,13 @@ def apply_tests(
     Returns:
         Callable[..., Any]: Decorated function
     """
-    apply_last = False
+    apply_last: Optional[Callable[..., Any]] = None
     wrapped = task
 
     for wrapper in tests:
 
         # always apply test_until last
-        if wrapper.__module__.endswith('test_until') and tests[-1] != wrapper:
+        if wrapper.__module__.endswith("test_until") and tests[-1] != wrapper:
             apply_last = wrapper
             continue
 
@@ -31,6 +32,7 @@ def apply_tests(
         wrapped = apply_last(wrapped)
 
     return wrapped
+
 
 @wrapt.decorator
 def wrap_task(

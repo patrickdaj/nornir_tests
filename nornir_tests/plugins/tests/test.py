@@ -1,6 +1,6 @@
 import pprint
 from dataclasses import dataclass
-from typing import Callable, List, Any, Union, Dict
+from typing import Any, Union, Dict
 
 
 @dataclass

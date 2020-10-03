@@ -1,9 +1,8 @@
 import wrapt
-import copy
 from dataclasses import dataclass, field
 from assertpy import assert_that
 from jsonpath_ng import parse
-from json import loads, dumps
+from json import loads
 from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
@@ -30,6 +29,7 @@ class JsonPathRecord(TestRecord):
         "one_of",
         "assertion",
     ]
+
 
 def test_jsonpath(
     assertion: str = "is_equal_to",

@@ -86,6 +86,7 @@ def _print_individual_result(
         elif x:
             print(x)
 
+
 def _print_result(
     result: Result,
     attrs: List[str] = None,
