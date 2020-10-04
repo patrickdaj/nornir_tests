@@ -10,7 +10,7 @@ from .test import TestRecord
 
 
 @dataclass
-class JsonPathRecord(TestRecord):
+class JpathRecord(TestRecord):
     assertion: str = "is_equal_to"
     matches: List[str] = field(default_factory=list)
     one_of: bool = False
@@ -74,7 +74,7 @@ def jpath(
         kwargs: Dict[str, Any],
     ) -> Result:
 
-        test = JsonPathRecord(
+        test = JpathRecord(
             assertion=assertion,
             one_of=one_of,
             value=value,

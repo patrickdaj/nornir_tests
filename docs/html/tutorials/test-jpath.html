@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="test: until" href="test-until.html" />
-    <link rel="prev" title="test: regexp" href="test-regexp.html" /> 
+    <link rel="prev" title="test: xpath" href="test-xpath.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test-timing.html">test: timing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test-regexp.html">test: regexp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-xpath.html">test: xpath</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">test: jpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test-until.html">test: until</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test-callback.html">test: callback</a></li>
@@ -471,7 +472,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..os_version&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;4.14.3-2329074.gaatlantarel&amp;#39;}</span>
@@ -510,7 +511,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..os_version&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;4.14.3-2329074.gaatlantarel&amp;#39;}</span>
@@ -585,18 +586,18 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">get_interface_ips***************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..FastEthernet8..prefix_length&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: 22}</span>
 <span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.169.prefix_length&amp;#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$.interfaces_ip&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: 3}</span>
 <span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: TypeError(&amp;quot;&amp;#39;str&amp;#39; object does not support item assignment&amp;quot;),
  &amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip&amp;#39;]}</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..ipv6&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;1::1&amp;#39;}</span>
@@ -628,18 +629,18 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..FastEthernet8..prefix_length&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: 22}</span>
 <span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.170.prefix_length&amp;#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$.interfaces_ip&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: 3}</span>
 <span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: TypeError(&amp;quot;&amp;#39;str&amp;#39; object does not support item assignment&amp;quot;),
  &amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip&amp;#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..ipv6&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;1::1&amp;#39;}</span>
@@ -696,12 +697,12 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">check_bgp_neighbors*************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..remote_as&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;8121&amp;#39;}</span>
 <span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;#39;Expected &amp;lt;8121&amp;gt; to be equal to &amp;lt;8121&amp;gt;, but was not.&amp;#39;))}</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;fail_task&amp;#39;: True,
  &amp;#39;path&amp;#39;: &amp;#39;$..connection_state&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
@@ -741,12 +742,12 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-red-intense-fg ansi-bold">vvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..remote_as&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;8121&amp;#39;}</span>
 <span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;#39;Expected &amp;lt;8121&amp;gt; to be equal to &amp;lt;8121&amp;gt;, but was not.&amp;#39;))}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
  &amp;#39;fail_task&amp;#39;: True,
  &amp;#39;path&amp;#39;: &amp;#39;$..connection_state&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
@@ -813,7 +814,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;host_data&amp;#39;: &amp;#39;$.mgmt_port&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$.interfaces&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
@@ -876,7 +877,7 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;host_data&amp;#39;: &amp;#39;$.mgmt_port&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$.interfaces&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
@@ -975,13 +976,13 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">get_interface_ips***************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-green-fg">P JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;one_of&amp;#39;: True,
  &amp;#39;path&amp;#39;: &amp;#39;$..ipv4&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;10.66.43.169&amp;#39;}</span>
 <span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4&amp;#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+<span class="ansi-red-fg">F JpathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
  &amp;#39;path&amp;#39;: &amp;#39;$..ipv4&amp;#39;,
  &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
  &amp;#39;value&amp;#39;: &amp;#39;10.66.43.169&amp;#39;}</span>
@@ -1028,7 +1029,7 @@ div.rendered_html tbody tr:hover {
         <a href="test-until.html" class="btn btn-neutral float-right" title="test: until" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="test-regexp.html" class="btn btn-neutral float-left" title="test: regexp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="test-xpath.html" class="btn btn-neutral float-left" title="test: xpath" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
