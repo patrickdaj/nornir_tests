@@ -10,7 +10,7 @@ Tutorials
     all-methods-of-using
     test-timing
     test-regexp
-    test-lxml
-    test-jsonpath
+    test-xpath
+    test-jpath
     test-until
     test-callback
