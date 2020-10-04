@@ -34,7 +34,7 @@ _____
 * **regexp** - Run assertions on nornir results using assertpy's text assertions
 * **jpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
 * **timing** - Gather timing info from tasks
-* **test_wait** - Re-run tasks until assertions pass
+* **wait** - Re-run tasks until assertions pass
 * **xpath** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
 * **callback** - Run a custom callback to handle results
 
