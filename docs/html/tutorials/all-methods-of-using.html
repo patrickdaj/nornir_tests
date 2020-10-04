@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Using test_timing" href="using-test-timing.html" />
+    <link rel="next" title="test: xpath" href="test-timing.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
@@ -94,12 +94,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#Not-supported">Not supported</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: test_jsonpath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
-<li class="toctree-l2"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-timing.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-regexp.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-lxml.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: jpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-until.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-callback.html">test: xpath</a></li>
 </ul>
 </li>
 </ul>
@@ -447,9 +447,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nd">@test_until</span><span class="p">(</span><span class="n">retries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="nd">@test_timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_enabled&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="nd">@until</span><span class="p">(</span><span class="n">retries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="nd">@timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_enabled&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">at_syntax_test</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">])</span>
 
@@ -509,8 +509,8 @@ div.rendered_html tbody tr:hover {
     <span class="n">task</span><span class="o">=</span><span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span>
     <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_timing</span><span class="p">(),</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
+        <span class="n">timing</span><span class="p">(),</span>
+        <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">),</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">])</span>
 </pre></div>
@@ -563,7 +563,7 @@ div.rendered_html tbody tr:hover {
         <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_ping</span><span class="p">),</span>
         <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
         <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">test_timing</span><span class="p">()</span>
+            <span class="n">timing</span><span class="p">()</span>
         <span class="p">]</span>
     <span class="p">)</span>
 
@@ -571,7 +571,7 @@ div.rendered_html tbody tr:hover {
         <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span>
         <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
         <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
+            <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
         <span class="p">]</span>
     <span class="p">)</span>
 
@@ -637,7 +637,7 @@ div.rendered_html tbody tr:hover {
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="using-test-timing.html" class="btn btn-neutral float-right" title="Using test_timing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="test-timing.html" class="btn btn-neutral float-right" title="test: xpath" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

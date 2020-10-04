@@ -1,7 +1,7 @@
 import lxml
 import os
 
-from nornir_tests.plugins.tests import test_lxml as t_lxml
+from nornir_tests.plugins.tests import xpath as t_lxml
 from nornir_tests.plugins.tasks import wrap_task
 
 from nornir.core.task import Result

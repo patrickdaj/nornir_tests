@@ -1,4 +1,4 @@
-from nornir_tests.plugins.tests import test_until as t_until
+from nornir_tests.plugins.tests import until as t_until
 from nornir_tests.plugins.tasks import wrap_task
 
 from nornir_utils.plugins.tasks.data import echo_data
@@ -24,7 +24,7 @@ def generate_exception(task):
     return Result(host=task.host, failed=False)
 
 
-def test_until_passed(single_host):
+def until_passed(single_host):
 
     results = single_host.run(
         task=wrap_task(echo_data),
@@ -38,7 +38,7 @@ def test_until_passed(single_host):
         assert result[0].tests[0].run_time > 0
 
 
-def test_until_on_failed(single_host):
+def until_on_failed(single_host):
 
     results = single_host.run(
         name="whatever",

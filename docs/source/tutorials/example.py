@@ -1,7 +1,7 @@
 from nornir_napalm.plugins.tasks import napalm_get
 from nornir_netmiko.tasks import netmiko_send_command
 from nornir_rich.plugins.functions import RichResults
-from nornir_tests.plugins.tests import test_until, test_jsonpath
+from nornir_tests.plugins.tests import until, jpath
 from nornir_tests.plugins.processors import TestsProcessor
 from nornir import InitNornir
 
@@ -24,7 +24,7 @@ vyos = nr.filter(name="vyos")
 
 
 # Using @decorator syntax
-@test_jsonpath(
+@jpath(
     path="interfaces_ip.eth0.ipv4",
     assertion="contains_key",
     value="192.168.99.170",
@@ -45,10 +45,10 @@ result = vyos.run(
     task=napalm_get,
     getters=["interfaces"],
     tests=[
-        test_jsonpath(
+        jpath(
             path="interfaces.eth0.is_up", assertion="is_true", fail_task=True
         ),
-        test_until(initial_delay=15, retries=10, delay=15, reset_conns=True),
+        until(initial_delay=15, retries=10, delay=15, reset_conns=True),
     ],
 )
 

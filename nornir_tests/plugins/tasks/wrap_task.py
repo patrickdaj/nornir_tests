@@ -9,6 +9,9 @@ def apply_tests(
 ) -> Callable[..., Any]:
     """Apply tests (decorators) to task
 
+    This is strictly used for wrapping a nornir task in all tests defined.  It
+    has no other use than applying the tests and is used only by wrap_task.
+
     Args:
         task (Callable[..., Any]): nornir task
         tests (List[Callable[..., Any]]): test decorators to apply
@@ -21,8 +24,8 @@ def apply_tests(
 
     for wrapper in tests:
 
-        # always apply test_until last
-        if wrapper.__module__.endswith("test_until") and tests[-1] != wrapper:
+        # always apply until last
+        if wrapper.__module__.endswith("until") and tests[-1] != wrapper:
             apply_last = wrapper
             continue
 
@@ -42,6 +45,9 @@ def wrap_task(
     kwargs: Dict[str, Any],
 ) -> Result:
     """Wrap task without using @ decorator syntax
+
+    wrap_task wraps the task function of a nornir.run or task.run with all
+    the decorators/wrappers in the tests array.
 
     This function return
 

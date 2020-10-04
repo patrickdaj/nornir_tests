@@ -31,12 +31,12 @@ Plugins
 Tests
 _____
 
-* **test_regexp** - Run assertions on nornir results using assertpy's text assertions
-* **test_jsonpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
-* **test_timing** - Gather timing info from tasks
+* **regexp** - Run assertions on nornir results using assertpy's text assertions
+* **jpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **timing** - Gather timing info from tasks
 * **test_wait** - Re-run tasks until assertions pass
-* **test_lxml** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
-* **test_callback** - Run a custom callback to handle results
+* **xpath** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **callback** - Run a custom callback to handle results
 
 Tasks
 _____
@@ -64,8 +64,8 @@ Wrap a subtask that returns a direct result without task.run:
 
 .. code-block:: python
 
-    @test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True)
-    @test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)
+    @jpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True)
+    @until(initial_delay=15, retries=10, delay=15, reset_conns=True)
     def get_interfaces(task):
         return napalm_get(task, getters=['interfaces'])
     
@@ -78,8 +78,8 @@ The second and probably easier method is to wrap the task directly:
     vyos.run(
         wrap_task(napalm_get), getters=['interfaces'],
         tests=[
-            test_jsonpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
-            test_until(initial_delay=15, retries=10, delay=15, reset_conns=True)
+            jpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True),
+            until(initial_delay=15, retries=10, delay=15, reset_conns=True)
         ]
     )
 

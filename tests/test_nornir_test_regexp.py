@@ -1,6 +1,6 @@
 import os
 
-from nornir_tests.plugins.tests import test_regexp as t_regexp
+from nornir_tests.plugins.tests import regexp as t_regexp
 from nornir_tests.plugins.tasks import wrap_task
 
 from nornir.core.task import Result

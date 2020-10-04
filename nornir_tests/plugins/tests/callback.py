@@ -14,11 +14,41 @@ class CallbackRecord(TestRecord):
     repr_keys = ["fail_task"]
 
 
-def test_callback(
+def callback(
     callback: Callable[..., Any],
     fail_task: bool = False,
 ) -> Result:
     """Test decorator using custom callback
+
+    This wrapper can be used to test a task result using a custom callback.  The callback
+    has the nornir Result, the Task which includes a host attribute that can be used for
+    verifications, and the test record.  To fail the test set test.passed to False and
+    populate the CallbackRecord with whatever is desired.
+
+    Example:
+
+    .. code-block:: python
+
+        def my_callback(result, test, task):
+            if result.result['hostname'] != task.host.hostname:
+                test.passed = False
+                test.custom = "Hostname did not match inventory"
+
+        results = nr.run(
+            wrap_task(napalm_get), getters=['system']
+            tests=[
+                callback(my_callback, fail_task=True)
+            ]
+        )
+    
+    This would fail the task and thus the host would end up in failed_hosts despite the
+    fact that napalm_get had no issues.  It would fail due to the fact that the callback
+    was not ok with what was returned.
+
+    This is just another way to deal with validations in Nornir and the primary advantage
+    is that it could potentially be chained with another test such as until to wait
+    for a particular condition.  It also provides a succinct way to display the logic of
+    the validation into results without requiring another task or printing directly.
 
     Args:
         callback (Callable): Callback function

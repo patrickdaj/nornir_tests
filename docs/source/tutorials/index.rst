@@ -8,9 +8,9 @@ Tutorials
 
     introduction
     all-methods-of-using
-    using-test-timing
-    using-test-regexp
-    using-test-lxml
+    test-timing
+    test-regexp
+    test-lxml
     test-jsonpath
-    using-test-until
-    script-conversion
+    test-until
+    test-callback

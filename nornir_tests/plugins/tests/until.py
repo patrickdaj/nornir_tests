@@ -21,7 +21,7 @@ class UntilRecord(TestRecord):
     repr_keys = ["fail_task", "initial_delay", "retries", "delay", "reset_conns"]
 
 
-def test_until(
+def until(
     initial_delay: float = 0,
     retries: int = 0,
     delay: float = 0,

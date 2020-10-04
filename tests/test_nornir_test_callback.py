@@ -2,7 +2,7 @@ import json
 import os
 
 from nornir_tests.plugins.tasks import wrap_task
-from nornir_tests.plugins.tests import test_callback as t_callback
+from nornir_tests.plugins.tests import callback as t_callback
 
 from nornir.core.task import Result
 

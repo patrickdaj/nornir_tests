@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>test: test_lxml &mdash; nornir_tests 0.1.0 documentation</title>
+  <title>test: xpath &mdash; nornir_tests 0.1.0 documentation</title>
   
 
   
@@ -36,7 +36,9 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="test: xpath" href="test-callback.html" />
+    <link rel="prev" title="test: jpath" href="test-jsonpath.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,9 +83,19 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-timing.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-regexp.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-lxml.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: jpath</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-callback.html">test: xpath</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -129,7 +141,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>test: test_lxml</li>
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
+        
+      <li>test: xpath</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -390,9 +404,9 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="test:-test_lxml">
-<h1>test: test_lxml<a class="headerlink" href="#test:-test_lxml" title="Permalink to this headline">¶</a></h1>
-<p>test_lxml uses lxml xpath in conjunction with assertpy to validate task data.</p>
+<div class="section" id="test:-xpath">
+<h1>test: xpath<a class="headerlink" href="#test:-xpath" title="Permalink to this headline">¶</a></h1>
+<p>xpath uses lxml xpath in conjunction with assertpy to validate task data.</p>
 <p>This module combines the power of xpath and assertpy. In order to use this module it is somewhat necessary to be familiar with both of those. Links to them can be found below.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">xpath</span> <span class="pre">cheatsheat</span> <span class="pre">&lt;https://devhints.io/xpath&gt;</span></code>__</p></li>
@@ -409,7 +423,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.tasks</span> <span class="kn">import</span> <span class="n">wrap_task</span>
-<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_lxml</span>
+<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">xpath</span>
 
 <span class="n">nr</span> <span class="o">=</span> <span class="n">InitNornir</span><span class="p">(</span>
     <span class="n">inventory</span><span class="o">=</span><span class="p">{</span>
@@ -432,6 +446,15 @@ div.rendered_html tbody tr:hover {
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="test-callback.html" class="btn btn-neutral float-right" title="test: xpath" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="test-jsonpath.html" class="btn btn-neutral float-left" title="test: jpath" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

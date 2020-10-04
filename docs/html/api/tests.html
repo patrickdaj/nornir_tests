@@ -184,29 +184,34 @@
 <div class="section" id="module-nornir_tests.plugins.tests">
 <span id="tests"></span><h1>tests<a class="headerlink" href="#module-nornir_tests.plugins.tests" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="nornir_tests.plugins.tests.apply_tests">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">apply_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">tests</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span><a class="headerlink" href="#nornir_tests.plugins.tests.apply_tests" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply tests (decorators) to task</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>task</strong> (<em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em>) – nornir task</p></li>
-<li><p><strong>tests</strong> (<em>List</em><em>[</em><em>Callable</em><em>[</em><em>..</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – test decorators to apply</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Decorated function</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Callable[.., Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="nornir_tests.plugins.tests.test_callback">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_callback" title="Permalink to this definition">¶</a></dt>
+<dt id="nornir_tests.plugins.tests.callback">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using custom callback</p>
+<p>This wrapper can be used to test a task result using a custom callback.  The callback
+has the nornir Result, the Task which includes a host attribute that can be used for
+verifications, and the test record.  To fail the test set test.passed to False and
+populate the CallbackRecord with whatever is desired.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_callback</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">task</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">:</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">passed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">custom</span> <span class="o">=</span> <span class="s2">&quot;Hostname did not match inventory&quot;</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">callback</span><span class="p">(</span><span class="n">my_callback</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This would fail the task and thus the host would end up in failed_hosts despite the
+fact that napalm_get had no issues.  It would fail due to the fact that the callback
+was not ok with what was returned.</p>
+<p>This is just another way to deal with validations in Nornir and the primary advantage
+is that it could potentially be chained with another test such as until to wait
+for a particular condition.  It also provides a succinct way to display the logic of
+the validation into results without requiring another task or printing directly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -219,8 +224,8 @@ result failure.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nornir_tests.plugins.tests.test_jsonpath">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_jsonpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_jsonpath" title="Permalink to this definition">¶</a></dt>
+<dt id="nornir_tests.plugins.tests.jpath">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">jpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.jpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using jsonpath</p>
 <p>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">jsonpath_ng</a>
 implementation.  The path and host_data attributes both use the jsonpath syntax
@@ -249,10 +254,73 @@ result failure.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="nornir_tests.plugins.tests.test_lxml">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_lxml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xpath</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">attrib</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_lxml" title="Permalink to this definition">¶</a></dt>
+<dt id="nornir_tests.plugins.tests.regexp">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">regexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">regexp</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.regexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator using re module</p>
+<p>This test is based off the standard re module.</p>
+<p>The operation is based on the <a class="reference external" href="https://github.com/assertpy/assertpy">assertpy</a>
+implementation.  Any method available to assert_py.assert_that should be usable.
+If the assert_that assertion requires an argument to compare against then that
+should come from either the value argument or the value at the regexp match of
+host_data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regexp</strong> (<em>str</em><em>, </em><em>optional</em>) – regular expression.</p></li>
+<li><p><strong>value</strong> (<em>str</em><em>, </em><em>optional</em>) – Data to use for comparison.</p></li>
+<li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).</p></li>
+<li><p><strong>assertion</strong> (<em>str</em><em>, </em><em>optional</em>) – Any method of assertpy.assert_that object.</p></li>
+<li><p><strong>one_of</strong> (<em>bool</em><em>, </em><em>optional</em>) – When found values is &gt; 1, allow one match to pass otherwise
+all returned must match.</p></li>
+<li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath starting at task.host.data to use for comparison.</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
+result failure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nornir_tests.plugins.tests.timing">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">timing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">9223372036854775807</span></em>, <em class="sig-param"><span class="n">t0</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">t1</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">run_time</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.timing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator for timing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure. Defaults to False.</p></li>
+<li><p><strong>min_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required minimum runtime. Defaults to 0.</p></li>
+<li><p><strong>max_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required maximum runtime. Defaults to sys.maxsize.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nornir_tests.plugins.tests.xpath">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">xpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_equal_to'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xpath</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">attrib</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test decorator using lxml</p>
 <p>This test is based off of the <a class="reference external" href="https://github.com/h2non/jsonpath-ng">lxml</a> implementation.</p>
+<p>The operation is based on the <a class="reference external" href="https://github.com/assertpy/assertpy">assertpy</a>
+implementation.  Any method available to assert_py.assert_that should be usable.
+If the assert_that assertion requires an argument to compare against then that
+should come from either the value argument or the value at the jsonpath match of
+host_data.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">],</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//interface[@name=&quot;ethernet1/1&quot;]/ip-address&#39;</span><span class="p">,</span> <span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$..ethernet1-1&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nd">@xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//interfaces&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;ethernet1/1&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_ethernet11</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">check_ethernet11</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -266,41 +334,6 @@ otherwise all returned must match.</p></li>
 <li><p><strong>attrib</strong> (<em>str</em><em>, </em><em>optional</em>) – compare attribute value ie. &lt;element &#64;attrib=’whatever’&gt;.</p></li>
 <li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
 result failure.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="nornir_tests.plugins.tests.test_regexp">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_regexp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regexp</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">result_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'result'</span></em>, <em class="sig-param"><span class="n">assertion</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'is_not_none'</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">one_of</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">host_data</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_regexp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test decorator using regexp</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>regexp</strong> (<em>str</em><em>, </em><em>optional</em>) – Regular expression to use for matching.</p></li>
-<li><p><strong>result_attr</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute to check in results (ie. stdout, result).</p></li>
-<li><p><strong>value</strong> (<em>str</em><em>, </em><em>optional</em>) – Data to use for comparison.</p></li>
-<li><p><strong>assertion</strong> (<em>str</em><em>, </em><em>optional</em>) – Any method of assertpy.assert_that object.</p></li>
-<li><p><strong>one_of</strong> (<em>bool</em><em>, </em><em>optional</em>) – When found values is &gt; 1, allow one match to pass otherwise
-all returned must match.</p></li>
-<li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath starting at task.host.data to use for comparison.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="nornir_tests.plugins.tests.test_timing">
-<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">test_timing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_run_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">9223372036854775807</span></em>, <em class="sig-param"><span class="n">t0</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">t1</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">run_time</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.test_timing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test decorator for timing</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
-setting result failure. Defaults to False.</p></li>
-<li><p><strong>min_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required minimum runtime. Defaults to 0.</p></li>
-<li><p><strong>max_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required maximum runtime. Defaults to sys.maxsize.</p></li>
 </ul>
 </dd>
 </dl>

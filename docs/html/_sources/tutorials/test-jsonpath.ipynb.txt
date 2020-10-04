@@ -4,9 +4,9 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# test: test_jsonpath\n",
+    "# test: jpath\n",
     "\n",
-    "[test_jsonpath](../api/tasks.rst#nornir_tests.plugins.tests.test_jsonpath) uses jsonpath in conjunction with assertpy to validate task data.\n",
+    "[jpath](../api/tasks.rst#nornir_tests.plugins.tests.jpath) uses jsonpath in conjunction with assertpy to validate task data.\n",
     "\n",
     "This module combines the power of jsonpath and assertpy.  In order to use this module it is somewhat necessary to be familiar with both of those.  Links to them can be found below.\n",
     "\n",
@@ -19,7 +19,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 251,
+   "execution_count": 17,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -28,7 +28,7 @@
     "\n",
     "from nornir_tests.plugins.functions import print_result\n",
     "from nornir_tests.plugins.tasks import wrap_task\n",
-    "from nornir_tests.plugins.tests import test_jsonpath\n",
+    "from nornir_tests.plugins.tests import jpath\n",
     "\n",
     "nr = InitNornir(\n",
     "    inventory={\n",
@@ -52,21 +52,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 252,
+   "execution_count": 18,
    "metadata": {},
    "outputs": [],
    "source": [
     "results = nr.run(\n",
     "    wrap_task(napalm_get), getters=['facts'],\n",
     "    tests=[\n",
-    "        test_jsonpath(path='$..os_version', value='4.14.3-2329074.gaatlantarel')\n",
+    "        jpath(path='$..os_version', value='4.14.3-2329074.gaatlantarel')\n",
     "    ]\n",
     ")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 253,
+   "execution_count": 19,
    "metadata": {
     "tags": []
    },
@@ -74,11 +74,38 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_equal_to',\n 'path': '$..os_version',\n 'result_attr': 'result',\n 'value': '4.14.3-2329074.gaatlantarel'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['facts.os_version']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_equal_to',\n 'path': '$..os_version',\n 'result_attr': 'result',\n 'value': '4.14.3-2329074.gaatlantarel'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['facts.os_version']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..os_version&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;4.14.3-2329074.gaatlantarel&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;facts.os_version&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c0714220&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">{\n  \"facts\": {\n    \"uptime\": 151005.57332897186,\n    \"vendor\": \"Arista\",\n    \"os_version\": \"<span style=\"color: #008000\">4.14.3-2329074.gaatlantarel</span>\",\n    \"serial_number\": \"SN0123A34AS\",\n    \"model\": \"vEOS\",\n    \"hostname\": \"eos-router\",\n    \"fqdn\": \"eos-router\",\n    \"interface_list\": [\n      \"Ethernet2\",\n      \"Management1\",\n      \"Ethernet1\",\n      \"Ethernet3\"\n    ]\n  }\n}\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..os_version&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;4.14.3-2329074.gaatlantarel&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;facts.os_version&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c0714310&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">{\n  \"facts\": {\n    \"uptime\": 151005.57332897186,\n    \"vendor\": \"Arista\",\n    \"os_version\": \"<span style=\"color: #008000\">4.14.3-2329074.gaatlantarel</span>\",\n    \"serial_number\": \"SN0123A34AS\",\n    \"model\": \"vEOS\",\n    \"hostname\": \"eos-router2\",\n    \"fqdn\": \"eos-router2\",\n    \"interface_list\": [\n      \"Ethernet2\",\n      \"Management1\",\n      \"Ethernet1\",\n      \"Ethernet3\",\n      \"Ethernet4\"\n    ]\n  }\n}\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m{&#39;facts&#39;: {&#39;uptime&#39;: 151005.57332897186, &#39;vendor&#39;: &#39;Arista&#39;, &#39;os_version&#39;: &#39;4.14.3-2329074.gaatlantarel&#39;, &#39;serial_number&#39;: &#39;SN0123A34AS&#39;, &#39;model&#39;: &#39;vEOS&#39;, &#39;hostname&#39;: &#39;eos-router&#39;, &#39;fqdn&#39;: &#39;eos-router&#39;, &#39;interface_list&#39;: [&#39;Ethernet2&#39;, &#39;Management1&#39;, &#39;Ethernet1&#39;, &#39;Ethernet3&#39;]}}\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
-    "print_result(results, vars=['tests'])"
+    "print_result(results, vars=['tests', 'highlit'])\n",
+    "print(results['rtr00'][0].result)"
    ]
   },
   {
@@ -90,15 +117,15 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 254,
+   "execution_count": 20,
    "metadata": {
     "tags": []
    },
    "outputs": [],
    "source": [
-    "@test_jsonpath(path='$..ipv6', assertion='contains', value=\"1::1\")\n",
-    "@test_jsonpath(path='$.interfaces_ip', assertion='is_length', value=3)\n",
-    "@test_jsonpath(path='$..FastEthernet8..prefix_length', value=22)\n",
+    "@jpath(path='$..ipv6', assertion='contains', value=\"1::1\")\n",
+    "@jpath(path='$.interfaces_ip', assertion='is_length', value=3)\n",
+    "@jpath(path='$..FastEthernet8..prefix_length', value=22)\n",
     "def get_interface_ips(task):\n",
     "    return napalm_get(task, getters=['interfaces_ip'])\n",
     "\n",
@@ -107,7 +134,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 255,
+   "execution_count": 21,
    "metadata": {
     "tags": []
    },
@@ -115,11 +142,37 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mget_interface_ips***************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_equal_to',\n 'path': '$..FastEthernet8..prefix_length',\n 'result_attr': 'result',\n 'value': 22}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip.FastEthernet8.ipv4.10.66.43.169.prefix_length']}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_length',\n 'path': '$.interfaces_ip',\n 'result_attr': 'result',\n 'value': 3}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip']}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'contains',\n 'path': '$..ipv6',\n 'result_attr': 'result',\n 'value': '1::1'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip.Loopback555.ipv6']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_equal_to',\n 'path': '$..FastEthernet8..prefix_length',\n 'result_attr': 'result',\n 'value': 22}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip.FastEthernet8.ipv4.10.66.43.170.prefix_length']}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_length',\n 'path': '$.interfaces_ip',\n 'result_attr': 'result',\n 'value': 3}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip']}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {'assertion': 'contains',\n 'path': '$..ipv6',\n 'result_attr': 'result',\n 'value': '1::1'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{'exception': Exception(AssertionError(\"Expected <{'1::2': {'prefix_length': 64}, '2001:DB8:1::2': {'prefix_length': 64}, '2::99': {'prefix_length': 64}, 'FE80::5': {'prefix_length': 'N/A'}}> to contain key <1::1>, but did not.\"))}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mget_interface_ips***************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..FastEthernet8..prefix_length&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: 22}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.169.prefix_length&#39;]}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;is_length&#39;,\n &#39;path&#39;: &#39;$.interfaces_ip&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: 3}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: TypeError(&quot;&#39;str&#39; object does not support item assignment&quot;),\n &#39;matches&#39;: [&#39;interfaces_ip&#39;]}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;path&#39;: &#39;$..ipv6&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;1::1&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces_ip.Loopback555.ipv6&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c08d0a90&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">\"\\\"{\\\\n  \\\\\\\"interfaces_ip\\\\\\\": {\\\\n    \\\\\\\"FastEthernet8\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n  \n\\\\\\\"10.66.43.169\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": \\\\\\\"<span style=\"color: #008000\">22</span>\\\\\\\"\\\\n        }\\\\n      \n}\\\\n    },\\\\n    \\\\\\\"Loopback555\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n        \n\\\\\\\"192.168.1.1\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 24\\\\n        }\\\\n      },\\\\n      \n\\\\\\\"ipv6\\\\\\\": {\\\\n        \\\\\\\"1::1\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        \n},\\\\n        \\\\\\\"2001:DB8:1::1\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        },\\\\n  \n\\\\\\\"2::\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        },\\\\n        \\\\\\\"FE80::3\\\\\\\": \n{\\\\n          \\\\\\\"prefix_length\\\\\\\": \\\\\\\"N/A\\\\\\\"\\\\n        }\\\\n      }\\\\n    },\\\\n    \n\\\\\\\"Tunnel0\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n        \\\\\\\"10.63.100.9\\\\\\\": {\\\\n          \n\\\\\\\"prefix_length\\\\\\\": 24\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}\\\"\"\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..FastEthernet8..prefix_length&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: 22}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.170.prefix_length&#39;]}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;is_length&#39;,\n &#39;path&#39;: &#39;$.interfaces_ip&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: 3}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: TypeError(&quot;&#39;str&#39; object does not support item assignment&quot;),\n &#39;matches&#39;: [&#39;interfaces_ip&#39;]}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;path&#39;: &#39;$..ipv6&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;1::1&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: Exception(AssertionError(&quot;Expected &lt;{&#39;1::2&#39;: {&#39;prefix_length&#39;: 64}, &#39;2001:DB8:1::2&#39;: {&#39;prefix_length&#39;: 64}, &#39;2::99&#39;: {&#39;prefix_length&#39;: 64}, &#39;FE80::5&#39;: {&#39;prefix_length&#39;: &#39;N/A&#39;}}&gt; to contain key &lt;1::1&gt;, but did not.&quot;))}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c0b6fd60&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">\"\\\"{\\\\n  \\\\\\\"interfaces_ip\\\\\\\": {\\\\n    \\\\\\\"FastEthernet8\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n  \n\\\\\\\"10.66.43.170\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": \\\\\\\"<span style=\"color: #008000\">22</span>\\\\\\\"\\\\n        }\\\\n      \n}\\\\n    },\\\\n    \\\\\\\"Loopback555\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n        \n\\\\\\\"192.168.1.2\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 24\\\\n        }\\\\n      },\\\\n      \n\\\\\\\"ipv6\\\\\\\": {\\\\n        \\\\\\\"1::2\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        \n},\\\\n        \\\\\\\"2001:DB8:1::2\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        },\\\\n  \n\\\\\\\"2::99\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": 64\\\\n        },\\\\n        \n\\\\\\\"FE80::5\\\\\\\": {\\\\n          \\\\\\\"prefix_length\\\\\\\": \\\\\\\"N/A\\\\\\\"\\\\n        }\\\\n      }\\\\n   \n},\\\\n    \\\\\\\"Tunnel0\\\\\\\": {\\\\n      \\\\\\\"ipv4\\\\\\\": {\\\\n        \\\\\\\"10.63.100.10\\\\\\\": {\\\\n     \n\\\\\\\"prefix_length\\\\\\\": 24\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}\\\"\"\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
-    "print_result(results, vars=['tests'])"
+    "print_result(results, vars=['tests', 'highlit'])"
    ]
   },
   {
@@ -131,7 +184,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 256,
+   "execution_count": 22,
    "metadata": {
     "tags": []
    },
@@ -139,16 +192,43 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mcheck_bgp_neighbors*************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'is_equal_to',\n 'fail_task': True,\n 'path': '$..connection_state',\n 'result_attr': 'result',\n 'value': 'Established'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['bgp_neighbors_detail.global.8121.[0].connection_state']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {'assertion': 'is_equal_to',\n 'fail_task': True,\n 'path': '$..connection_state',\n 'result_attr': 'result',\n 'value': 'Established'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{'exception': Exception(AssertionError('Expected <EstabSync> to be equal to <Established>, but was not.'))}\u001b[0m\n\u001b[0m\u001b[1m\u001b[31m^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mcheck_bgp_neighbors*************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..remote_as&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;8121&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: Exception(AssertionError(&#39;Expected &lt;8121&gt; to be equal to &lt;8121&gt;, but was not.&#39;))}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;fail_task&#39;: True,\n &#39;path&#39;: &#39;$..connection_state&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;Established&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;bgp_neighbors_detail.global.8121.[0].connection_state&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c039f2e0&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">\"{\\n  \\\"bgp_neighbors_detail\\\": {\\n    \\\"global\\\": {\\n      \\\"8121\\\": [\\n        {\\n         \n\\\"up\\\": true,\\n          \\\"local_as\\\": 13335,\\n          \\\"remote_as\\\": \\\"<span style=\"color: #800000\">8121</span>\\\",\\n          \n\\\"local_address\\\": \\\"172.101.76.1\\\",\\n          \\\"local_address_configured\\\": true,\\n        \n\\\"local_port\\\": 179,\\n          \\\"routing_table\\\": \\\"inet.0\\\",\\n          \\\"remote_address\\\":\n\\\"192.247.78.0\\\",\\n          \\\"remote_port\\\": 58380,\\n          \\\"multihop\\\": false,\\n       \n\\\"multipath\\\": true,\\n          \\\"remove_private_as\\\": true,\\n          \\\"import_policy\\\": \n\\\"4-NTT-TRANSIT-IN\\\",\\n          \\\"export_policy\\\": \\\"4-NTT-TRANSIT-OUT\\\",\\n          \n\\\"input_messages\\\": 123,\\n          \\\"output_messages\\\": 13,\\n          \\\"input_updates\\\": \n123,\\n          \\\"output_updates\\\": 5,\\n          \\\"messages_queued_out\\\": 23,\\n          \n\\\"connection_state\\\": \\\"Established\\\",\\n          \\\"previous_connection_state\\\": \n\\\"EstabSync\\\",\\n          \\\"last_event\\\": \\\"RecvKeepAlive\\\",\\n          \n\\\"suppress_4byte_as\\\": false,\\n          \\\"local_as_prepend\\\": false,\\n          \n\\\"holdtime\\\": 90,\\n          \\\"configured_holdtime\\\": 90,\\n          \\\"keepalive\\\": 30,\\n    \n\\\"configured_keepalive\\\": 30,\\n          \\\"active_prefix_count\\\": 132808,\\n          \n\\\"received_prefix_count\\\": 566739,\\n          \\\"accepted_prefix_count\\\": 566479,\\n          \n\\\"suppressed_prefix_count\\\": 0,\\n          \\\"advertised_prefix_count\\\": 0,\\n          \n\\\"flap_count\\\": 27\\n        }\\n      ]\\n    }\\n  }\\n}\"\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[31mvvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;path&#39;: &#39;$..remote_as&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;8121&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: Exception(AssertionError(&#39;Expected &lt;8121&gt; to be equal to &lt;8121&gt;, but was not.&#39;))}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,\n &#39;fail_task&#39;: True,\n &#39;path&#39;: &#39;$..connection_state&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;Established&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: Exception(AssertionError(&#39;Expected &lt;EstabSync&gt; to be equal to &lt;Established&gt;, but was not.&#39;))}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c039f370&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">\"{\\n  \\\"bgp_neighbors_detail\\\": {\\n    \\\"global\\\": {\\n      \\\"8121\\\": [\\n        {\\n         \n\\\"up\\\": true,\\n          \\\"local_as\\\": 13335,\\n          \\\"remote_as\\\": \\\"<span style=\"color: #800000\">8121</span>\\\",\\n          \n\\\"local_address\\\": \\\"172.101.77.1\\\",\\n          \\\"local_address_configured\\\": true,\\n        \n\\\"local_port\\\": 179,\\n          \\\"routing_table\\\": \\\"inet.0\\\",\\n          \\\"remote_address\\\":\n\\\"192.247.78.1\\\",\\n          \\\"remote_port\\\": 58381,\\n          \\\"multihop\\\": false,\\n       \n\\\"multipath\\\": true,\\n          \\\"remove_private_as\\\": true,\\n          \\\"import_policy\\\": \n\\\"4-NTT-TRANSIT-IN\\\",\\n          \\\"export_policy\\\": \\\"4-NTT-TRANSIT-OUT\\\",\\n          \n\\\"input_messages\\\": 123,\\n          \\\"output_messages\\\": 13,\\n          \\\"input_updates\\\": \n123,\\n          \\\"output_updates\\\": 5,\\n          \\\"messages_queued_out\\\": 23,\\n          \n\\\"connection_state\\\": \\\"EstabSync\\\",\\n          \\\"previous_connection_state\\\": \n\\\"Established\\\",\\n          \\\"last_event\\\": \\\"RecvKeepAlive\\\",\\n          \n\\\"suppress_4byte_as\\\": false,\\n          \\\"local_as_prepend\\\": false,\\n          \n\\\"holdtime\\\": 90,\\n          \\\"configured_holdtime\\\": 90,\\n          \\\"keepalive\\\": 30,\\n    \n\\\"configured_keepalive\\\": 30,\\n          \\\"active_prefix_count\\\": 132808,\\n          \n\\\"received_prefix_count\\\": 566739,\\n          \\\"accepted_prefix_count\\\": 566479,\\n          \n\\\"suppressed_prefix_count\\\": 0,\\n          \\\"advertised_prefix_count\\\": 0,\\n          \n\\\"flap_count\\\": 27\\n        }\\n      ]\\n    }\\n  }\\n}\"\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[31m^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
-    "@test_jsonpath(path='$..connection_state', value=\"Established\", fail_task=True)\n",
+    "@jpath(path='$..connection_state', value=\"Established\", fail_task=True)\n",
+    "@jpath(path='$..remote_as', value='8121')\n",
     "def check_bgp_neighbors(task):\n",
     "    return napalm_get(task, getters=['bgp_neighbors_detail'])\n",
     "\n",
     "results = nr.run(check_bgp_neighbors)\n",
-    "print_result(results, vars=['tests'])"
+    "print_result(results, vars=['tests', 'highlit'])"
    ]
   },
   {
@@ -160,7 +240,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 257,
+   "execution_count": 23,
    "metadata": {
     "tags": []
    },
@@ -168,7 +248,33 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'contains',\n 'host_data': '$.mgmt_port',\n 'path': '$.interfaces',\n 'result_attr': 'result',\n 'value': 'Management1'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'contains',\n 'host_data': '$.mgmt_port',\n 'path': '$.interfaces',\n 'result_attr': 'result',\n 'value': 'Management2'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mnapalm_get**********************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;host_data&#39;: &#39;$.mgmt_port&#39;,\n &#39;path&#39;: &#39;$.interfaces&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;Management1&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c19007c0&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">{\n  \"interfaces\": {\n    \"Management1\": {\n      \"is_up\": false,\n      \"is_enabled\": false,\n      \"description\": \"\",\n      \"last_flapped\": -1.0,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:61\"\n    },\n    \"Ethernet1\": {\n      \"is_up\": true,\n      \"is_enabled\": true,\n      \"description\": \"foo\",\n      \"last_flapped\": 1429978575.1554043,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:62\"\n    },\n    \"Ethernet2\": {\n      \"is_up\": true,\n      \"is_enabled\": true,\n      \"description\": \"bla\",\n      \"last_flapped\": 1429978575.1555667,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:63\"\n    },\n    \"Ethernet3\": {\n      \"is_up\": false,\n      \"is_enabled\": true,\n      \"description\": \"bar\",\n      \"last_flapped\": -1.0,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:64\"\n    }\n  }\n}\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr01 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;host_data&#39;: &#39;$.mgmt_port&#39;,\n &#39;path&#39;: &#39;$.interfaces&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;Management2&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c052a970&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">{\n  \"interfaces\": {\n    \"Management2\": {\n      \"is_up\": false,\n      \"is_enabled\": false,\n      \"description\": \"\",\n      \"last_flapped\": -1.0,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:61\"\n    },\n    \"Ethernet1\": {\n      \"is_up\": true,\n      \"is_enabled\": true,\n      \"description\": \"foo\",\n      \"last_flapped\": 1429978575.1554043,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:62\"\n    },\n    \"Ethernet2\": {\n      \"is_up\": true,\n      \"is_enabled\": true,\n      \"description\": \"bla\",\n      \"last_flapped\": 1429978575.1555667,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:63\"\n    },\n    \"Ethernet3\": {\n      \"is_up\": false,\n      \"is_enabled\": true,\n      \"description\": \"bar\",\n      \"last_flapped\": -1.0,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:64\"\n    },\n    \"Ethernet4\": {\n      \"is_up\": false,\n      \"is_enabled\": true,\n      \"description\": \"bar\",\n      \"last_flapped\": -1.0,\n      \"speed\": 1000,\n      \"mtu\": 1500,\n      \"mac_address\": \"FA:16:3E:57:33:65\"\n    }\n  }\n}\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
@@ -177,10 +283,10 @@
     "results = nr.run(\n",
     "    wrap_task(napalm_get), getters=['interfaces'],\n",
     "    tests=[\n",
-    "        test_jsonpath(path='$.interfaces', assertion='contains', host_data='$.mgmt_port')\n",
+    "        jpath(path='$.interfaces', assertion='contains', host_data='$.mgmt_port')\n",
     "    ]\n",
     ")\n",
-    "print_result(results, vars=['tests'])"
+    "print_result(results, vars=['tests', 'highlit'])"
    ]
   },
   {
@@ -199,7 +305,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 258,
+   "execution_count": 24,
    "metadata": {
     "tags": []
    },
@@ -207,18 +313,31 @@
     {
      "output_type": "stream",
      "name": "stdout",
-     "text": "\u001b[1m\u001b[36mget_interface_ips***************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {'assertion': 'contains',\n 'one_of': True,\n 'path': '$..ipv4',\n 'result_attr': 'result',\n 'value': '10.66.43.169'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{'matches': ['interfaces_ip.FastEthernet8.ipv4']}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {'assertion': 'contains',\n 'path': '$..ipv4',\n 'result_attr': 'result',\n 'value': '10.66.43.169'}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{'exception': Exception(AssertionError(\"Expected <{'192.168.1.1': {'prefix_length': 24}}> to contain key <10.66.43.169>, but did not.\")),\n 'matches': ['interfaces_ip.FastEthernet8.ipv4']}\u001b[0m\n\u001b[0m\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
+     "text": "\u001b[1m\u001b[36mget_interface_ips***************************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[34m* rtr00 ** changed : False *****************************************************\u001b[0m\n\u001b[0m\u001b[1m\u001b[32mvvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\u001b[0m\n\u001b[0m\u001b[2m\u001b[32mP JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;one_of&#39;: True,\n &#39;path&#39;: &#39;$..ipv4&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;10.66.43.169&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[32m{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4&#39;]}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31mF JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,\n &#39;path&#39;: &#39;$..ipv4&#39;,\n &#39;result_attr&#39;: &#39;result&#39;,\n &#39;value&#39;: &#39;10.66.43.169&#39;}\u001b[0m\n\u001b[0m\u001b[2m\u001b[31m{&#39;exception&#39;: Exception(AssertionError(&quot;Expected &lt;{&#39;192.168.1.1&#39;: {&#39;prefix_length&#39;: 24}}&gt; to contain key &lt;10.66.43.169&gt;, but did not.&quot;)),\n &#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4&#39;]}\u001b[0m\n\u001b[0m"
+    },
+    {
+     "output_type": "display_data",
+     "data": {
+      "text/plain": "&lt;rich.jupyter.JupyterRenderable at 0x7f61c0c634c0&gt;",
+      "text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">\"{\\n  \\\"interfaces_ip\\\": {\\n    \\\"FastEthernet8\\\": {\\n      \\\"ipv4\\\": {\\n        \n\\\"10.66.43.169\\\": {\\n          \\\"prefix_length\\\": 22\\n        }\\n      }\\n    },\\n    \n\\\"Loopback555\\\": {\\n      \\\"ipv4\\\": {\\n        \\\"192.168.1.1\\\": {\\n          \n\\\"prefix_length\\\": 24\\n        }\\n      },\\n      \\\"ipv6\\\": {\\n        \\\"1::1\\\": {\\n         \n\\\"prefix_length\\\": 64\\n        },\\n        \\\"2001:DB8:1::1\\\": {\\n          \\\"prefix_length\\\":\n64\\n        },\\n        \\\"2::\\\": {\\n          \\\"prefix_length\\\": 64\\n        },\\n        \n\\\"FE80::3\\\": {\\n          \\\"prefix_length\\\": \\\"N/A\\\"\\n        }\\n      }\\n    },\\n    \n\\\"Tunnel0\\\": {\\n      \\\"ipv4\\\": {\\n        \\\"10.63.100.9\\\": {\\n          \\\"prefix_length\\\": \n24\\n        }\\n      }\\n    }\\n  }\\n}\"\n</pre>\n"
+     },
+     "metadata": {}
+    },
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": "\u001b[1m\u001b[32m^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\n\u001b[0m"
     }
    ],
    "source": [
-    "@test_jsonpath(path='$..ipv4', assertion='contains', value=\"10.66.43.169\")\n",
-    "@test_jsonpath(path='$..ipv4', assertion='contains', value=\"10.66.43.169\", one_of=True)\n",
+    "@jpath(path='$..ipv4', assertion='contains', value=\"10.66.43.169\")\n",
+    "@jpath(path='$..ipv4', assertion='contains', value=\"10.66.43.169\", one_of=True)\n",
     "def get_interface_ips(task):\n",
     "    return napalm_get(task, getters=['interfaces_ip'])\n",
     "\n",
     "rtr00 = nr.filter(name='rtr00')\n",
     "results = rtr00.run(get_interface_ips)\n",
-    "print_result(results, vars=['tests'])"
+    "print_result(results, vars=['tests', 'highlit'])"
    ]
   },
   {

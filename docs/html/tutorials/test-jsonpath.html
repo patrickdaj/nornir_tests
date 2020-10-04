@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>test: test_jsonpath &mdash; nornir_tests 0.1.0 documentation</title>
+  <title>test: jpath &mdash; nornir_tests 0.1.0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Using test_until" href="using-test-until.html" />
-    <link rel="prev" title="Using test_lxml" href="using-test-lxml.html" /> 
+    <link rel="next" title="test: xpath" href="test-until.html" />
+    <link rel="prev" title="test: xpath" href="test-lxml.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,12 +88,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">test: test_jsonpath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
-<li class="toctree-l2"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-timing.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-regexp.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-lxml.html">test: xpath</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">test: jpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-until.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-callback.html">test: xpath</a></li>
 </ul>
 </li>
 </ul>
@@ -143,7 +143,7 @@
         
           <li><a href="index.html">Tutorials</a> &raquo;</li>
         
-      <li>test: test_jsonpath</li>
+      <li>test: jpath</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -404,9 +404,9 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="test:-test_jsonpath">
-<h1>test: test_jsonpath<a class="headerlink" href="#test:-test_jsonpath" title="Permalink to this headline">¶</a></h1>
-<p>test_jsonpath uses jsonpath in conjunction with assertpy to validate task data.</p>
+<div class="section" id="test:-jpath">
+<h1>test: jpath<a class="headerlink" href="#test:-jpath" title="Permalink to this headline">¶</a></h1>
+<p>jpath uses jsonpath in conjunction with assertpy to validate task data.</p>
 <p>This module combines the power of jsonpath and assertpy. In order to use this module it is somewhat necessary to be familiar with both of those. Links to them can be found below.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">jsonpath_ng</span> <span class="pre">&lt;https://github.com/h2non/jsonpath-ng&gt;</span></code></p></li>
@@ -414,7 +414,7 @@ div.rendered_html tbody tr:hover {
 </ul>
 <p>Examples:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[251]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -423,7 +423,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.tasks</span> <span class="kn">import</span> <span class="n">wrap_task</span>
-<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_jsonpath</span>
+<span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">jpath</span>
 
 <span class="n">nr</span> <span class="o">=</span> <span class="n">InitNornir</span><span class="p">(</span>
     <span class="n">inventory</span><span class="o">=</span><span class="p">{</span>
@@ -441,29 +441,30 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>When running a task, validations usually if done in Nornir can be executed as additional logic implemented in python or with running of actual tasks. Using <code class="docutils literal notranslate"><span class="pre">nornir_tests</span></code> moves the logic into the task and provides a way to impact the success of a task based on its validations.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[252]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">results</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;facts&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..os_version&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;4.14.3-2329074.gaatlantarel&#39;</span><span class="p">)</span>
+        <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..os_version&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;4.14.3-2329074.gaatlantarel&#39;</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[253]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span></span><span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;highlit&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;rtr00&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -471,32 +472,96 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;path&#39;: &#39;$..os_version&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;4.14.3-2329074.gaatlantarel&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;facts.os_version&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..os_version&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;4.14.3-2329074.gaatlantarel&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;facts.os_version&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">{
+  "facts": {
+    "uptime": 151005.57332897186,
+    "vendor": "Arista",
+    "os_version": "<span style="color: #008000">4.14.3-2329074.gaatlantarel</span>",
+    "serial_number": "SN0123A34AS",
+    "model": "vEOS",
+    "hostname": "eos-router",
+    "fqdn": "eos-router",
+    "interface_list": [
+      "Ethernet2",
+      "Management1",
+      "Ethernet1",
+      "Ethernet3"
+    ]
+  }
+}
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;path&#39;: &#39;$..os_version&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;4.14.3-2329074.gaatlantarel&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;facts.os_version&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..os_version&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;4.14.3-2329074.gaatlantarel&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;facts.os_version&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">{
+  "facts": {
+    "uptime": 151005.57332897186,
+    "vendor": "Arista",
+    "os_version": "<span style="color: #008000">4.14.3-2329074.gaatlantarel</span>",
+    "serial_number": "SN0123A34AS",
+    "model": "vEOS",
+    "hostname": "eos-router2",
+    "fqdn": "eos-router2",
+    "interface_list": [
+      "Ethernet2",
+      "Management1",
+      "Ethernet1",
+      "Ethernet3",
+      "Ethernet4"
+    ]
+  }
+}
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+{&amp;#39;facts&amp;#39;: {&amp;#39;uptime&amp;#39;: 151005.57332897186, &amp;#39;vendor&amp;#39;: &amp;#39;Arista&amp;#39;, &amp;#39;os_version&amp;#39;: &amp;#39;4.14.3-2329074.gaatlantarel&amp;#39;, &amp;#39;serial_number&amp;#39;: &amp;#39;SN0123A34AS&amp;#39;, &amp;#39;model&amp;#39;: &amp;#39;vEOS&amp;#39;, &amp;#39;hostname&amp;#39;: &amp;#39;eos-router&amp;#39;, &amp;#39;fqdn&amp;#39;: &amp;#39;eos-router&amp;#39;, &amp;#39;interface_list&amp;#39;: [&amp;#39;Ethernet2&amp;#39;, &amp;#39;Management1&amp;#39;, &amp;#39;Ethernet1&amp;#39;, &amp;#39;Ethernet3&amp;#39;]}}
 
 </pre></div></div>
 </div>
 <p>The first example was pretty simple but the next will have many tests run in validating interface data. It will also use &#64; decorator syntax.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[254]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv6&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;1::1&quot;</span><span class="p">)</span>
-<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.interfaces_ip&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..FastEthernet8..prefix_length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span></span><span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv6&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;1::1&quot;</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.interfaces_ip&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..FastEthernet8..prefix_length&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_interface_ips</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces_ip&#39;</span><span class="p">])</span>
 
@@ -505,15 +570,15 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[255]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span></span><span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;highlit&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -521,59 +586,110 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">get_interface_ips***************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;path&#39;: &#39;$..FastEthernet8..prefix_length&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: 22}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.169.prefix_length&#39;]}</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_length&#39;,
- &#39;path&#39;: &#39;$.interfaces_ip&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: 3}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip&#39;]}</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;path&#39;: &#39;$..ipv6&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;1::1&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip.Loopback555.ipv6&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..FastEthernet8..prefix_length&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: 22}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.169.prefix_length&amp;#39;]}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$.interfaces_ip&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: 3}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: TypeError(&amp;quot;&amp;#39;str&amp;#39; object does not support item assignment&amp;quot;),
+ &amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip&amp;#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..ipv6&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;1::1&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.Loopback555.ipv6&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">"\"{\\n  \\\"interfaces_ip\\\": {\\n    \\\"FastEthernet8\\\": {\\n      \\\"ipv4\\\": {\\n
+\\\"10.66.43.169\\\": {\\n          \\\"prefix_length\\\": \\\"<span style="color: #008000">22</span>\\\"\\n        }\\n
+}\\n    },\\n    \\\"Loopback555\\\": {\\n      \\\"ipv4\\\": {\\n
+\\\"192.168.1.1\\\": {\\n          \\\"prefix_length\\\": 24\\n        }\\n      },\\n
+\\\"ipv6\\\": {\\n        \\\"1::1\\\": {\\n          \\\"prefix_length\\\": 64\\n
+},\\n        \\\"2001:DB8:1::1\\\": {\\n          \\\"prefix_length\\\": 64\\n        },\\n
+\\\"2::\\\": {\\n          \\\"prefix_length\\\": 64\\n        },\\n        \\\"FE80::3\\\":
+{\\n          \\\"prefix_length\\\": \\\"N/A\\\"\\n        }\\n      }\\n    },\\n
+\\\"Tunnel0\\\": {\\n      \\\"ipv4\\\": {\\n        \\\"10.63.100.9\\\": {\\n
+\\\"prefix_length\\\": 24\\n        }\\n      }\\n    }\\n  }\\n}\""
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;path&#39;: &#39;$..FastEthernet8..prefix_length&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: 22}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.170.prefix_length&#39;]}</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_length&#39;,
- &#39;path&#39;: &#39;$.interfaces_ip&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: 3}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip&#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;path&#39;: &#39;$..ipv6&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;1::1&#39;}</span>
-<span class="ansi-red-fg">{&#39;exception&#39;: Exception(AssertionError(&#34;Expected &lt;{&#39;1::2&#39;: {&#39;prefix_length&#39;: 64}, &#39;2001:DB8:1::2&#39;: {&#39;prefix_length&#39;: 64}, &#39;2::99&#39;: {&#39;prefix_length&#39;: 64}, &#39;FE80::5&#39;: {&#39;prefix_length&#39;: &#39;N/A&#39;}}&gt; to contain key &lt;1::1&gt;, but did not.&#34;))}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..FastEthernet8..prefix_length&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: 22}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4.10.66.43.170.prefix_length&amp;#39;]}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_length&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$.interfaces_ip&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: 3}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: TypeError(&amp;quot;&amp;#39;str&amp;#39; object does not support item assignment&amp;quot;),
+ &amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip&amp;#39;]}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..ipv6&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;1::1&amp;#39;}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;quot;Expected &amp;lt;{&amp;#39;1::2&amp;#39;: {&amp;#39;prefix_length&amp;#39;: 64}, &amp;#39;2001:DB8:1::2&amp;#39;: {&amp;#39;prefix_length&amp;#39;: 64}, &amp;#39;2::99&amp;#39;: {&amp;#39;prefix_length&amp;#39;: 64}, &amp;#39;FE80::5&amp;#39;: {&amp;#39;prefix_length&amp;#39;: &amp;#39;N/A&amp;#39;}}&amp;gt; to contain key &amp;lt;1::1&amp;gt;, but did not.&amp;quot;))}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">"\"{\\n  \\\"interfaces_ip\\\": {\\n    \\\"FastEthernet8\\\": {\\n      \\\"ipv4\\\": {\\n
+\\\"10.66.43.170\\\": {\\n          \\\"prefix_length\\\": \\\"<span style="color: #008000">22</span>\\\"\\n        }\\n
+}\\n    },\\n    \\\"Loopback555\\\": {\\n      \\\"ipv4\\\": {\\n
+\\\"192.168.1.2\\\": {\\n          \\\"prefix_length\\\": 24\\n        }\\n      },\\n
+\\\"ipv6\\\": {\\n        \\\"1::2\\\": {\\n          \\\"prefix_length\\\": 64\\n
+},\\n        \\\"2001:DB8:1::2\\\": {\\n          \\\"prefix_length\\\": 64\\n        },\\n
+\\\"2::99\\\": {\\n          \\\"prefix_length\\\": 64\\n        },\\n
+\\\"FE80::5\\\": {\\n          \\\"prefix_length\\\": \\\"N/A\\\"\\n        }\\n      }\\n
+},\\n    \\\"Tunnel0\\\": {\\n      \\\"ipv4\\\": {\\n        \\\"10.63.100.10\\\": {\\n
+\\\"prefix_length\\\": 24\\n        }\\n      }\\n    }\\n  }\\n}\""
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
 </div>
 <p>The next example will show how a task can be set to failed based on the validation that is performed. If the task has fail_task set to true and ends up with passed=False in the test it will mark the overall task as failed.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[256]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..connection_state&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Established&quot;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..connection_state&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Established&quot;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..remote_as&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;8121&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">check_bgp_neighbors</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bgp_neighbors_detail&#39;</span><span class="p">])</span>
 
 <span class="n">results</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">check_bgp_neighbors</span><span class="p">)</span>
-<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;highlit&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -581,28 +697,100 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">check_bgp_neighbors*************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;fail_task&#39;: True,
- &#39;path&#39;: &#39;$..connection_state&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;Established&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;bgp_neighbors_detail.global.8121.[0].connection_state&#39;]}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..remote_as&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;8121&amp;#39;}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;#39;Expected &amp;lt;8121&amp;gt; to be equal to &amp;lt;8121&amp;gt;, but was not.&amp;#39;))}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;fail_task&amp;#39;: True,
+ &amp;#39;path&amp;#39;: &amp;#39;$..connection_state&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;Established&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;bgp_neighbors_detail.global.8121.[0].connection_state&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">"{\n  \"bgp_neighbors_detail\": {\n    \"global\": {\n      \"8121\": [\n        {\n
+\"up\": true,\n          \"local_as\": 13335,\n          \"remote_as\": \"<span style="color: #800000">8121</span>\",\n
+\"local_address\": \"172.101.76.1\",\n          \"local_address_configured\": true,\n
+\"local_port\": 179,\n          \"routing_table\": \"inet.0\",\n          \"remote_address\":
+\"192.247.78.0\",\n          \"remote_port\": 58380,\n          \"multihop\": false,\n
+\"multipath\": true,\n          \"remove_private_as\": true,\n          \"import_policy\":
+\"4-NTT-TRANSIT-IN\",\n          \"export_policy\": \"4-NTT-TRANSIT-OUT\",\n
+\"input_messages\": 123,\n          \"output_messages\": 13,\n          \"input_updates\":
+123,\n          \"output_updates\": 5,\n          \"messages_queued_out\": 23,\n
+\"connection_state\": \"Established\",\n          \"previous_connection_state\":
+\"EstabSync\",\n          \"last_event\": \"RecvKeepAlive\",\n
+\"suppress_4byte_as\": false,\n          \"local_as_prepend\": false,\n
+\"holdtime\": 90,\n          \"configured_holdtime\": 90,\n          \"keepalive\": 30,\n
+\"configured_keepalive\": 30,\n          \"active_prefix_count\": 132808,\n
+\"received_prefix_count\": 566739,\n          \"accepted_prefix_count\": 566479,\n
+\"suppressed_prefix_count\": 0,\n          \"advertised_prefix_count\": 0,\n
+\"flap_count\": 27\n        }\n      ]\n    }\n  }\n}"
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-red-intense-fg ansi-bold">vvvv check_bgp_neighbors ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv ERROR</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&#39;assertion&#39;: &#39;is_equal_to&#39;,
- &#39;fail_task&#39;: True,
- &#39;path&#39;: &#39;$..connection_state&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;Established&#39;}</span>
-<span class="ansi-red-fg">{&#39;exception&#39;: Exception(AssertionError(&#39;Expected &lt;EstabSync&gt; to be equal to &lt;Established&gt;, but was not.&#39;))}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..remote_as&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;8121&amp;#39;}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;#39;Expected &amp;lt;8121&amp;gt; to be equal to &amp;lt;8121&amp;gt;, but was not.&amp;#39;))}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;is_equal_to&amp;#39;,
+ &amp;#39;fail_task&amp;#39;: True,
+ &amp;#39;path&amp;#39;: &amp;#39;$..connection_state&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;Established&amp;#39;}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;#39;Expected &amp;lt;EstabSync&amp;gt; to be equal to &amp;lt;Established&amp;gt;, but was not.&amp;#39;))}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">"{\n  \"bgp_neighbors_detail\": {\n    \"global\": {\n      \"8121\": [\n        {\n
+\"up\": true,\n          \"local_as\": 13335,\n          \"remote_as\": \"<span style="color: #800000">8121</span>\",\n
+\"local_address\": \"172.101.77.1\",\n          \"local_address_configured\": true,\n
+\"local_port\": 179,\n          \"routing_table\": \"inet.0\",\n          \"remote_address\":
+\"192.247.78.1\",\n          \"remote_port\": 58381,\n          \"multihop\": false,\n
+\"multipath\": true,\n          \"remove_private_as\": true,\n          \"import_policy\":
+\"4-NTT-TRANSIT-IN\",\n          \"export_policy\": \"4-NTT-TRANSIT-OUT\",\n
+\"input_messages\": 123,\n          \"output_messages\": 13,\n          \"input_updates\":
+123,\n          \"output_updates\": 5,\n          \"messages_queued_out\": 23,\n
+\"connection_state\": \"EstabSync\",\n          \"previous_connection_state\":
+\"Established\",\n          \"last_event\": \"RecvKeepAlive\",\n
+\"suppress_4byte_as\": false,\n          \"local_as_prepend\": false,\n
+\"holdtime\": 90,\n          \"configured_holdtime\": 90,\n          \"keepalive\": 30,\n
+\"configured_keepalive\": 30,\n          \"active_prefix_count\": 132808,\n
+\"received_prefix_count\": 566739,\n          \"accepted_prefix_count\": 566479,\n
+\"suppressed_prefix_count\": 0,\n          \"advertised_prefix_count\": 0,\n
+\"flap_count\": 27\n        }\n      ]\n    }\n  }\n}"
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-red-intense-fg ansi-bold">^^^^ END check_bgp_neighbors ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
 </div>
 <p>The last example will use host_data in order to find some data specific to the host to validate against. The host_data is anything from inventory perhaps obviously in the data dictionary.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[257]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -611,14 +799,14 @@ div.rendered_html tbody tr:hover {
 <span class="n">results</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.interfaces&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$.mgmt_port&#39;</span><span class="p">)</span>
+        <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.interfaces&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$.mgmt_port&#39;</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">)</span>
-<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;highlit&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -626,21 +814,138 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">napalm_get**********************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;host_data&#39;: &#39;$.mgmt_port&#39;,
- &#39;path&#39;: &#39;$.interfaces&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;Management1&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;host_data&amp;#39;: &amp;#39;$.mgmt_port&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$.interfaces&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;Management1&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">{
+  "interfaces": {
+    "Management1": {
+      "is_up": false,
+      "is_enabled": false,
+      "description": "",
+      "last_flapped": -1.0,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:61"
+    },
+    "Ethernet1": {
+      "is_up": true,
+      "is_enabled": true,
+      "description": "foo",
+      "last_flapped": 1429978575.1554043,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:62"
+    },
+    "Ethernet2": {
+      "is_up": true,
+      "is_enabled": true,
+      "description": "bla",
+      "last_flapped": 1429978575.1555667,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:63"
+    },
+    "Ethernet3": {
+      "is_up": false,
+      "is_enabled": true,
+      "description": "bar",
+      "last_flapped": -1.0,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:64"
+    }
+  }
+}
+</pre></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr01 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv napalm_get ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;host_data&#39;: &#39;$.mgmt_port&#39;,
- &#39;path&#39;: &#39;$.interfaces&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;Management2&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;host_data&amp;#39;: &amp;#39;$.mgmt_port&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$.interfaces&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;Management2&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">{
+  "interfaces": {
+    "Management2": {
+      "is_up": false,
+      "is_enabled": false,
+      "description": "",
+      "last_flapped": -1.0,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:61"
+    },
+    "Ethernet1": {
+      "is_up": true,
+      "is_enabled": true,
+      "description": "foo",
+      "last_flapped": 1429978575.1554043,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:62"
+    },
+    "Ethernet2": {
+      "is_up": true,
+      "is_enabled": true,
+      "description": "bla",
+      "last_flapped": 1429978575.1555667,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:63"
+    },
+    "Ethernet3": {
+      "is_up": false,
+      "is_enabled": true,
+      "description": "bar",
+      "last_flapped": -1.0,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:64"
+    },
+    "Ethernet4": {
+      "is_up": false,
+      "is_enabled": true,
+      "description": "bar",
+      "last_flapped": -1.0,
+      "speed": 1000,
+      "mtu": 1500,
+      "mac_address": "FA:16:3E:57:33:65"
+    }
+  }
+}
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END napalm_get ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -648,22 +953,22 @@ div.rendered_html tbody tr:hover {
 <p>In these examples ‘contains’, ‘is_equal’, and ‘is_length’ were used for assertions. Many other possibilities are available from the assertpy module. Not saying all of them make sense to use or that they all work as expected but they should. Too many to validate to be honest. Some other that would certainly work fine would be ‘is_true’, ‘is_empty’, etc.</p>
 <p>A few more things about how it all works. The one_of argument isn’t always needed but it could be. If the match was intended to turn up many of something and something like is_equal assertion is used, if one_of is not true then it will fail if all matches don’t meet the assertion. This is kind of confusing and I should prob show an example here.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[258]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv4&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;10.66.43.169&quot;</span><span class="p">)</span>
-<span class="nd">@test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv4&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;10.66.43.169&quot;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv4&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;10.66.43.169&quot;</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..ipv4&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;10.66.43.169&quot;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_interface_ips</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces_ip&#39;</span><span class="p">])</span>
 
 <span class="n">rtr00</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;rtr00&#39;</span><span class="p">)</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">rtr00</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_interface_ips</span><span class="p">)</span>
-<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">])</span>
+<span class="n">print_result</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;highlit&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -671,18 +976,41 @@ div.rendered_html tbody tr:hover {
 <span class="ansi-cyan-intense-fg ansi-bold">get_interface_ips***************************************************************</span>
 <span class="ansi-blue-intense-fg ansi-bold">* rtr00 ** changed : False *****************************************************</span>
 <span class="ansi-green-intense-fg ansi-bold">vvvv get_interface_ips ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO</span>
-<span class="ansi-green-fg">P JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;one_of&#39;: True,
- &#39;path&#39;: &#39;$..ipv4&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;10.66.43.169&#39;}</span>
-<span class="ansi-green-fg">{&#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4&#39;]}</span>
-<span class="ansi-red-fg">F JsonPathRecord - {&#39;assertion&#39;: &#39;contains&#39;,
- &#39;path&#39;: &#39;$..ipv4&#39;,
- &#39;result_attr&#39;: &#39;result&#39;,
- &#39;value&#39;: &#39;10.66.43.169&#39;}</span>
-<span class="ansi-red-fg">{&#39;exception&#39;: Exception(AssertionError(&#34;Expected &lt;{&#39;192.168.1.1&#39;: {&#39;prefix_length&#39;: 24}}&gt; to contain key &lt;10.66.43.169&gt;, but did not.&#34;)),
- &#39;matches&#39;: [&#39;interfaces_ip.FastEthernet8.ipv4&#39;]}</span>
+<span class="ansi-green-fg">P JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;one_of&amp;#39;: True,
+ &amp;#39;path&amp;#39;: &amp;#39;$..ipv4&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;10.66.43.169&amp;#39;}</span>
+<span class="ansi-green-fg">{&amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4&amp;#39;]}</span>
+<span class="ansi-red-fg">F JsonPathRecord - {&amp;#39;assertion&amp;#39;: &amp;#39;contains&amp;#39;,
+ &amp;#39;path&amp;#39;: &amp;#39;$..ipv4&amp;#39;,
+ &amp;#39;result_attr&amp;#39;: &amp;#39;result&amp;#39;,
+ &amp;#39;value&amp;#39;: &amp;#39;10.66.43.169&amp;#39;}</span>
+<span class="ansi-red-fg">{&amp;#39;exception&amp;#39;: Exception(AssertionError(&amp;quot;Expected &amp;lt;{&amp;#39;192.168.1.1&amp;#39;: {&amp;#39;prefix_length&amp;#39;: 24}}&amp;gt; to contain key &amp;lt;10.66.43.169&amp;gt;, but did not.&amp;quot;)),
+ &amp;#39;matches&amp;#39;: [&amp;#39;interfaces_ip.FastEthernet8.ipv4&amp;#39;]}</span>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">"{\n  \"interfaces_ip\": {\n    \"FastEthernet8\": {\n      \"ipv4\": {\n
+\"10.66.43.169\": {\n          \"prefix_length\": 22\n        }\n      }\n    },\n
+\"Loopback555\": {\n      \"ipv4\": {\n        \"192.168.1.1\": {\n
+\"prefix_length\": 24\n        }\n      },\n      \"ipv6\": {\n        \"1::1\": {\n
+\"prefix_length\": 64\n        },\n        \"2001:DB8:1::1\": {\n          \"prefix_length\":
+64\n        },\n        \"2::\": {\n          \"prefix_length\": 64\n        },\n
+\"FE80::3\": {\n          \"prefix_length\": \"N/A\"\n        }\n      }\n    },\n
+\"Tunnel0\": {\n      \"ipv4\": {\n        \"10.63.100.9\": {\n          \"prefix_length\":
+24\n        }\n      }\n    }\n  }\n}"
+</pre></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 <span class="ansi-green-intense-fg ansi-bold">^^^^ END get_interface_ips ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
 </pre></div></div>
@@ -698,10 +1026,10 @@ div.rendered_html tbody tr:hover {
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="using-test-until.html" class="btn btn-neutral float-right" title="Using test_until" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="test-until.html" class="btn btn-neutral float-right" title="test: xpath" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="using-test-lxml.html" class="btn btn-neutral float-left" title="Using test_lxml" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="test-lxml.html" class="btn btn-neutral float-left" title="test: xpath" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

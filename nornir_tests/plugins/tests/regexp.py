@@ -2,7 +2,7 @@ import wrapt
 from dataclasses import dataclass, field
 from assertpy import assert_that
 from jsonpath_ng import parse
-from json import loads
+import re
 from typing import Any, List, Callable, Dict
 
 from nornir.core.task import Result
@@ -10,12 +10,12 @@ from .test import TestRecord
 
 
 @dataclass
-class JsonPathRecord(TestRecord):
+class RegexpRecord(TestRecord):
     assertion: str = "is_equal_to"
     matches: List[str] = field(default_factory=list)
     one_of: bool = False
     value: Any = None
-    path: str = ""
+    regexp: str = ""
     result_attr: str = "result"
     host_data: str = ""
 
@@ -31,30 +31,27 @@ class JsonPathRecord(TestRecord):
     ]
 
 
-def test_jsonpath(
+def regexp(
     assertion: str = "is_equal_to",
     value: Any = None,
-    path: str = "",
+    regexp: str = "",
     one_of: bool = False,
     result_attr: str = "result",
     host_data: str = "",
     fail_task: bool = False,
 ) -> Result:
-    """Test decorator using jsonpath
+    """Test decorator using re module
 
-    This test is based off of the `jsonpath_ng <https://github.com/h2non/jsonpath-ng>`__
-    implementation.  The path and host_data attributes both use the jsonpath syntax
-    documented there.  The host_data is a jsonpath starting from the task.host.data
-    dictionary.
+    This test is based off the standard re module.
 
     The operation is based on the `assertpy <https://github.com/assertpy/assertpy>`__
     implementation.  Any method available to assert_py.assert_that should be usable.
     If the assert_that assertion requires an argument to compare against then that
-    should come from either the value argument or the value at the jsonpath match of
+    should come from either the value argument or the value at the regexp match of
     host_data.
 
     Args:
-        path (str, optional): jsonpath path.
+        regexp (str, optional): regular expression.
         value (str, optional): Data to use for comparison.
         result_attr (str, optional): Attribute to check in results (ie. stdout, result).
         assertion (str, optional): Any method of assertpy.assert_that object.
@@ -74,11 +71,11 @@ def test_jsonpath(
         kwargs: Dict[str, Any],
     ) -> Result:
 
-        test = JsonPathRecord(
+        test = RegexpRecord(
             assertion=assertion,
             one_of=one_of,
             value=value,
-            path=path,
+            regexp=regexp,
             result_attr=result_attr,
             host_data=host_data,
             fail_task=fail_task,
@@ -92,7 +89,7 @@ def test_jsonpath(
         result = wrapped(*args, **kwargs)
 
         try:
-            json_data = getattr(result, test.result_attr)
+            text_data = getattr(result, test.result_attr)
 
             # self.host_data always preferred
             if test.host_data:
@@ -103,16 +100,21 @@ def test_jsonpath(
 
                 test.value = new_value[0].value if new_value[0] else test.value
 
-            if isinstance(json_data, str):
-                json_data = loads(json_data)
+            if not isinstance(text_data, str):
+                text_data = repr(text_data)
 
-            match = parse(test.path).find(json_data)
+            match = list(re.finditer(test.regexp, text_data))
 
             if not match:
-                raise Exception(f"no match found from path {test.path}")
+                raise Exception(f"no match found from regexp {test.regexp}")
 
             for submatch in match:
-                assert_obj = assert_that(submatch.value)
+                if submatch.groups():
+                    assert len(submatch.groups()) == 1, "Only one match group allowed"
+                    assert_obj = assert_that(submatch.groups()[0])
+                else:
+                    assert_obj = assert_that(submatch.group())
+
                 assert_method = getattr(assert_obj, test.assertion)
                 try:
                     if test.value:
@@ -120,7 +122,9 @@ def test_jsonpath(
                     else:
                         assert_method()
 
-                    test.matches.append(str(submatch.full_path))
+                    test.matches.append(
+                        submatch.groups() if submatch.groups() else submatch.group()
+                    )
                     test.passed = True
 
                 except Exception as e:

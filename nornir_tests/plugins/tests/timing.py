@@ -20,7 +20,7 @@ class TimingRecord(TestRecord):
     repr_keys = ["fail_task", "min_run_time", "max_run_time"]
 
 
-def test_timing(
+def timing(
     min_run_time: int = 0,
     max_run_time: int = sys.maxsize,
     t0: float = -1,

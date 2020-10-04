@@ -16,7 +16,7 @@ class LoopRecord(TestRecord):
     repr_keys = ["values", "reset_conns"]
 
 
-def test_loop(
+def loop(
     values: List[Any],
     placeholder: Any,
     reset_conns: bool = False,
@@ -40,7 +40,7 @@ def test_loop(
         else:
             task = kwargs["task"]
 
-        result = MultiResult(name=f"{task.name} - test_loop")
+        result = MultiResult(name=f"{task.name} - loop")
 
         for value in values:
             kwargs.update({placeholder: value})

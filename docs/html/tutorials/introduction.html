@@ -96,12 +96,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="all-methods-of-using.html">All methods of using tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-timing.html">Using test_timing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-regexp.html">Using test_regexp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-lxml.html">Using test_lxml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: test_jsonpath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using-test-until.html">Using test_until</a></li>
-<li class="toctree-l2"><a class="reference internal" href="script-conversion.html">Nornir with Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-timing.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-regexp.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-lxml.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-jsonpath.html">test: jpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-until.html">test: xpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test-callback.html">test: xpath</a></li>
 </ul>
 </li>
 </ul>
@@ -452,7 +452,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">test_regexp</span><span class="p">,</span> <span class="n">test_until</span><span class="p">,</span> <span class="n">test_timing</span><span class="p">,</span> <span class="n">test_jsonpath</span>
+<span></span><span class="kn">from</span> <span class="nn">nornir_tests.plugins.tests</span> <span class="kn">import</span> <span class="n">regexp</span><span class="p">,</span> <span class="n">until</span><span class="p">,</span> <span class="n">timing</span><span class="p">,</span> <span class="n">jpath</span>
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.tasks</span> <span class="kn">import</span> <span class="n">wrap_task</span>
 <span class="kn">from</span> <span class="nn">nornir_tests.plugins.functions</span> <span class="kn">import</span> <span class="n">print_result</span>
 </pre></div>
@@ -473,7 +473,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     <span class="n">task</span><span class="o">=</span><span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span>
     <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">),</span>
+        <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
@@ -524,7 +524,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     <span class="n">task</span><span class="o">=</span><span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_ping</span><span class="p">),</span>
     <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_timing</span><span class="p">(),</span>
+        <span class="n">timing</span><span class="p">(),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 <span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">])</span>
@@ -567,7 +567,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     <span class="n">task</span><span class="o">=</span><span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_ping</span><span class="p">),</span>
     <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;192.168.99.1&#39;</span><span class="p">,</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 <span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">])</span>
@@ -600,7 +600,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 </div>
 <div class="section" id="Combining-tests">
 <h2>Combining tests<a class="headerlink" href="#Combining-tests" title="Permalink to this headline">¶</a></h2>
-<p>Tests can be stacked and the entire task and associated tests can be retried using test_until. The next test shows how a rebooted device can be retried until it comes back up using only tests.</p>
+<p>Tests can be stacked and the entire task and associated tests can be retried using until. The next test shows how a rebooted device can be retried until it comes back up using only tests.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -619,8 +619,8 @@ further tutorials I’ll go into more detail on using each of the test types.</p
     <span class="n">task</span><span class="o">=</span><span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span>
     <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;interfaces&#39;</span><span class="p">],</span>
     <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">test_jsonpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-        <span class="n">test_until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;interfaces.eth0.is_up&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">until</span><span class="p">(</span><span class="n">initial_delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">reset_conns</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 <span class="n">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">])</span>
@@ -666,7 +666,7 @@ further tutorials I’ll go into more detail on using each of the test types.</p
 
 </pre></div></div>
 </div>
-<p>The result above shows that it must have failed on its first try but around the one minute mark it was able to pass the test_jsonpath test and so test_until finished up.</p>
+<p>The result above shows that it must have failed on its first try but around the one minute mark it was able to pass the jpath test and so until finished up.</p>
 <p>Check out all the other tutorials to see each in more detail.</p>
 </div>
 </div>

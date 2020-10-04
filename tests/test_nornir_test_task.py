@@ -1,7 +1,7 @@
 import json
 import os
 
-from nornir_tests.plugins.tests import test_jsonpath as t_jsonpath
+from nornir_tests.plugins.tests import jpath as t_jsonpath
 from nornir_tests.plugins.tasks import wrap_task
 
 from nornir.core.task import Result

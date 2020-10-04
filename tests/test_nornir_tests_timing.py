@@ -1,6 +1,6 @@
 import pytest
 
-from nornir_tests.plugins.tests import test_timing as t_timing
+from nornir_tests.plugins.tests import timing as t_timing
 from nornir_tests.plugins.tasks import wrap_task
 
 from nornir_utils.plugins.tasks.data import echo_data
