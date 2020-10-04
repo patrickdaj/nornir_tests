@@ -37,6 +37,9 @@ _____
 * **wait** - Re-run tasks until assertions pass
 * **xpath** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
 * **callback** - Run a custom callback to handle results
+* **shorten** - (Not implemented) Shorten the data in result using jpath/xpath/regexp
+* **when** - (Not implemented) Conditionally skip tasks based on jpath/xpath/regexp
+* **loop** - Repeat task using a list of values
 
 Tasks
 _____
