@@ -58,8 +58,59 @@ Common Uses
 * Testing a condition repeatedly until all tests are passing
 * Nest multiple tests
 
-Usage
------
+What does it do exactly?
+------------------------
+
+Integrate validations into running of a task.  This allows the validation to impact whether or
+not the task failed.  Validations can be chained together.  Supports jsonpath, xpath, and regexp
+validations.  The default assertion performed is 'is_equal_to' from the assertpy library but
+most will work within reason.
+
+.. code-block:: python
+
+    @jpath(path='$..state', value='active', fail_task=True)
+    @jpath(path='$..peer.connection', value='up', fail_task=True)
+    def get_ha_info(task):
+        return netmiko_send_command(task, command_string='show ha info', use_textfsm=True)
+
+    nr.run(get_ha_info)
+
+Retry a task until a condition is met.
+
+.. code-block:: python
+
+    @xpath(path='.//neighbor/entry[@name="router1"].connected', assertion='is_true')
+    @wait(retries=10, delay=5)
+    def get_ospf_neighbors(task):
+        return netmiko_send_command(task, command_string='show ip ospf nei', use_textfsm=True)
+
+    nr.run(get_ospf_neighbors)
+
+Conditionally run a task on a particular nornir inventory.
+
+.. code-block:: python
+
+    @when(results=results, failed=True)
+    @when(results=results, path='$.version', value='10.0')
+    def run_when_failed_and_version_10(task):
+        return netmiko_send_command(task, command_string='echo failures')
+    
+    results = nr.run(netmiko_send_command, command_string='show system info', use_textfsm=True)
+    nr.run(run_when_failed_and_version_10)
+
+Time tasks and optionally fail them if criteria are not met.
+
+.. code-block:: python
+
+    @timing(max_run_time=10, fail_task=True)
+    def check_status(task):
+        return netmiko_send_command(task, command_string='check status')
+
+    nr.run(check_status)
+
+Alternative to @ decorator syntax
+---------------------------------
+
 All Nornir functions that return a Result should be wrappable in nornir_tests.  There are two
 main ways to wrap.
 

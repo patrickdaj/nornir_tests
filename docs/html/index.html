@@ -225,8 +225,50 @@ it came back.  It utilizes a few different libraries to hopefully make things a 
 <li><p>Nest multiple tests</p></li>
 </ul>
 </div>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-does-it-do-exactly">
+<h2>What does it do exactly?<a class="headerlink" href="#what-does-it-do-exactly" title="Permalink to this headline">¶</a></h2>
+<p>Integrate validations into running of a task.  This allows the validation to impact whether or
+not the task failed.  Validations can be chained together.  Supports jsonpath, xpath, and regexp
+validations.  The default assertion performed is ‘is_equal_to’ from the assertpy library but
+most will work within reason.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..state&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;active&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@jpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;$..peer.connection&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_ha_info</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">netmiko_send_command</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;show ha info&#39;</span><span class="p">,</span> <span class="n">use_textfsm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_ha_info</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Retry a task until a condition is met.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@xpath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;.//neighbor/entry[@name=&quot;router1&quot;].connected&#39;</span><span class="p">,</span> <span class="n">assertion</span><span class="o">=</span><span class="s1">&#39;is_true&#39;</span><span class="p">)</span>
+<span class="nd">@wait</span><span class="p">(</span><span class="n">retries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_ospf_neighbors</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">netmiko_send_command</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;show ip ospf nei&#39;</span><span class="p">,</span> <span class="n">use_textfsm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">get_ospf_neighbors</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Conditionally run a task on a particular nornir inventory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;$.version&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;10.0&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">run_when_failed_and_version_10</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">netmiko_send_command</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;echo failures&#39;</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">netmiko_send_command</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;show system info&#39;</span><span class="p">,</span> <span class="n">use_textfsm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_when_failed_and_version_10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Time tasks and optionally fail them if criteria are not met.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@timing</span><span class="p">(</span><span class="n">max_run_time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fail_task</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_status</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">netmiko_send_command</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">command_string</span><span class="o">=</span><span class="s1">&#39;check status&#39;</span><span class="p">)</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">check_status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="alternative-to-decorator-syntax">
+<h2>Alternative to &#64; decorator syntax<a class="headerlink" href="#alternative-to-decorator-syntax" title="Permalink to this headline">¶</a></h2>
 <p>All Nornir functions that return a Result should be wrappable in nornir_tests.  There are two
 main ways to wrap.</p>
 <p>Wrap a subtask that returns a direct result without task.run:</p>
