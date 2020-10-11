@@ -62,7 +62,7 @@ def xpath(
         nr.run(
             wrap_task(napalm_get), getters=['config'],
             tests=[
-                xpath(xpath='.//interface[@name="ethernet1/1"]/ip-address', host_data='$..ethernet1-1', text=True)
+                xpath(xpath='.//ip-address', one_of=True, host_data='$..ethernet1-1', text=True)
             ]
         )
 

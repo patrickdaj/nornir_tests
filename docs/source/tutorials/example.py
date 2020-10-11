@@ -45,9 +45,7 @@ result = vyos.run(
     task=napalm_get,
     getters=["interfaces"],
     tests=[
-        jpath(
-            path="interfaces.eth0.is_up", assertion="is_true", fail_task=True
-        ),
+        jpath(path="interfaces.eth0.is_up", assertion="is_true", fail_task=True),
         until(initial_delay=15, retries=10, delay=15, reset_conns=True),
     ],
 )

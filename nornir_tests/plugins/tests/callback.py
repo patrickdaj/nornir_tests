@@ -40,7 +40,7 @@ def callback(
                 callback(my_callback, fail_task=True)
             ]
         )
-    
+
     This would fail the task and thus the host would end up in failed_hosts despite the
     fact that napalm_get had no issues.  It would fail due to the fact that the callback
     was not ok with what was returned.

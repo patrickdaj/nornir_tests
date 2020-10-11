@@ -13,10 +13,11 @@ Collection of test/assertion plugins for `nornir <github.com/nornir-automation/n
 
 The point of nornir_tests is to provide a bit more flexibility in how the data that is sent back from
 a task run is validated.  When using a task like napalm_get or netmiko_send_command, the results
-come back in a variety of forms and typically code needs to be written to validate it.  One issue
-with this methodology is that you can't impact the result passed/failed attribute.  nornir_tests
-is meant to validate the result data and make sure the returned result is correct and not just that
-it came back.  It utilizes a few different libraries to hopefully make things a bit easier to test.
+come back in a variety of forms and typically code needs to be written to validate and/or act upon it.  
+One issue with this methodology is that you can't easily impact the result passed/failed attribute.  
+nornir_tests is meant to validate the result data and make sure the returned result is correct and not 
+just that it came back.  It also adds some utility methods that pair well with the tests.  It utilizes 
+a few different libraries to hopefully make things a bit easier to test.
 
 Installation
 ------------
@@ -31,11 +32,11 @@ Plugins
 Tests
 _____
 
-* **regexp** - Run assertions on nornir results using assertpy's text assertions
-* **jpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **regexp** - Run assertions on nornir results using assertpy's assertions
+* **jpath** - Run assertions on nornir results dictionaries using many of assertpy's assertions
 * **timing** - Gather timing info from tasks
 * **wait** - Re-run tasks until assertions pass
-* **xpath** - Run assertions on nornir results XML using many of assertpy's assertions like "is_in", "is_equal_to" or "contains"
+* **xpath** - Run assertions on nornir results XML using many of assertpy's assertions
 * **callback** - Run a custom callback to handle results
 * **shorten** - (Not implemented) Shorten the data in result using jpath/xpath/regexp
 * **when** - (Not implemented) Conditionally skip tasks based on jpath/xpath/regexp
@@ -51,12 +52,20 @@ Common Uses
 -----------
 
 * Validating returned results and modifying Result object based on test parameters
+* Only running a task on a subset of inventory depending on a pre-test
 * Timing a task and making sure it completes within a certain amount of time
-* Faling a task if text is not in results attribute
-* Using jsonpath or xpath to assert a value at a particular path
+* Asserting particular values exist at a path using regexp, jsonpath or xpath
 * Passing a task for an expected exception
-* Testing a condition repeatedly until all tests are passing
+* Testing a condition repeatedly until all tests are passing, like a reboot, or job completing
 * Nest multiple tests
+* Reduce the result in some fashion
+
+One thing to address is that all of these things can be done with Nornir and Python without
+this module except.  In most cases the hope is that the code involved will look cleaner and
+be much shorter with nornir_tests.  There are certainly some neat things that nornir_tests can
+do that would require some trickier/uglier code to accomplish without it.  The real goal is to
+obtain a clean way to test nornir results but there are a few random methods that have been
+implemented that are more of nice to haves such as shorten and loop.
 
 What does it do exactly?
 ------------------------
@@ -111,21 +120,12 @@ Time tasks and optionally fail them if criteria are not met.
 Alternative to @ decorator syntax
 ---------------------------------
 
-All Nornir functions that return a Result should be wrappable in nornir_tests.  There are two
-main ways to wrap.
+All the previous examples used @ decorator syntax but that is not the most flexible way of
+using nornir_tests.  There are requirements that go along with using decorator syntax in that
+the function must return a result and therefore the way it is called in the function may not
+be ideal.
 
-Wrap a subtask that returns a direct result without task.run:
-
-.. code-block:: python
-
-    @jpath(path='interfaces.eth0.is_up', assertion='is_true', fail_task=True)
-    @until(initial_delay=15, retries=10, delay=15, reset_conns=True)
-    def get_interfaces(task):
-        return napalm_get(task, getters=['interfaces'])
-    
-    vyos.run(get_interfaces) 
-
-The second and probably easier method is to wrap the task directly:
+The alternative and probably easier method is to wrap the task directly:
 
 .. code-block:: python
 
@@ -137,25 +137,13 @@ The second and probably easier method is to wrap the task directly:
         ]
     )
 
+Viewing test results
+--------------------
+
 The test results can be seen using the standard print_result in nornir_utils but an extended
 version of print_result is also included in this module to better print test records.
 
 For more details, see the `documentation <https://patrickdaj.github.io/nornir_tests/html/index.html>`__
-
-How it works
-------------
-
-Each of the tests is actually a decorator or wrapper.  Because of the way nornir works there is
-no way to use normal @ decorator syntax as these need to be applied before function definitions.
-That is possible but not as flexible.  So in order to apply the decorators at runtime, they are
-paired with a special processor that looks for them in task.params.
-
-Once the task is wrapped, when Nornir calls it the decorator can run code before and after
-execution of the task.  It can then affect the actual result being returned.  For this reason
-it does not really work for anything that doesn't return a result.  So wrapping calls to tasks
-defined in plugins like nornir_napalm or nornir_utils works fine.  Wrapping grouped_task is not
-currently possible but the tasks within the grouped task are.  Nornir run commands that return
-results work fine.
 
 References
 ----------
