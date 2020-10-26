@@ -132,6 +132,7 @@ def print_result(
 ) -> None:
     """
     Prints an object of type `nornir.core.task.Result`
+
     Arguments:
       result: from a previous task
       vars: Which attributes you want to print

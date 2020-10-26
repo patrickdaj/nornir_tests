@@ -25,6 +25,11 @@ def callback(
     verifications, and the test record.  To fail the test set test.passed to False and
     populate the CallbackRecord with whatever is desired.
 
+    Args:
+        callback (Callable): Callback function
+        fail_task (bool, optional): Determines whether test failure results causes setting
+            result failure.
+
     Example:
 
     .. code-block:: python
@@ -49,11 +54,6 @@ def callback(
     is that it could potentially be chained with another test such as until to wait
     for a particular condition.  It also provides a succinct way to display the logic of
     the validation into results without requiring another task or printing directly.
-
-    Args:
-        callback (Callable): Callback function
-        fail_task (bool, optional): Determines whether test failure results causes setting
-            result failure.
 
     """
 

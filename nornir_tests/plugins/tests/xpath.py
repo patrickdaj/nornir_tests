@@ -55,6 +55,18 @@ def xpath(
     should come from either the value argument or the value at the jsonpath match of
     host_data.
 
+    Args:
+        xpath (str, optional): xpath locator.
+        value (str, optional): value for comparison can be empty but not usual.
+        host_data (str, optional): jsonpath to get value from task.host.data.
+        one_of (bool, optional): When found values is > 1, allow one match to pass
+            otherwise all returned must match.
+        result_attr (str, optional): Attribute to check in results (ie. stdout, result).
+        text (bool, optional): compare text value ie. <element>text</element>.
+        attrib (str, optional): compare attribute value ie. <element @attrib='whatever'>.
+        fail_task (bool, optional): Determines whether test failure results causes setting
+            result failure.
+
     Example:
 
     .. code-block:: python
@@ -72,17 +84,6 @@ def xpath(
 
         nr.run(check_ethernet11)
 
-    Args:
-        xpath (str, optional): xpath locator.
-        value (str, optional): value for comparison can be empty but not usual.
-        host_data (str, optional): jsonpath to get value from task.host.data.
-        one_of (bool, optional): When found values is > 1, allow one match to pass
-            otherwise all returned must match.
-        result_attr (str, optional): Attribute to check in results (ie. stdout, result).
-        text (bool, optional): compare text value ie. <element>text</element>.
-        attrib (str, optional): compare attribute value ie. <element @attrib='whatever'>.
-        fail_task (bool, optional): Determines whether test failure results causes setting
-            result failure.
     """
 
     @wrapt.decorator

@@ -31,6 +31,19 @@ def until(
     run_time: float = -1,
     fail_task: bool = False,
 ) -> Result:
+    """Test decorator for until
+    This decorator allows retrying a task multiple times
+
+    Args:
+        initial_delay (float, optional): Time in seconds to wait for first attempt.
+        retries (int, optional): Number of times to retry.
+        delay (float, optional): Time to wait in between retries in seconds.
+        reset_conns (bool, optional): Reset connections in between retries.
+        fail_task (bool, optional): Determines whether test failure results causes
+            setting result failure.
+
+    """
+
     @wrapt.decorator
     def wrapper(
         wrapped: Callable[..., Any],
@@ -38,7 +51,6 @@ def until(
         args: List[Any],
         kwargs: Dict[str, Any],
     ) -> Result:
-
         test = UntilRecord(
             initial_delay=initial_delay,
             retries=retries,

@@ -32,9 +32,9 @@ def timing(
 
     Args:
         fail_task (bool, optional): Determines whether test failure results causes
-            setting result failure. Defaults to False.
-        min_run_time (int, optional): Required minimum runtime. Defaults to 0.
-        max_run_time (int, optional): Required maximum runtime. Defaults to sys.maxsize.
+            setting result failure.
+        min_run_time (int, optional): Required minimum runtime.
+        max_run_time (int, optional): Required maximum runtime.
     """
 
     @wrapt.decorator

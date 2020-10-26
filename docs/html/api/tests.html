@@ -191,6 +191,15 @@
 has the nornir Result, the Task which includes a host attribute that can be used for
 verifications, and the test record.  To fail the test set test.passed to False and
 populate the CallbackRecord with whatever is desired.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> (<em>Callable</em>) – Callback function</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
+result failure.</p></li>
+</ul>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_callback</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">task</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">:</span>
@@ -212,15 +221,6 @@ was not ok with what was returned.</p>
 is that it could potentially be chained with another test such as until to wait
 for a particular condition.  It also provides a succinct way to display the logic of
 the validation into results without requiring another task or printing directly.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>callback</strong> (<em>Callable</em>) – Callback function</p></li>
-<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
-result failure.</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -248,6 +248,21 @@ all returned must match.</p></li>
 <li><p><strong>host_data</strong> (<em>str</em><em>, </em><em>optional</em>) – jsonpath starting at task.host.data to use for comparison.</p></li>
 <li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes setting
 result failure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nornir_tests.plugins.tests.loop">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">loop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">placeholder</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">reset_conns</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator for looping</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>) – Values to loop through.</p></li>
+<li><p><strong>placeholder</strong> (<em>Any</em>) – Values are placed into placeholder for each iteration.</p></li>
+<li><p><strong>reset_conns</strong> (<em>bool</em><em>, </em><em>optional</em>) – [description]. Reset connections after each loop.</p></li>
 </ul>
 </dd>
 </dl>
@@ -288,9 +303,28 @@ result failure.</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
-setting result failure. Defaults to False.</p></li>
-<li><p><strong>min_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required minimum runtime. Defaults to 0.</p></li>
-<li><p><strong>max_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required maximum runtime. Defaults to sys.maxsize.</p></li>
+setting result failure.</p></li>
+<li><p><strong>min_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required minimum runtime.</p></li>
+<li><p><strong>max_run_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Required maximum runtime.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nornir_tests.plugins.tests.until">
+<code class="sig-prename descclassname">nornir_tests.plugins.tests.</code><code class="sig-name descname">until</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_delay</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">retries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">delay</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">reset_conns</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">t0</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">t1</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">run_time</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fail_task</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; nornir.core.task.Result<a class="headerlink" href="#nornir_tests.plugins.tests.until" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test decorator for until
+This decorator allows retrying a task multiple times</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_delay</strong> (<em>float</em><em>, </em><em>optional</em>) – Time in seconds to wait for first attempt.</p></li>
+<li><p><strong>retries</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of times to retry.</p></li>
+<li><p><strong>delay</strong> (<em>float</em><em>, </em><em>optional</em>) – Time to wait in between retries in seconds.</p></li>
+<li><p><strong>reset_conns</strong> (<em>bool</em><em>, </em><em>optional</em>) – Reset connections in between retries.</p></li>
+<li><p><strong>fail_task</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether test failure results causes
+setting result failure.</p></li>
 </ul>
 </dd>
 </dl>
@@ -306,21 +340,6 @@ implementation.  Any method available to assert_py.assert_that should be usable.
 If the assert_that assertion requires an argument to compare against then that
 should come from either the value argument or the value at the jsonpath match of
 host_data.</p>
-<p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">],</span>
-    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//interface[@name=&quot;ethernet1/1&quot;]/ip-address&#39;</span><span class="p">,</span> <span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$..ethernet1-1&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="p">]</span>
-<span class="p">)</span>
-
-<span class="nd">@xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//interfaces&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;ethernet1/1&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">check_ethernet11</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
-
-<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">check_ethernet11</span><span class="p">)</span>
-</pre></div>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -337,6 +356,21 @@ result failure.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">wrap_task</span><span class="p">(</span><span class="n">napalm_get</span><span class="p">),</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">],</span>
+    <span class="n">tests</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//ip-address&#39;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">host_data</span><span class="o">=</span><span class="s1">&#39;$..ethernet1-1&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nd">@xpath</span><span class="p">(</span><span class="n">xpath</span><span class="o">=</span><span class="s1">&#39;.//interfaces&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;ethernet1/1&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">one_of</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_ethernet11</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">napalm_get</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">getters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">])</span>
+
+<span class="n">nr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">check_ethernet11</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

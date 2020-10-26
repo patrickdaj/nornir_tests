@@ -21,6 +21,15 @@ def loop(
     placeholder: Any,
     reset_conns: bool = False,
 ) -> Result:
+    """Test decorator for looping
+
+    Args:
+        values (List[Any]): Values to loop through.
+        placeholder (Any): Values are placed into placeholder for each iteration.
+        reset_conns (bool, optional): [description]. Reset connections after each loop.
+
+    """
+
     @wrapt.decorator
     def wrapper(
         wrapped: Callable[..., Any],
