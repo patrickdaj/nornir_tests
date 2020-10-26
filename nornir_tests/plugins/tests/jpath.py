@@ -64,6 +64,18 @@ def jpath(
         fail_task (bool, optional): Determines whether test failure results causes setting
             result failure.
 
+    Example:
+
+    .. code-block:: python
+
+        results = nr.run(
+            wrap_task(napalm_get), getters=['system']
+            tests=[
+                jpath(path="$.sw-version", assertion='is_in", value=['8.1', '9.1'], fail_task=True)
+                jpath(path="$.hostname", host_data="$.fqdn", fail_task=True)
+            ]
+        )
+
     """
 
     @wrapt.decorator

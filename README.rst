@@ -40,7 +40,7 @@ _____
 * **callback** - Run a custom callback to handle results
 * **shorten** - (Not implemented) Shorten the data in result using jpath/xpath/regexp
 * **when** - (Not implemented) Conditionally skip tasks based on jpath/xpath/regexp
-* **loop** - Repeat task using a list of values
+* **loop** - (Work in progress) Repeat task using a list of values
 
 Tasks
 _____
