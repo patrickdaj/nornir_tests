@@ -4,19 +4,19 @@ PYTHON:=3.8
 
 .PHONY: pytest
 pytest:
-	poetry run pytest -vs ${ARGS}
+	uv run pytest -vs ${ARGS}
 
 .PHONY: black
 black:
-	poetry run black --check .
+	uv run black --check .
 
 .PHONY: pylama
 pylama:
-	poetry run pylama
+	uv run pylama
 
 .PHONY: mypy
 mypy:
-	poetry run mypy .
+	uv run mypy .
 
 .PHONY: tests
 tests: black pylama mypy pytest
